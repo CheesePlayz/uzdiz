@@ -1,149 +1,49 @@
 package foi.uzdiz.sbicak20.modeli;
 
+import foi.uzdiz.sbicak20.enumeracije.ZeljeznickeStaniceEnum.*;
+
 public class ZeljeznickeStanice {
 
     private String stanica;
     private String oznakaPruge;
-    private String vrstaStanice;
-    private String statusStanice;
+    private ZSVrstaStaniceEnum vrstaStanice;
+    private ZSStatusStaniceEnum statusStanice;
     private boolean putniciUlIz;
     private boolean robaUtIst;
-    private String kategorijaPruge;
+    private ZSKategorijaPrugeEnum kategorijaPruge;
     private int brojPerona;
-    private String vrstaPruge;
+    private ZSVrstaPrugeEnum vrstaPruge;
     private int brojKolosjeka;
     private double doPoOsovini;
     private double doPoDuznomM;
-    private String statusPruge;
+    private ZSStatusPrugeEnum statusPruge;
     private int duzina;
-
-    // Getters and Setters for each field
     public String getStanica() {
         return stanica;
     }
-
-    public void setStanica(String stanica) {
-        this.stanica = stanica;
-    }
-
     public String getOznakaPruge() {
         return oznakaPruge;
     }
-
-    public void setOznakaPruge(String oznakaPruge) {
-        this.oznakaPruge = oznakaPruge;
-    }
-
-    public String getVrstaStanice() {
+    public ZSVrstaStaniceEnum getVrstaStanice() {
         return vrstaStanice;
     }
-
-    public void setVrstaStanice(String vrstaStanice) {
-        this.vrstaStanice = vrstaStanice;
-    }
-
-    public String getStatusStanice() {
-        return statusStanice;
-    }
-
-    public void setStatusStanice(String statusStanice) {
-        this.statusStanice = statusStanice;
-    }
-
-    public boolean isPutniciUlIz() {
-        return putniciUlIz;
-    }
-
-    public void setPutniciUlIz(boolean putniciUlIz) {
-        this.putniciUlIz = putniciUlIz;
-    }
-
-    public boolean isRobaUtIst() {
-        return robaUtIst;
-    }
-
-    public void setRobaUtIst(boolean robaUtIst) {
-        this.robaUtIst = robaUtIst;
-    }
-
-    public String getKategorijaPruge() {
-        return kategorijaPruge;
-    }
-
-    public void setKategorijaPruge(String kategorijaPruge) {
-        this.kategorijaPruge = kategorijaPruge;
-    }
-
-    public int getBrojPerona() {
-        return brojPerona;
-    }
-
-    public void setBrojPerona(int brojPerona) {
-        this.brojPerona = brojPerona;
-    }
-
-    public String getVrstaPruge() {
-        return vrstaPruge;
-    }
-
-    public void setVrstaPruge(String vrstaPruge) {
-        this.vrstaPruge = vrstaPruge;
-    }
-
-    public int getBrojKolosjeka() {
-        return brojKolosjeka;
-    }
-
-    public void setBrojKolosjeka(int brojKolosjeka) {
-        this.brojKolosjeka = brojKolosjeka;
-    }
-
-    public double getDoPoOsovini() {
-        return doPoOsovini;
-    }
-
-    public void setDoPoOsovini(double doPoOsovini) {
-        this.doPoOsovini = doPoOsovini;
-    }
-
-    public double getDoPoDuznomM() {
-        return doPoDuznomM;
-    }
-
-    public void setDoPoDuznomM(double doPoDuznomM) {
-        this.doPoDuznomM = doPoDuznomM;
-    }
-
-    public String getStatusPruge() {
-        return statusPruge;
-    }
-
-    public void setStatusPruge(String statusPruge) {
-        this.statusPruge = statusPruge;
-    }
-
     public int getDuzina() {
         return duzina;
     }
-
-    public void setDuzina(int duzina) {
-        this.duzina = duzina;
-    }
-    
     private ZeljeznickeStanice(StanicaBuilder builder) {
         this.stanica = builder.stanica;
         this.oznakaPruge = builder.oznakaPruge;
-        this.vrstaStanice = builder.vrstaStanice;
-        this.statusStanice = builder.statusStanice;
+        this.vrstaStanice = ZSVrstaStaniceEnum.fromLabel(builder.vrstaStanice);
+        this.statusStanice = ZSStatusStaniceEnum.valueOf(builder.statusStanice);
         this.putniciUlIz = builder.putniciUlIz;
         this.robaUtIst = builder.robaUtIst;
-        this.kategorijaPruge = builder.kategorijaPruge;
+        this.kategorijaPruge = ZSKategorijaPrugeEnum.valueOf(builder.kategorijaPruge);
         this.brojPerona = builder.brojPerona;
-        this.vrstaPruge = builder.vrstaPruge;
+        this.vrstaPruge = ZSVrstaPrugeEnum.valueOf(builder.vrstaPruge);
         this.brojKolosjeka = builder.brojKolosjeka;
         this.doPoOsovini = builder.doPoOsovini;
         this.doPoDuznomM = builder.doPoDuznomM;
-        this.statusPruge = builder.statusPruge;
+        this.statusPruge = ZSStatusPrugeEnum.valueOf(builder.statusPruge);
         this.duzina = builder.duzina;
     }
 

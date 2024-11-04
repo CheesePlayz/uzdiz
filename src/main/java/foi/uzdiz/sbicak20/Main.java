@@ -1,10 +1,14 @@
 package foi.uzdiz.sbicak20;
 
+import foi.uzdiz.sbicak20.pomocnici.InitSustava;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
+
+    static InitSustava initSustava = null;
     public static void main(String[] args) throws IOException {
 
         String putanjaStanice = null;
@@ -43,12 +47,13 @@ public class Main {
             System.out.println("Nije naveden put do datoteke kompozicija (--zk)");
         }
 
+        initSustava = new InitSustava(putanjaStanice, putanjaVozila, putanjaKompozicije);
         if (putanjaStanice != null && putanjaVozila != null && putanjaKompozicije != null) {
             while (true){
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 System.out.println("Komanda >> ");
                 String komanda = reader.readLine();
-                ZeljeznickiSustavSingleton.getInstanca(putanjaStanice, putanjaVozila, putanjaKompozicije).IzvrsiKomandu(komanda);
+                ZeljeznickiSustavSingleton.getInstanca(initSustava.getStanice(), initSustava.getVozila(), initSustava.getKompozicije()).IzvrsiKomandu(komanda);
             }
 
         }

@@ -15,21 +15,19 @@ import static java.lang.System.exit;
 public class ZeljeznickiSustavSingleton {
     private static ZeljeznickiSustavSingleton instanca;
 
-    private InitSustava initSustava;
     private List<ZeljeznickeStanice> stanice;
     private List<ZeljeznickaPrijevoznaSredstva> vozila;
     private List<Kompozicija> kompozicije;
 
-    private ZeljeznickiSustavSingleton(String putanjaCsvStanice, String putanjaCsvPrijevoznaSredstva, String putanjaCsvKompozicije) {
-        this.initSustava = new InitSustava(putanjaCsvStanice, putanjaCsvPrijevoznaSredstva, putanjaCsvKompozicije);
-        this.stanice = initSustava.getStanice();
-        this.vozila = initSustava.getVozila();
-        this.kompozicije = initSustava.getKompozicije();
+    private ZeljeznickiSustavSingleton(List<ZeljeznickeStanice> stanice, List<ZeljeznickaPrijevoznaSredstva> vozila, List<Kompozicija> kompozicije) {
+        this.stanice = stanice;
+        this.vozila = vozila;
+        this.kompozicije = kompozicije;
     }
 
-    public static ZeljeznickiSustavSingleton getInstanca(String putanjaCsvStanice, String putanjaCsvPrijevoznaSredstva, String putanjaCsvKompozicije) {
+    public static ZeljeznickiSustavSingleton getInstanca(List<ZeljeznickeStanice> stanice, List<ZeljeznickaPrijevoznaSredstva> vozila, List<Kompozicija> kompozicije) {
         if (instanca == null) {
-            instanca = new ZeljeznickiSustavSingleton(putanjaCsvStanice, putanjaCsvPrijevoznaSredstva, putanjaCsvKompozicije);
+            instanca = new ZeljeznickiSustavSingleton(stanice, vozila, kompozicije);
         }
         return instanca;
     }

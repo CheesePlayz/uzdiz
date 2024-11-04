@@ -3,6 +3,7 @@ package foi.uzdiz.sbicak20.pomocnici;
 import foi.uzdiz.sbicak20.modeli.Kompozicija;
 import foi.uzdiz.sbicak20.modeli.ZeljeznickaPrijevoznaSredstva;
 import foi.uzdiz.sbicak20.modeli.ZeljeznickeStanice;
+import foi.uzdiz.sbicak20.validatori.StanicaValidator;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,20 +14,21 @@ import java.util.List;
 public class CitajCSV {
     public static List<ZeljeznickeStanice> ucitajStaniceIzCSV(String putanjaDatoteke) {
         List<ZeljeznickeStanice> stanice = new ArrayList<>();
-
+        StanicaValidator stanicaValidator = new StanicaValidator();
         try (BufferedReader br = new BufferedReader(new FileReader(putanjaDatoteke))) {
             String line;
-            br.readLine(); // Preskoči zaglavlje
+            br.readLine();
 
             while ((line = br.readLine()) != null) {
                 String[] redovi = line.split(";");
-                if (redovi.length < 14) {
+                if (redovi.length != 14){
                     continue;
                 }
-                if (redovi.length > 14) {
+                boolean ispravnaValidacija = stanicaValidator.Validiraj(redovi);
+                if (!ispravnaValidacija){
+                    System.out.println("Neispravna stanica! Nastavljamo s radom");
                     continue;
                 }
-
                 boolean putniciUlIz = redovi[4].trim().equalsIgnoreCase("DA");
                 boolean robaUtIst = redovi[5].trim().equalsIgnoreCase("DA");
 
