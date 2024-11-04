@@ -111,18 +111,19 @@ public class ZeljeznickiSustavSingleton {
                 return;
             }
 
-            double ukupnaKilometraza = 0;
-            for (ZeljeznickeStanice stanica : stanicePruge) {
-                ukupnaKilometraza += stanica.getDuzina();
-            }
 
+            double ukupnaKilometraza = 0;
             if (obrnutRedoslijed) {
-                for (int i = stanicePruge.size() - 1; i >= 0; i--) {
+                int brojElemenataUnutarPruge = stanicePruge.size() - 1;
+                for (int i = brojElemenataUnutarPruge; i >= 0; i--) {
                     ZeljeznickeStanice stanica = stanicePruge.get(i);
+                    if (i == brojElemenataUnutarPruge) ukupnaKilometraza = 0;
+                    else ukupnaKilometraza += stanicePruge.get(i+1).getDuzina();
                     System.out.printf("%s, %s, %.2f km%n", stanica.getStanica(), stanica.getVrstaStanice(), ukupnaKilometraza);
                 }
             } else {
                 for (ZeljeznickeStanice stanica : stanicePruge) {
+                    ukupnaKilometraza += stanica.getDuzina();
                     System.out.printf("%s, %s, %.2f km%n", stanica.getStanica(), stanica.getVrstaStanice(), ukupnaKilometraza);
                 }
             }
