@@ -1,14 +1,19 @@
 package foi.uzdiz.sbicak20.modeli;
 
+import foi.uzdiz.sbicak20.enumeracije.ZeljeznickaPrijevoznaSredstvaEnum.ZPSNamjenaEnum;
+import foi.uzdiz.sbicak20.enumeracije.ZeljeznickaPrijevoznaSredstvaEnum.ZPSStatusEnum;
+import foi.uzdiz.sbicak20.enumeracije.ZeljeznickaPrijevoznaSredstvaEnum.ZPSVrstaPogona;
+import foi.uzdiz.sbicak20.enumeracije.ZeljeznickaPrijevoznaSredstvaEnum.ZPSVrstaPrijevozaEnum;
+
 public class ZeljeznickaPrijevoznaSredstva {
 
     private String oznaka;
     private String opis;
     private String proizvodac;
     private int godina;
-    private String namjena;
-    private String vrstaPrijevoza;
-    private String vrstaPogona;
+    private ZPSNamjenaEnum namjena;
+    private ZPSVrstaPrijevozaEnum vrstaPrijevoza;
+    private ZPSVrstaPogona vrstaPogona;
     private int maxBrzina;
     private double maxSnaga;
     private int brojSjedecihMjesta;
@@ -19,7 +24,7 @@ public class ZeljeznickaPrijevoznaSredstva {
     private double nosivost;
     private double povrsina;
     private double zapremina;
-    private String status;
+    private ZPSStatusEnum status;
 
 
     private ZeljeznickaPrijevoznaSredstva(VoziloBuilder builder) {
@@ -27,9 +32,9 @@ public class ZeljeznickaPrijevoznaSredstva {
         this.opis = builder.opis;
         this.proizvodac = builder.proizvodac;
         this.godina = builder.godina;
-        this.namjena = builder.namjena;
-        this.vrstaPrijevoza = builder.vrstaPrijevoza;
-        this.vrstaPogona = builder.vrstaPogona;
+        this.namjena = ZPSNamjenaEnum.valueOf(builder.namjena);
+        this.vrstaPrijevoza = ZPSVrstaPrijevozaEnum.valueOf(builder.vrstaPrijevoza);
+        this.vrstaPogona = ZPSVrstaPogona.valueOf(builder.vrstaPogona);
         this.maxBrzina = builder.maxBrzina;
         this.maxSnaga = builder.maxSnaga;
         this.brojSjedecihMjesta = builder.brojSjedecihMjesta;
@@ -40,7 +45,7 @@ public class ZeljeznickaPrijevoznaSredstva {
         this.nosivost = builder.nosivost;
         this.povrsina = builder.povrsina;
         this.zapremina = builder.zapremina;
-        this.status = builder.status;
+        this.status = ZPSStatusEnum.valueOf(builder.status);
     }
 
     public String getOznaka() {
@@ -51,142 +56,24 @@ public class ZeljeznickaPrijevoznaSredstva {
         return opis;
     }
 
-    public String getProizvodac() {
-        return proizvodac;
-    }
-
     public int getGodina() {
         return godina;
     }
 
-    public String getNamjena() {
+    public ZPSNamjenaEnum getNamjena() {
         return namjena;
     }
 
-    public String getVrstaPrijevoza() {
-        return vrstaPrijevoza;
-    }
-
-    public String getVrstaPogona() {
+    public ZPSVrstaPogona getVrstaPogona() {
         return vrstaPogona;
     }
 
     public int getMaxBrzina() {
         return maxBrzina;
     }
-
-    public double getMaxSnaga() {
-        return maxSnaga;
-    }
-
-    public int getBrojSjedecihMjesta() {
-        return brojSjedecihMjesta;
-    }
-
-    public int getBrojStajucihMjesta() {
-        return brojStajucihMjesta;
-    }
-
-    public int getBrojBicikala() {
-        return brojBicikala;
-    }
-
-    public int getBrojKreveta() {
-        return brojKreveta;
-    }
-
-    public int getBrojAutomobila() {
-        return brojAutomobila;
-    }
-
-    public double getNosivost() {
-        return nosivost;
-    }
-
-    public double getPovrsina() {
-        return povrsina;
-    }
-
-    public double getZapremina() {
-        return zapremina;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
     public void setOznaka(String oznaka) {
         this.oznaka = oznaka;
     }
-
-    public void setOpis(String opis) {
-        this.opis = opis;
-    }
-
-    public void setProizvodac(String proizvodac) {
-        this.proizvodac = proizvodac;
-    }
-
-    public void setGodina(int godina) {
-        this.godina = godina;
-    }
-
-    public void setNamjena(String namjena) {
-        this.namjena = namjena;
-    }
-
-    public void setVrstaPrijevoza(String vrstaPrijevoza) {
-        this.vrstaPrijevoza = vrstaPrijevoza;
-    }
-
-    public void setVrstaPogona(String vrstaPogona) {
-        this.vrstaPogona = vrstaPogona;
-    }
-
-    public void setMaxBrzina(int maxBrzina) {
-        this.maxBrzina = maxBrzina;
-    }
-
-    public void setMaxSnaga(double maxSnaga) {
-        this.maxSnaga = maxSnaga;
-    }
-
-    public void setBrojSjedecihMjesta(int brojSjedecihMjesta) {
-        this.brojSjedecihMjesta = brojSjedecihMjesta;
-    }
-
-    public void setBrojStajucihMjesta(int brojStajucihMjesta) {
-        this.brojStajucihMjesta = brojStajucihMjesta;
-    }
-
-    public void setBrojBicikala(int brojBicikala) {
-        this.brojBicikala = brojBicikala;
-    }
-
-    public void setBrojKreveta(int brojKreveta) {
-        this.brojKreveta = brojKreveta;
-    }
-
-    public void setBrojAutomobila(int brojAutomobila) {
-        this.brojAutomobila = brojAutomobila;
-    }
-
-    public void setNosivost(double nosivost) {
-        this.nosivost = nosivost;
-    }
-
-    public void setPovrsina(double povrsina) {
-        this.povrsina = povrsina;
-    }
-
-    public void setZapremina(double zapremina) {
-        this.zapremina = zapremina;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public static class VoziloBuilder {
         private String oznaka;
         private String opis;

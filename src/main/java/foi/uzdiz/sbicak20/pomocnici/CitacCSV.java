@@ -3,7 +3,8 @@ package foi.uzdiz.sbicak20.pomocnici;
 import foi.uzdiz.sbicak20.modeli.Kompozicija;
 import foi.uzdiz.sbicak20.modeli.ZeljeznickaPrijevoznaSredstva;
 import foi.uzdiz.sbicak20.modeli.ZeljeznickeStanice;
-import foi.uzdiz.sbicak20.validatori.StanicaValidator;
+import foi.uzdiz.sbicak20.validatori.IValidator;
+import foi.uzdiz.sbicak20.validatori.ValidatorFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,10 +12,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CitajCSV {
-    public static List<ZeljeznickeStanice> ucitajStaniceIzCSV(String putanjaDatoteke) {
+public class CitacCSV {
+
+    static IValidator validator;
+    public static List<ZeljeznickeStanice> ucitajStaniceIzCSV(String putanjaDatoteke) throws Exception {
         List<ZeljeznickeStanice> stanice = new ArrayList<>();
-        StanicaValidator stanicaValidator = new StanicaValidator();
+        validator = ValidatorFactory.napraviValidator(ZeljeznickeStanice.class);
         try (BufferedReader br = new BufferedReader(new FileReader(putanjaDatoteke))) {
             String line;
             br.readLine();
@@ -24,21 +27,19 @@ public class CitajCSV {
                 if (redovi.length != 14){
                     continue;
                 }
-                boolean ispravnaValidacija = stanicaValidator.Validiraj(redovi);
+                boolean ispravnaValidacija = validator.Validiraj(redovi);
                 if (!ispravnaValidacija){
                     System.out.println("Neispravna stanica! Nastavljamo s radom");
                     continue;
                 }
-                boolean putniciUlIz = redovi[4].trim().equalsIgnoreCase("DA");
-                boolean robaUtIst = redovi[5].trim().equalsIgnoreCase("DA");
 
                 ZeljeznickeStanice stanica = new ZeljeznickeStanice.StanicaBuilder()
                         .setStanica(redovi[0].trim())
                         .setOznakaPruge(redovi[1].trim())
                         .setVrstaStanice(redovi[2].trim())
                         .setStatusStanice(redovi[3].trim())
-                        .setPutniciUlIz(putniciUlIz)
-                        .setRobaUtIst(robaUtIst)
+                        .setPutniciUlIz(redovi[4].trim())
+                        .setRobaUtIst(redovi[5].trim())
                         .setKategorijaPruge(redovi[6].trim())
                         .setBrojPerona(Integer.parseInt(redovi[7].trim()))
                         .setVrstaPruge(redovi[8].trim())
@@ -58,20 +59,21 @@ public class CitajCSV {
         return stanice;
     }
 
-    public static List<ZeljeznickaPrijevoznaSredstva> ucitajVozilaIzCSV(String putanjaDatoteke) {
+    public static List<ZeljeznickaPrijevoznaSredstva> ucitajVozilaIzCSV(String putanjaDatoteke) throws Exception {
         List<ZeljeznickaPrijevoznaSredstva> vozila = new ArrayList<ZeljeznickaPrijevoznaSredstva>();
-
+        validator = ValidatorFactory.napraviValidator(ZeljeznickaPrijevoznaSredstva.class);
         try (BufferedReader br = new BufferedReader(new FileReader(putanjaDatoteke))) {
             String line;
             br.readLine();
 
             while ((line = br.readLine()) != null) {
                 String[] redovi = line.split(";");
-
-                if (redovi.length < 18) {
+                if (redovi.length != 18){
                     continue;
                 }
-                if (redovi.length > 18) {
+                boolean ispravnaValidacija = validator.Validiraj(redovi);
+                if (!ispravnaValidacija){
+                    System.out.println("Neispravno vozilo! Nastavljamo s radom");
                     continue;
                 }
 

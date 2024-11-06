@@ -8,8 +8,8 @@ public class ZeljeznickeStanice {
     private String oznakaPruge;
     private ZSVrstaStaniceEnum vrstaStanice;
     private ZSStatusStaniceEnum statusStanice;
-    private boolean putniciUlIz;
-    private boolean robaUtIst;
+    private ZSPutniciUlIzEnum putniciUlIz;
+    private ZSRobaUtIstEnum robaUtIst;
     private ZSKategorijaPrugeEnum kategorijaPruge;
     private int brojPerona;
     private ZSVrstaPrugeEnum vrstaPruge;
@@ -35,8 +35,8 @@ public class ZeljeznickeStanice {
         this.oznakaPruge = builder.oznakaPruge;
         this.vrstaStanice = ZSVrstaStaniceEnum.fromLabel(builder.vrstaStanice);
         this.statusStanice = ZSStatusStaniceEnum.valueOf(builder.statusStanice);
-        this.putniciUlIz = builder.putniciUlIz;
-        this.robaUtIst = builder.robaUtIst;
+        this.putniciUlIz = ZSPutniciUlIzEnum.valueOf(builder.putniciUlIz);
+        this.robaUtIst = ZSRobaUtIstEnum.valueOf(builder.robaUtIst);
         this.kategorijaPruge = ZSKategorijaPrugeEnum.valueOf(builder.kategorijaPruge);
         this.brojPerona = builder.brojPerona;
         this.vrstaPruge = ZSVrstaPrugeEnum.valueOf(builder.vrstaPruge);
@@ -52,8 +52,8 @@ public class ZeljeznickeStanice {
         private String oznakaPruge;
         private String vrstaStanice;
         private String statusStanice;
-        private boolean putniciUlIz;
-        private boolean robaUtIst;
+        private String putniciUlIz;
+        private String robaUtIst;
         private String kategorijaPruge;
         private int brojPerona;
         private String vrstaPruge;
@@ -83,12 +83,12 @@ public class ZeljeznickeStanice {
             return this;
         }
 
-        public StanicaBuilder setPutniciUlIz(boolean putniciUlIz) {
+        public StanicaBuilder setPutniciUlIz(String putniciUlIz) {
             this.putniciUlIz = putniciUlIz;
             return this;
         }
 
-        public StanicaBuilder setRobaUtIst(boolean robaUtIst) {
+        public StanicaBuilder setRobaUtIst(String robaUtIst) {
             this.robaUtIst = robaUtIst;
             return this;
         }

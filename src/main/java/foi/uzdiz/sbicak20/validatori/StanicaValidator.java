@@ -13,7 +13,7 @@ public class StanicaValidator implements IValidator {
     private Pattern DO_PO_OSOVINI_PATTERN = Pattern.compile("^(1[0-9]|[2-4][0-9]|50)(?:,[0-9])?$");  // Decimale 10 do 50, npr. 22,5
     private Pattern DO_PO_DUZINI_PATTERN = Pattern.compile("^(?:[2-9](?:,[0-9])?|10(?:,[0-9])?)$");  // Od 2 do 10
     private Pattern STATUS_PRUGE_PATTERN = Pattern.compile("^[IK]$");
-     private Pattern DUZINA_PATTERN = Pattern.compile("^(?:[1-9]?[0-9]{0,2}|0)$");  // 0 do 999
+    private Pattern DUZINA_PATTERN = Pattern.compile("^(?:[1-9]?[0-9]{0,2}|0)$");  // 0 do 999
 
     @Override
     public boolean Validiraj(String[] redovi) {

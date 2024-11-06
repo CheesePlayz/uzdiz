@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 public class Main {
 
     static InitSustava initSustava = null;
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
         String putanjaStanice = null;
         String putanjaVozila = null;
