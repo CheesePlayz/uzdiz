@@ -152,7 +152,7 @@ public class CitacCSV {
                             listaKompozicija.add(new ArrayList<>(trenutnaKompozicija));
                         } else {
                             SustavGresaka.getInstance().prijaviGresku(
-                                    new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon i ispravan redoslijed."), "Učitavanje CSV-a kompozicija", new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka});
+                                    new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge."), "Učitavanje CSV-a kompozicija", new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka});
                         }
 
                         trenutnaKompozicija.clear();
@@ -184,7 +184,7 @@ public class CitacCSV {
                             listaKompozicija.add(new ArrayList<>(trenutnaKompozicija));
                         } else {
                             SustavGresaka.getInstance().prijaviGresku(
-                                    new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon i ispravan redoslijed."), "Učitavanje CSV-a kompozicija", new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka});
+                                    new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge"), "Učitavanje CSV-a kompozicija", new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka});
                         }
                     }
                     trenutnaKompozicija.clear();
@@ -197,8 +197,6 @@ public class CitacCSV {
                 } catch (IllegalArgumentException e) {
                     trenutnaKompozicija.clear();
                     trenutnaOznaka = oznaka;
-                    SustavGresaka.getInstance().prijaviGresku(
-                            new IllegalArgumentException("Neispravna uloga u kompoziciji: " + uloga + ", preskačem kompoziciju"), "Učitavanje CSV-a kompozicija", new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka});
                 }
             }
 
@@ -207,7 +205,7 @@ public class CitacCSV {
                     listaKompozicija.add(new ArrayList<>(trenutnaKompozicija));
                 } else {
                     SustavGresaka.getInstance().prijaviGresku(
-                            new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon i ispravan redoslijed."), "Učitavanje CSV-a kompozicija", new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka});
+                            new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge"), "Učitavanje CSV-a kompozicija", new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka});
                 }
             }
 
