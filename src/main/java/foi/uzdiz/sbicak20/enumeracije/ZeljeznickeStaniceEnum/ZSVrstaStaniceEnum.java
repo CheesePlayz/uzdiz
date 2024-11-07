@@ -5,12 +5,15 @@ public enum ZSVrstaStaniceEnum {
     STAJ("staj.");
 
     private String oznaka;
+
     ZSVrstaStaniceEnum(String oznaka) {
         this.oznaka = oznaka;
     }
+
     public String getLabel() {
         return oznaka;
     }
+
     public static ZSVrstaStaniceEnum fromLabel(String oznaka) {
         for (ZSVrstaStaniceEnum vrsta : values()) {
             if (vrsta.getLabel().equals(oznaka)) {

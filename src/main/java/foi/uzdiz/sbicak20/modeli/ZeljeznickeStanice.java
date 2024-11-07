@@ -18,18 +18,23 @@ public class ZeljeznickeStanice {
     private double doPoDuznomM;
     private ZSStatusPrugeEnum statusPruge;
     private int duzina;
+
     public String getStanica() {
         return stanica;
     }
+
     public String getOznakaPruge() {
         return oznakaPruge;
     }
+
     public ZSVrstaStaniceEnum getVrstaStanice() {
         return vrstaStanice;
     }
+
     public int getDuzina() {
         return duzina;
     }
+
     private ZeljeznickeStanice(StanicaBuilder builder) {
         this.stanica = builder.stanica;
         this.oznakaPruge = builder.oznakaPruge;

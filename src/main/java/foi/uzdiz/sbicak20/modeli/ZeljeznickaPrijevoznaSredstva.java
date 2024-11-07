@@ -71,9 +71,11 @@ public class ZeljeznickaPrijevoznaSredstva {
     public int getMaxBrzina() {
         return maxBrzina;
     }
+
     public void setOznaka(String oznaka) {
         this.oznaka = oznaka;
     }
+
     public static class VoziloBuilder {
         private String oznaka;
         private String opis;
