@@ -89,9 +89,7 @@ public class CitacCSV {
             while ((line = br.readLine()) != null) {
                 redakCSV++;
                 String[] redovi = line.split(";");
-                if (redovi.length != 18) {
-                    continue;
-                }
+
                 boolean ispravnaValidacija = validator.Validiraj(redovi, redakCSV, null);
                 if (!ispravnaValidacija) {
                     continue;
@@ -146,15 +144,18 @@ public class CitacCSV {
             while ((line = br.readLine()) != null) {
                 line = line.trim();
                 redakCSV++;
+
                 if (line.equals(";;")) {
                     if (!trenutnaKompozicija.isEmpty()) {
                         if (validator.Validiraj(null, 0, trenutnaKompozicija)) {
                             listaKompozicija.add(new ArrayList<>(trenutnaKompozicija));
                         } else {
                             SustavGresaka.getInstance().prijaviGresku(
-                                    new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge."), "Učitavanje CSV-a kompozicija", new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka});
+                                    new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge."),
+                                    "Učitavanje CSV-a kompozicija",
+                                    new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka}
+                            );
                         }
-
                         trenutnaKompozicija.clear();
                         trenutnaOznaka = null;
                     }
@@ -184,19 +185,26 @@ public class CitacCSV {
                             listaKompozicija.add(new ArrayList<>(trenutnaKompozicija));
                         } else {
                             SustavGresaka.getInstance().prijaviGresku(
-                                    new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge"), "Učitavanje CSV-a kompozicija", new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka});
+                                    new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge"),
+                                    "Učitavanje CSV-a kompozicija",
+                                    new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka}
+                            );
                         }
                     }
                     trenutnaKompozicija.clear();
-                    trenutnaOznaka = oznaka;
+                    trenutnaOznaka = null;
+                    listaKompozicija.removeLast();
+                    continue;
+
                 }
 
                 try {
                     Kompozicija dioKompozicije = new Kompozicija(oznaka, oznakaPrijevoznogSredstva, uloga);
                     trenutnaKompozicija.add(dioKompozicije);
                 } catch (IllegalArgumentException e) {
+                    SustavGresaka.getInstance().prijaviGresku(e, "Pogrešan zapis kompozicije", new String[]{"CSV Redak: " + redakCSV, line});
                     trenutnaKompozicija.clear();
-                    trenutnaOznaka = oznaka;
+                    trenutnaOznaka = null;
                 }
             }
 
@@ -205,7 +213,10 @@ public class CitacCSV {
                     listaKompozicija.add(new ArrayList<>(trenutnaKompozicija));
                 } else {
                     SustavGresaka.getInstance().prijaviGresku(
-                            new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge"), "Učitavanje CSV-a kompozicija", new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka});
+                            new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge"),
+                            "Učitavanje CSV-a kompozicija",
+                            new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka}
+                    );
                 }
             }
 
@@ -216,5 +227,6 @@ public class CitacCSV {
 
         return listaKompozicija;
     }
+
 }
 

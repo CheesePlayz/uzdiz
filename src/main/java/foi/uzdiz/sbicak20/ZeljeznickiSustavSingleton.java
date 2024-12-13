@@ -46,8 +46,7 @@ public class ZeljeznickiSustavSingleton {
                 return;
             }
 
-            String oznakaPruge = dioKomande[1];
-            String redoslijed = dioKomande[2];
+            String oznakaPruge = dioKomande[1];;
             boolean obrnutRedoslijed;
             if (Objects.equals(dioKomande[2], "N")) {
                 obrnutRedoslijed = false;
@@ -76,47 +75,83 @@ public class ZeljeznickiSustavSingleton {
     }
 
     private void IspisPruge(List<ZeljeznickeStanice> stanice) {
-        Map<String, List<ZeljeznickeStanice>> prugeMap = new HashMap<>();
+        if (stanice == null || stanice.isEmpty()) {
+            System.out.println("Nema dostupnih podataka o stanicama.");
+            return;
+        }
 
-        int maxDuljinaStanice = 0;
+        Map<String, List<ZeljeznickeStanice>> prugeMap = new HashMap<>();
+        int[] maxDuljine = {6, 15, 15, 18};
+
+
         for (ZeljeznickeStanice stanica : stanice) {
             String oznakaPruge = stanica.getOznakaPruge();
             prugeMap.putIfAbsent(oznakaPruge, new ArrayList<>());
             prugeMap.get(oznakaPruge).add(stanica);
-            if (maxDuljinaStanice < stanica.getStanica().length()) {
-                maxDuljinaStanice = stanica.getStanica().length();
-            }
+
+            maxDuljine[0] = Math.max(maxDuljine[0], oznakaPruge.length());
         }
-        String format = "| %-" + maxDuljinaStanice + "s | %-" + maxDuljinaStanice + "s | %-" + maxDuljinaStanice + "s | %-" + maxDuljinaStanice + "s |%n";
+
+        for (Map.Entry<String, List<ZeljeznickeStanice>> entry : prugeMap.entrySet()) {
+            List<ZeljeznickeStanice> stanicePruge = entry.getValue();
+            if (stanicePruge.size() < 2) continue;
+
+
+            String pocetnaStanica = stanicePruge.get(0).getStanica();
+            String zavrsnaStanica = stanicePruge.get(stanicePruge.size() - 1).getStanica();
+
+            maxDuljine[1] = Math.max(maxDuljine[1], pocetnaStanica.length());
+            maxDuljine[2] = Math.max(maxDuljine[2], zavrsnaStanica.length());
+        }
+
+
+        StringBuilder formatBuilder = new StringBuilder("|");
+        for (int duljina : maxDuljine) {
+            formatBuilder.append(" %-").append(duljina).append("s |");
+        }
+        formatBuilder.append("%n");
+        String format = formatBuilder.toString();
+
         System.out.printf(format, "Oznaka", "Pocetna stanica", "Zavrsna stanica", "Ukupna kilometraza");
 
         for (Map.Entry<String, List<ZeljeznickeStanice>> entry : prugeMap.entrySet()) {
             String oznaka = entry.getKey();
             List<ZeljeznickeStanice> stanicePruge = entry.getValue();
 
+            if (stanicePruge.size() < 2) {
+                continue;
+            }
+
             String pocetnaStanica = stanicePruge.get(0).getStanica();
             String zavrsnaStanica = stanicePruge.get(stanicePruge.size() - 1).getStanica();
-
             double ukupnaKilometraza = 0;
 
             for (ZeljeznickeStanice stanica : stanicePruge) {
                 ukupnaKilometraza += stanica.getDuzina();
             }
 
+            maxDuljine[2] = Math.max(maxDuljine[2], pocetnaStanica.length());
+            maxDuljine[3] = Math.max(maxDuljine[3], zavrsnaStanica.length());
+
             System.out.printf(format, oznaka, pocetnaStanica, zavrsnaStanica, ukupnaKilometraza);
         }
     }
 
-    private void IspisPregledStanicaNaOdredenojPruzi(List<ZeljeznickeStanice> stanice, String oznakaPruge, boolean obrnutRedoslijed) {
-        List<ZeljeznickeStanice> stanicePruge = new ArrayList<>();
 
-        int maxDuljinaStanice = 0;
+    private void IspisPregledStanicaNaOdredenojPruzi(List<ZeljeznickeStanice> stanice, String oznakaPruge, boolean obrnutRedoslijed) {
+        if (stanice == null || stanice.isEmpty()) {
+            System.out.println("Nema dostupnih podataka o stanicama.");
+            return;
+        }
+
+        List<ZeljeznickeStanice> stanicePruge = new ArrayList<>();
+        int[] maxDuljine = {13, 13, 18};
+
         for (ZeljeznickeStanice stanica : stanice) {
             if (stanica.getOznakaPruge().equals(oznakaPruge)) {
                 stanicePruge.add(stanica);
-                if (maxDuljinaStanice < stanica.getStanica().length()) {
-                    maxDuljinaStanice = stanica.getStanica().length();
-                }
+                maxDuljine[0] = Math.max(maxDuljine[0], stanica.getStanica().length());
+                maxDuljine[1] = Math.max(maxDuljine[1], stanica.getVrstaStanice().toString().length());
             }
         }
 
@@ -125,34 +160,47 @@ public class ZeljeznickiSustavSingleton {
             return;
         }
 
+        if (stanicePruge.size() < 2) {
+            System.out.println("Pruga mora imati barem dvije stanice!");
+            return;
+        }
+
+        StringBuilder formatBuilder = new StringBuilder("|");
+        for (int duljina : maxDuljine) {
+            formatBuilder.append(" %-").append(duljina).append("s |");
+        }
+        formatBuilder.append("%n");
+        String format = formatBuilder.toString();
+
+        System.out.printf(format, "Naziv stanice", "Vrsta stanice", "Ukupna kilometraza");
 
         double ukupnaKilometraza = 0;
 
-        String format1 = "| %-" + maxDuljinaStanice + "s | %-" + maxDuljinaStanice + "s | %-" + maxDuljinaStanice + "s%n";
-        System.out.printf(format1, "Naziv stanice", "Vrsta stanice", "Ukupna kilometraza");
-        String format = "| %-" + maxDuljinaStanice + "s | %-" + maxDuljinaStanice + "s | %.2f km%n";
 
         if (obrnutRedoslijed) {
             int brojElemenataUnutarPruge = stanicePruge.size() - 1;
             for (int i = brojElemenataUnutarPruge; i >= 0; i--) {
                 ZeljeznickeStanice stanica = stanicePruge.get(i);
-                if (i == brojElemenataUnutarPruge) ukupnaKilometraza = 0;
-                else ukupnaKilometraza += stanicePruge.get(i + 1).getDuzina();
-
-                System.out.printf(format, stanica.getStanica(), stanica.getVrstaStanice(), ukupnaKilometraza);
+                if (i == brojElemenataUnutarPruge) {
+                    ukupnaKilometraza = 0;
+                } else {
+                    ukupnaKilometraza += stanicePruge.get(i + 1).getDuzina();
+                }
+                System.out.printf(format, stanica.getStanica(), stanica.getVrstaStanice(), String.format("%.1f km", ukupnaKilometraza));
             }
         } else {
             for (ZeljeznickeStanice stanica : stanicePruge) {
                 ukupnaKilometraza += stanica.getDuzina();
-                System.out.printf(format, stanica.getStanica(), stanica.getVrstaStanice(), ukupnaKilometraza);
+                System.out.printf(format, stanica.getStanica(), stanica.getVrstaStanice(), String.format("%.1f km", ukupnaKilometraza));
             }
         }
     }
 
+
     private void IspisVozilaIzKompozicije(String oznakaKompozicije) {
         boolean kompozicijaNadena = false;
         List<Kompozicija> trazenaKompozicija = null;
-        int maxDuljina = 0;
+
         for (List<Kompozicija> kompozicija : kompozicije) {
             if (kompozicija.get(0).getOznaka().equals(oznakaKompozicije)) {
                 trazenaKompozicija = kompozicija;
@@ -162,12 +210,13 @@ public class ZeljeznickiSustavSingleton {
         }
 
         if (!kompozicijaNadena || trazenaKompozicija == null) {
-            System.out.println("Kompozicija s oznakom " + oznakaKompozicije + " nije pronađena.");
+            System.out.println("Kompozicija s oznakom " + oznakaKompozicije + " nije pronadena.");
             return;
         }
 
-        String format = "| %-15s | %-6s | %-30s | %-6s | %-20s | %-15s | %-12s |%n";
-        System.out.printf(format, "Oznaka", "Uloga", "Opis", "Godina", "Namjena", "Vrsta pogona", "Maks. brzina");
+        int[] maxInitStupacaDuljine = {7, 5, 4, 6, 7, 12, 12};
+        List<String[]> podaciZaIspis = new ArrayList<>();
+
         for (Kompozicija kompozicija : trazenaKompozicija) {
             String oznakaPrijevoznogSredstva = kompozicija.getOznakaPrijevoznogSredstva();
             ZeljeznickaPrijevoznaSredstva sredstvo = null;
@@ -179,12 +228,33 @@ public class ZeljeznickiSustavSingleton {
             }
 
             if (sredstvo != null) {
-                System.out.printf(format, oznakaPrijevoznogSredstva, kompozicija.getUloga(), sredstvo.getOpis(), sredstvo.getGodina(),
-                        sredstvo.getNamjena(),
-                        sredstvo.getVrstaPogona(),
+                String[] red = {
+                        oznakaPrijevoznogSredstva,
+                        String.valueOf(kompozicija.getUloga()),
+                        sredstvo.getOpis(),
+                        String.valueOf(sredstvo.getGodina()),
+                        String.valueOf(sredstvo.getNamjena()),
+                        String.valueOf(sredstvo.getVrstaPogona()),
                         sredstvo.getMaxBrzina() + " km/h"
-                );
+                };
+                podaciZaIspis.add(red);
+
+                for (int i = 0; i < red.length; i++) {
+                    maxInitStupacaDuljine[i] = Math.max(maxInitStupacaDuljine[i], red[i].length());
+                }
             }
+        }
+
+        StringBuilder formatBuilder = new StringBuilder("|");
+        for (int duljina : maxInitStupacaDuljine) {
+            formatBuilder.append(" %-").append(duljina).append("s |");
+        }
+        formatBuilder.append("%n");
+        String format = formatBuilder.toString();
+
+        System.out.printf(format, "Oznaka", "Uloga", "Opis", "Godina", "Namjena", "Vrsta pogona", "Maks. brzina");
+        for (String[] red : podaciZaIspis) {
+            System.out.printf(format, (Object[]) red);
         }
     }
 }

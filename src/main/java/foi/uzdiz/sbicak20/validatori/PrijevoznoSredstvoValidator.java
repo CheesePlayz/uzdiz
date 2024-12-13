@@ -33,6 +33,10 @@ public class PrijevoznoSredstvoValidator implements IValidator {
     @Override
     public boolean Validiraj(String[] redovi, int redakCSV, List<Kompozicija> kompozicije) {
         int redak = 0;
+        if (redovi.length != 18) {
+            SustavGresaka.getInstance().prijaviGresku(new NevaljaniFormatGreska("Nema dovoljno podataka u redu."), "Učitavanje CSV-a Vozila");
+            return false;
+        }
         try {
             if (!OZNAKA_PATTERN.matcher(redovi[0].trim()).matches()) {
                 if (redovi[0].trim().isEmpty()) {
