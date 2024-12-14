@@ -6,6 +6,8 @@ import foi.uzdiz.sbicak20.modeli.Kompozicija;
 import foi.uzdiz.sbicak20.modeli.ZeljeznickoPrijevoznoSredstvo;
 import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
 import foi.uzdiz.sbicak20.validatori.IValidator;
+import foi.uzdiz.sbicak20.validatori.PrijevoznoSredstvoFactory;
+import foi.uzdiz.sbicak20.validatori.StanicaFactory;
 import foi.uzdiz.sbicak20.validatori.ValidatorFactory;
 
 import java.io.BufferedReader;
@@ -20,14 +22,14 @@ public class CitacCSV {
 
     static IValidator validator;
 
-    public static List<ZeljeznickaStanica> ucitajStaniceIzCSV(String putanjaDatoteke) throws Exception {
+    public static List<ZeljeznickaStanica> ucitajStaniceIzCSV(String putanjaDatoteke, ValidatorFactory factory) throws Exception {
         if (putanjaDatoteke == null) {
             SustavGresaka.getInstance().prijaviGresku(new NullVrijednostGreska("Datoteka za stanice je null"));
             exit(1);
         }
         List<ZeljeznickaStanica> stanice = new ArrayList<>();
         int redakCSV = 1;
-        validator = ValidatorFactory.napraviValidator(ZeljeznickaStanica.class);
+        validator = factory.napraviValidator();
         try (BufferedReader br = new BufferedReader(new FileReader(putanjaDatoteke))) {
             String line;
             br.readLine();
@@ -70,14 +72,14 @@ public class CitacCSV {
         return stanice;
     }
 
-    public static List<ZeljeznickoPrijevoznoSredstvo> ucitajVozilaIzCSV(String putanjaDatoteke) throws Exception {
+    public static List<ZeljeznickoPrijevoznoSredstvo> ucitajVozilaIzCSV(String putanjaDatoteke, ValidatorFactory factory) throws Exception {
         if (putanjaDatoteke == null) {
             SustavGresaka.getInstance().prijaviGresku(new NullVrijednostGreska("Datoteka za vozila je null"));
             exit(1);
         }
         List<ZeljeznickoPrijevoznoSredstvo> vozila = new ArrayList<ZeljeznickoPrijevoznoSredstvo>();
         int redakCSV = 1;
-        validator = ValidatorFactory.napraviValidator(ZeljeznickoPrijevoznoSredstvo.class);
+        validator = factory.napraviValidator();
         try (BufferedReader br = new BufferedReader(new FileReader(putanjaDatoteke))) {
             String line;
             br.readLine();
@@ -123,12 +125,12 @@ public class CitacCSV {
     }
 
 
-    public static List<List<Kompozicija>> ucitajKompozicijeIzCSV(String putanjaCsvKompozicije) throws Exception {
+    public static List<List<Kompozicija>> ucitajKompozicijeIzCSV(String putanjaCsvKompozicije, ValidatorFactory factory) throws Exception {
         if (putanjaCsvKompozicije == null) {
             SustavGresaka.getInstance().prijaviGresku(new NullVrijednostGreska("Datoteka za kompozicije je null"));
             System.exit(1);
         }
-        validator = ValidatorFactory.napraviValidator(Kompozicija.class);
+        validator = factory.napraviValidator();
         List<List<Kompozicija>> listaKompozicija = new ArrayList<>();
         List<Kompozicija> trenutnaKompozicija = new ArrayList<>();
         String trenutnaOznaka = null;
