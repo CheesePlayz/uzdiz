@@ -1,12 +1,22 @@
 package foi.uzdiz.sbicak20.greske;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SustavGresaka {
     private static SustavGresaka instance;
-    private int brojacGresaka = 0;
+    private int brojacGresakaGlobalno = 0;
+    private int brojacGresakaStanice = 0;
+    private int brojacGresakaVozila = 0;
+    private int brojacGresakaKompozicije = 0;
     private StringBuilder logGresaka = new StringBuilder();
     private StringBuilder trenutnaGreska = new StringBuilder();
+    private List<String> podrucjaGresaka = new ArrayList<>();
 
     private SustavGresaka() {
+        podrucjaGresaka.add("Ucitavanje CSV-a Stanica");
+        podrucjaGresaka.add("Ucitavanje CSV-a Vozila");
+        podrucjaGresaka.add("Ucitavanje CSV-a Kompozicije");
     }
 
     public static SustavGresaka getInstance() {
@@ -16,42 +26,49 @@ public class SustavGresaka {
         return instance;
     }
 
+    public List<String> getPodrucjaGresaka() {
+        return podrucjaGresaka;
+    }
+
     public void prijaviGresku(Exception e) {
-        brojacGresaka++;
-        logGresaka.append("Greška #").append(brojacGresaka).append(" - ")
+        brojacGresakaGlobalno++;
+        logGresaka.append("Greška #").append(brojacGresakaGlobalno).append(" - ")
                 .append(e.getMessage());
         trenutnaGreska.setLength(0);
-        trenutnaGreska.append("Greška #").append(brojacGresaka).append(" - ")
+        trenutnaGreska.append("Greška #").append(brojacGresakaGlobalno).append(" - ")
                 .append(e.getMessage());
         ispisiTrenutnuGresku(trenutnaGreska);
     }
 
     public void prijaviGresku(Exception e, String podrucjeGreske) {
-        brojacGresaka++;
-        logGresaka.append("Greška #").append(brojacGresaka).append(" - ").append(podrucjeGreske).append(" - ")
+        brojacGresakaGlobalno++;
+        povecajBrojacGresakaPrimjene(podrucjeGreske);
+        logGresaka.append("Greška #").append(brojacGresakaGlobalno).append(" - ").append(podrucjeGreske).append(" - ")
                 .append(e.getMessage());
         trenutnaGreska.setLength(0);
-        trenutnaGreska.append("Greška #").append(brojacGresaka).append(" - ").append(podrucjeGreske).append(" - ")
+        trenutnaGreska.append("Greška #").append(brojacGresakaGlobalno).append(" - ").append(podrucjeGreske).append(" - ")
                 .append(e.getMessage());
         ispisiTrenutnuGresku(trenutnaGreska);
     }
 
     public void prijaviGresku(Exception e, String podrucjeGreske, String dodatniAtribut) {
-        brojacGresaka++;
-        logGresaka.append("Greška #").append(brojacGresaka).append(" - ").append(podrucjeGreske).append(" - ").append(dodatniAtribut).append(" - ")
+        brojacGresakaGlobalno++;
+        povecajBrojacGresakaPrimjene(podrucjeGreske);
+        logGresaka.append("Greška #").append(brojacGresakaGlobalno).append(" - ").append(podrucjeGreske).append(" - ").append(dodatniAtribut).append(" - ")
                 .append(e.getMessage());
         trenutnaGreska.setLength(0);
-        trenutnaGreska.append("Greška #").append(brojacGresaka).append(" - ").append(podrucjeGreske).append(" - ").append(dodatniAtribut).append(" - ")
+        trenutnaGreska.append("Greška #").append(brojacGresakaGlobalno).append(" - ").append(podrucjeGreske).append(" - ").append(dodatniAtribut).append(" - ")
                 .append(e.getMessage());
         ispisiTrenutnuGresku(trenutnaGreska);
     }
 
     public void prijaviGresku(Exception e, String podrucjeGreske, String[] dodatniAtributi) {
-        brojacGresaka++;
+        brojacGresakaGlobalno++;
+        povecajBrojacGresakaPrimjene(podrucjeGreske);
         trenutnaGreska.setLength(0);
 
-        logGresaka.append("Greška #").append(brojacGresaka).append(" - ").append(podrucjeGreske).append(" - ");
-        trenutnaGreska.append("Greška #").append(brojacGresaka).append(" - ").append(podrucjeGreske).append(" - ");
+        logGresaka.append("Greška #").append(brojacGresakaGlobalno).append(" - ").append(podrucjeGreske).append(" - ");
+        trenutnaGreska.append("Greška #").append(brojacGresakaGlobalno).append(" - ").append(podrucjeGreske).append(" - ");
         for (String atribut : dodatniAtributi) {
             logGresaka.append(atribut).append(" - ");
             trenutnaGreska.append(atribut).append(" - ");
@@ -67,16 +84,33 @@ public class SustavGresaka {
     }
 
     public void ispisiSveGreske() {
-        if (brojacGresaka > 0) {
-            System.out.println("Ukupan broj grešaka: " + brojacGresaka);
-            System.out.println(logGresaka.toString());
+        if (brojacGresakaGlobalno > 0) {
+            System.out.println("\n----- Statistika Grešaka -----");
+            System.out.println("Ukupan broj grešaka: " + brojacGresakaGlobalno);
+            System.out.println("Broj grešaka po područjima:");
+            System.out.println("1. Stanice: " + brojacGresakaStanice);
+            System.out.println("2. Vozila: " + brojacGresakaVozila);
+            System.out.println("3. Kompozicije: " + brojacGresakaKompozicije);
+
         } else {
-            System.out.println("Nema prijavljenih grešaka.");
+            System.out.println("Nema prijavljenih grešaka.\n");
+        }
+        System.out.println("------------------------------\n");
+    }
+
+
+    private void povecajBrojacGresakaPrimjene(String podrucjePrimjene){
+        if (podrucjePrimjene.equals(podrucjaGresaka.get(0))) {
+            brojacGresakaStanice++;
+        } else if (podrucjePrimjene.equals(podrucjaGresaka.get(1))) {
+            brojacGresakaVozila++;
+        } else if (podrucjePrimjene.equals(podrucjaGresaka.get(2))) {
+            brojacGresakaKompozicije++;
         }
     }
 
     public void resetirajGreske() {
-        brojacGresaka = 0;
+        brojacGresakaGlobalno = 0;
         logGresaka.setLength(0);
     }
 }

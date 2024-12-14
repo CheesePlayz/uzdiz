@@ -34,7 +34,7 @@ public class PrijevoznoSredstvoValidator implements IValidator {
     public boolean Validiraj(String[] redovi, int redakCSV, List<Kompozicija> kompozicije) {
         int redak = 0;
         if (redovi.length != 18) {
-            SustavGresaka.getInstance().prijaviGresku(new NevaljaniFormatGreska("Nema dovoljno podataka u redu."), "Učitavanje CSV-a Vozila");
+            SustavGresaka.getInstance().prijaviGresku(new NevaljaniFormatGreska("Nema dovoljno podataka u redu."), SustavGresaka.getInstance().getPodrucjaGresaka().get(1));
             return false;
         }
         try {
@@ -164,7 +164,7 @@ public class PrijevoznoSredstvoValidator implements IValidator {
                 throw new NevaljaniFormatGreska("Neispravan format za STATUS: očekuje se 'I' ili 'K'.");
             }
         } catch (Exception e) {
-            SustavGresaka.getInstance().prijaviGresku(e, "Učitavanje CSV-a Vozila", new String[]{"CSV redak: " + redakCSV, "Trenutni zapis: " + redovi[redak].trim()});
+            SustavGresaka.getInstance().prijaviGresku(e, SustavGresaka.getInstance().getPodrucjaGresaka().get(1), new String[]{"CSV redak: " + redakCSV, "Trenutni zapis: " + redovi[redak].trim()});
             return false;
         }
 

@@ -1,16 +1,15 @@
 package foi.uzdiz.sbicak20.pomocnici;
 
-import foi.uzdiz.sbicak20.greske.SustavGresaka;
 import foi.uzdiz.sbicak20.modeli.Kompozicija;
-import foi.uzdiz.sbicak20.modeli.ZeljeznickaPrijevoznaSredstva;
-import foi.uzdiz.sbicak20.modeli.ZeljeznickeStanice;
+import foi.uzdiz.sbicak20.modeli.ZeljeznickoPrijevoznoSredstvo;
+import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
 
 import java.util.List;
 
 public class InitSustava {
     CitacCSV csvcitac;
-    private List<ZeljeznickeStanice> stanice;
-    private List<ZeljeznickaPrijevoznaSredstva> vozila;
+    private List<ZeljeznickaStanica> stanice;
+    private List<ZeljeznickoPrijevoznoSredstvo> vozila;
     private List<List<Kompozicija>> kompozicije;
 
     public InitSustava(String putanjaCsvStanice, String putanjaCsvPrijevoznaSredstva, String putanjaCsvKompozicije) throws Exception {
@@ -21,11 +20,11 @@ public class InitSustava {
 
     }
 
-    public List<ZeljeznickeStanice> getStanice() {
+    public List<ZeljeznickaStanica> getStanice() {
         return stanice;
     }
 
-    public List<ZeljeznickaPrijevoznaSredstva> getVozila() {
+    public List<ZeljeznickoPrijevoznoSredstvo> getVozila() {
         return vozila;
     }
 

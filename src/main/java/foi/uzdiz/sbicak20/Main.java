@@ -58,7 +58,7 @@ public class Main {
                 initSustava.getKompozicije()
         );
 
-
+        SustavGresaka.getInstance().ispisiSveGreske();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             while (true) {
                 System.out.print("Komanda >> ");

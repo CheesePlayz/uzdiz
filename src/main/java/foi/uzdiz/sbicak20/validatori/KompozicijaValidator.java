@@ -26,7 +26,7 @@ public class KompozicijaValidator implements IValidator {
                     throw new NevaljaniFormatGreska("Neispravan format za ULOGA_PATTERN: očekuje se 'P' ili 'V'.");
                 }
             } catch (Exception e) {
-                SustavGresaka.getInstance().prijaviGresku(e, "Učitavanje CSV-a Kompozicija", new String[]{"CSV redak: " + redakCSV, "Trenutni zapis: " + redovi[redak].trim()});
+                SustavGresaka.getInstance().prijaviGresku(e, SustavGresaka.getInstance().getPodrucjaGresaka().get(2), new String[]{"CSV redak: " + redakCSV, "Trenutni zapis: " + redovi[redak].trim()});
                 return false;
             }
         }

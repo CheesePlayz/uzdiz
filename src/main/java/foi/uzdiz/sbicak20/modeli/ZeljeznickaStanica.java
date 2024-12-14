@@ -2,7 +2,7 @@ package foi.uzdiz.sbicak20.modeli;
 
 import foi.uzdiz.sbicak20.enumeracije.ZeljeznickeStaniceEnum.*;
 
-public class ZeljeznickeStanice {
+public class ZeljeznickaStanica {
 
     private String stanica;
     private String oznakaPruge;
@@ -35,7 +35,7 @@ public class ZeljeznickeStanice {
         return duzina;
     }
 
-    private ZeljeznickeStanice(StanicaBuilder builder) {
+    private ZeljeznickaStanica(StanicaBuilder builder) {
         this.stanica = builder.stanica;
         this.oznakaPruge = builder.oznakaPruge;
         this.vrstaStanice = ZSVrstaStaniceEnum.fromLabel(builder.vrstaStanice);
@@ -138,8 +138,8 @@ public class ZeljeznickeStanice {
             return this;
         }
 
-        public ZeljeznickeStanice build() {
-            return new ZeljeznickeStanice(this);
+        public ZeljeznickaStanica build() {
+            return new ZeljeznickaStanica(this);
         }
     }
 

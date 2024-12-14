@@ -1,27 +1,28 @@
 package foi.uzdiz.sbicak20;
 
 import foi.uzdiz.sbicak20.modeli.Kompozicija;
-import foi.uzdiz.sbicak20.modeli.ZeljeznickaPrijevoznaSredstva;
-import foi.uzdiz.sbicak20.modeli.ZeljeznickeStanice;
+import foi.uzdiz.sbicak20.modeli.ZeljeznickoPrijevoznoSredstvo;
+import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.lang.System.exit;
 
 public class ZeljeznickiSustavSingleton {
     private static ZeljeznickiSustavSingleton instanca;
 
-    private List<ZeljeznickeStanice> stanice;
-    private List<ZeljeznickaPrijevoznaSredstva> vozila;
+    private List<ZeljeznickaStanica> stanice;
+    private List<ZeljeznickoPrijevoznoSredstvo> vozila;
     private List<List<Kompozicija>> kompozicije;
 
-    private ZeljeznickiSustavSingleton(List<ZeljeznickeStanice> stanice, List<ZeljeznickaPrijevoznaSredstva> vozila, List<List<Kompozicija>> kompozicije) {
+    private ZeljeznickiSustavSingleton(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije) {
         this.stanice = stanice;
         this.vozila = vozila;
         this.kompozicije = kompozicije;
     }
 
-    public static ZeljeznickiSustavSingleton getInstanca(List<ZeljeznickeStanice> stanice, List<ZeljeznickaPrijevoznaSredstva> vozila, List<List<Kompozicija>> kompozicije) {
+    public static ZeljeznickiSustavSingleton getInstanca(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije) {
         if (instanca == null) {
             instanca = new ZeljeznickiSustavSingleton(stanice, vozila, kompozicije);
         }
@@ -58,7 +59,16 @@ public class ZeljeznickiSustavSingleton {
             }
 
             IspisPregledStanicaNaOdredenojPruzi(stanice, oznakaPruge, obrnutRedoslijed);
-        } else {
+        }
+        else if (komanda.startsWith("ISI2S")){
+            String[] dioKomande = komanda.split(" ");
+            if (dioKomande.length != 4) {
+                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
+                return;
+            }
+            Isi2s(stanice, dioKomande[1], dioKomande[3]);
+        }
+        else {
             switch (komanda) {
                 case "Q": {
                     exit(0);
@@ -74,17 +84,17 @@ public class ZeljeznickiSustavSingleton {
         }
     }
 
-    private void IspisPruge(List<ZeljeznickeStanice> stanice) {
+    private void IspisPruge(List<ZeljeznickaStanica> stanice) {
         if (stanice == null || stanice.isEmpty()) {
             System.out.println("Nema dostupnih podataka o stanicama.");
             return;
         }
 
-        Map<String, List<ZeljeznickeStanice>> prugeMap = new HashMap<>();
+        Map<String, List<ZeljeznickaStanica>> prugeMap = new HashMap<>();
         int[] maxDuljine = {6, 15, 15, 18};
 
 
-        for (ZeljeznickeStanice stanica : stanice) {
+        for (ZeljeznickaStanica stanica : stanice) {
             String oznakaPruge = stanica.getOznakaPruge();
             prugeMap.putIfAbsent(oznakaPruge, new ArrayList<>());
             prugeMap.get(oznakaPruge).add(stanica);
@@ -92,8 +102,8 @@ public class ZeljeznickiSustavSingleton {
             maxDuljine[0] = Math.max(maxDuljine[0], oznakaPruge.length());
         }
 
-        for (Map.Entry<String, List<ZeljeznickeStanice>> entry : prugeMap.entrySet()) {
-            List<ZeljeznickeStanice> stanicePruge = entry.getValue();
+        for (Map.Entry<String, List<ZeljeznickaStanica>> entry : prugeMap.entrySet()) {
+            List<ZeljeznickaStanica> stanicePruge = entry.getValue();
             if (stanicePruge.size() < 2) continue;
 
 
@@ -114,9 +124,9 @@ public class ZeljeznickiSustavSingleton {
 
         System.out.printf(format, "Oznaka", "Pocetna stanica", "Zavrsna stanica", "Ukupna kilometraza");
 
-        for (Map.Entry<String, List<ZeljeznickeStanice>> entry : prugeMap.entrySet()) {
+        for (Map.Entry<String, List<ZeljeznickaStanica>> entry : prugeMap.entrySet()) {
             String oznaka = entry.getKey();
-            List<ZeljeznickeStanice> stanicePruge = entry.getValue();
+            List<ZeljeznickaStanica> stanicePruge = entry.getValue();
 
             if (stanicePruge.size() < 2) {
                 continue;
@@ -126,7 +136,7 @@ public class ZeljeznickiSustavSingleton {
             String zavrsnaStanica = stanicePruge.get(stanicePruge.size() - 1).getStanica();
             double ukupnaKilometraza = 0;
 
-            for (ZeljeznickeStanice stanica : stanicePruge) {
+            for (ZeljeznickaStanica stanica : stanicePruge) {
                 ukupnaKilometraza += stanica.getDuzina();
             }
 
@@ -138,16 +148,16 @@ public class ZeljeznickiSustavSingleton {
     }
 
 
-    private void IspisPregledStanicaNaOdredenojPruzi(List<ZeljeznickeStanice> stanice, String oznakaPruge, boolean obrnutRedoslijed) {
+    private void IspisPregledStanicaNaOdredenojPruzi(List<ZeljeznickaStanica> stanice, String oznakaPruge, boolean obrnutRedoslijed) {
         if (stanice == null || stanice.isEmpty()) {
             System.out.println("Nema dostupnih podataka o stanicama.");
             return;
         }
 
-        List<ZeljeznickeStanice> stanicePruge = new ArrayList<>();
+        List<ZeljeznickaStanica> stanicePruge = new ArrayList<>();
         int[] maxDuljine = {13, 13, 18};
 
-        for (ZeljeznickeStanice stanica : stanice) {
+        for (ZeljeznickaStanica stanica : stanice) {
             if (stanica.getOznakaPruge().equals(oznakaPruge)) {
                 stanicePruge.add(stanica);
                 maxDuljine[0] = Math.max(maxDuljine[0], stanica.getStanica().length());
@@ -180,7 +190,7 @@ public class ZeljeznickiSustavSingleton {
         if (obrnutRedoslijed) {
             int brojElemenataUnutarPruge = stanicePruge.size() - 1;
             for (int i = brojElemenataUnutarPruge; i >= 0; i--) {
-                ZeljeznickeStanice stanica = stanicePruge.get(i);
+                ZeljeznickaStanica stanica = stanicePruge.get(i);
                 if (i == brojElemenataUnutarPruge) {
                     ukupnaKilometraza = 0;
                 } else {
@@ -189,12 +199,72 @@ public class ZeljeznickiSustavSingleton {
                 System.out.printf(format, stanica.getStanica(), stanica.getVrstaStanice(), String.format("%.1f km", ukupnaKilometraza));
             }
         } else {
-            for (ZeljeznickeStanice stanica : stanicePruge) {
+            for (ZeljeznickaStanica stanica : stanicePruge) {
                 ukupnaKilometraza += stanica.getDuzina();
                 System.out.printf(format, stanica.getStanica(), stanica.getVrstaStanice(), String.format("%.1f km", ukupnaKilometraza));
             }
         }
     }
+
+
+    private void Isi2s(List<ZeljeznickaStanica> stanice, String pocetnaStanica, String zavrsnaStanica) {
+        // Koristenje grafa za modeliranje povezanosti stanica
+        Map<String, List<ZeljeznickaStanica>> graf = new HashMap<>();
+
+        // Izgradnja grafa s dvosmjernim vezama
+        for (ZeljeznickaStanica stanica : stanice) {
+            graf.putIfAbsent(stanica.getStanica(), new ArrayList<>());
+            for (ZeljeznickaStanica susjed : stanice) {
+                if (!stanica.getStanica().equals(susjed.getStanica()) && stanica.getOznakaPruge().equals(susjed.getOznakaPruge())) {
+                    graf.get(stanica.getStanica()).add(susjed);
+                    graf.putIfAbsent(susjed.getStanica(), new ArrayList<>());
+                    graf.get(susjed.getStanica()).add(stanica); // Dodavanje obrnute veze
+                }
+            }
+        }
+
+        // DFS za pronalazak puta
+        List<ZeljeznickaStanica> rezultat = new ArrayList<>();
+        Set<String> posjeceni = new HashSet<>();
+        int ukupnaUdaljenost = 0;
+        if (!dfs(graf, pocetnaStanica, zavrsnaStanica, posjeceni, rezultat, stanice, ukupnaUdaljenost)) {
+            System.out.println("Put nije pronaden!");
+            return;
+        }
+
+        // Ispis rezultata
+        System.out.println(String.format("%-20s %-10s %-10s", "Naziv", "Vrsta", "Ukupna udaljenost"));
+        int kumulativnaUdaljenost = 0;
+        for (ZeljeznickaStanica stanica : rezultat) {
+            kumulativnaUdaljenost += stanica.getDuzina();
+            System.out.println(String.format("%-20s %-10s %-10d", stanica.getStanica(), stanica.getVrstaStanice(), kumulativnaUdaljenost));
+        }
+    }
+
+    private boolean dfs(Map<String, List<ZeljeznickaStanica>> graf, String trenutni, String kraj, Set<String> posjeceni, List<ZeljeznickaStanica> rezultat, List<ZeljeznickaStanica> stanice, int ukupnaUdaljenost) {
+        if (posjeceni.contains(trenutni)) return false;
+        posjeceni.add(trenutni);
+
+        // Dodavanje trenutne stanice u rezultat
+        ZeljeznickaStanica trenutnaStanica = stanice.stream().filter(s -> s.getStanica().equals(trenutni)).findFirst().orElse(null);
+        if (trenutnaStanica != null) rezultat.add(trenutnaStanica);
+
+        if (trenutni.equals(kraj)) return true;
+
+        for (ZeljeznickaStanica susjed : graf.getOrDefault(trenutni, new ArrayList<>())) {
+            // Nastavi pretragu bez obzira na udaljenost
+            if (!posjeceni.contains(susjed.getStanica())) {
+                if (dfs(graf, susjed.getStanica(), kraj, posjeceni, rezultat, stanice, ukupnaUdaljenost + susjed.getDuzina())) {
+                    return true;
+                }
+            }
+        }
+
+        // Ukloni stanicu ako nema puta
+        rezultat.remove(rezultat.size() - 1);
+        return false;
+    }
+
 
 
     private void IspisVozilaIzKompozicije(String oznakaKompozicije) {
@@ -219,8 +289,8 @@ public class ZeljeznickiSustavSingleton {
 
         for (Kompozicija kompozicija : trazenaKompozicija) {
             String oznakaPrijevoznogSredstva = kompozicija.getOznakaPrijevoznogSredstva();
-            ZeljeznickaPrijevoznaSredstva sredstvo = null;
-            for (ZeljeznickaPrijevoznaSredstva ps : vozila) {
+            ZeljeznickoPrijevoznoSredstvo sredstvo = null;
+            for (ZeljeznickoPrijevoznoSredstvo ps : vozila) {
                 if (ps.getOznaka().equals(oznakaPrijevoznogSredstva)) {
                     sredstvo = ps;
                     break;

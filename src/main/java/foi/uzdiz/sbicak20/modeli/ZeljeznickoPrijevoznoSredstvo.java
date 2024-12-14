@@ -5,7 +5,7 @@ import foi.uzdiz.sbicak20.enumeracije.ZeljeznickaPrijevoznaSredstvaEnum.ZPSStatu
 import foi.uzdiz.sbicak20.enumeracije.ZeljeznickaPrijevoznaSredstvaEnum.ZPSVrstaPogona;
 import foi.uzdiz.sbicak20.enumeracije.ZeljeznickaPrijevoznaSredstvaEnum.ZPSVrstaPrijevozaEnum;
 
-public class ZeljeznickaPrijevoznaSredstva {
+public class ZeljeznickoPrijevoznoSredstvo {
 
     private String oznaka;
     private String opis;
@@ -27,7 +27,7 @@ public class ZeljeznickaPrijevoznaSredstva {
     private ZPSStatusEnum status;
 
 
-    private ZeljeznickaPrijevoznaSredstva(VoziloBuilder builder) {
+    private ZeljeznickoPrijevoznoSredstvo(VoziloBuilder builder) {
         this.oznaka = builder.oznaka;
         this.opis = builder.opis;
         this.proizvodac = builder.proizvodac;
@@ -186,8 +186,8 @@ public class ZeljeznickaPrijevoznaSredstva {
             return this;
         }
 
-        public ZeljeznickaPrijevoznaSredstva build() {
-            return new ZeljeznickaPrijevoznaSredstva(this);
+        public ZeljeznickoPrijevoznoSredstvo build() {
+            return new ZeljeznickoPrijevoznoSredstvo(this);
         }
     }
 

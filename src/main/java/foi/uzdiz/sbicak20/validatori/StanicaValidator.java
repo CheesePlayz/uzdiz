@@ -127,7 +127,7 @@ public class StanicaValidator implements IValidator {
             }
 
         } catch (Exception e) {
-            SustavGresaka.getInstance().prijaviGresku(e, "Učitavanje CSV-a Stanica", new String[]{"CSV redak: " + redakCSV, "Trenutni zapis: " + redovi[redak].trim()});
+            SustavGresaka.getInstance().prijaviGresku(e, SustavGresaka.getInstance().getPodrucjaGresaka().getFirst(), new String[]{"CSV redak: " + redakCSV, "Trenutni zapis: " + redovi[redak].trim()});
             return false;
         }
         return true;

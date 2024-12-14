@@ -1,22 +1,18 @@
 package foi.uzdiz.sbicak20.pomocnici;
 
-import foi.uzdiz.sbicak20.enumeracije.KompozicijeEnum.KUlogeEnum;
 import foi.uzdiz.sbicak20.greske.NullVrijednostGreska;
 import foi.uzdiz.sbicak20.greske.SustavGresaka;
 import foi.uzdiz.sbicak20.modeli.Kompozicija;
-import foi.uzdiz.sbicak20.modeli.ZeljeznickaPrijevoznaSredstva;
-import foi.uzdiz.sbicak20.modeli.ZeljeznickeStanice;
+import foi.uzdiz.sbicak20.modeli.ZeljeznickoPrijevoznoSredstvo;
+import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
 import foi.uzdiz.sbicak20.validatori.IValidator;
-import foi.uzdiz.sbicak20.validatori.KompozicijaValidator;
 import foi.uzdiz.sbicak20.validatori.ValidatorFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.lang.System.exit;
 
@@ -24,14 +20,14 @@ public class CitacCSV {
 
     static IValidator validator;
 
-    public static List<ZeljeznickeStanice> ucitajStaniceIzCSV(String putanjaDatoteke) throws Exception {
+    public static List<ZeljeznickaStanica> ucitajStaniceIzCSV(String putanjaDatoteke) throws Exception {
         if (putanjaDatoteke == null) {
             SustavGresaka.getInstance().prijaviGresku(new NullVrijednostGreska("Datoteka za stanice je null"));
             exit(1);
         }
-        List<ZeljeznickeStanice> stanice = new ArrayList<>();
+        List<ZeljeznickaStanica> stanice = new ArrayList<>();
         int redakCSV = 1;
-        validator = ValidatorFactory.napraviValidator(ZeljeznickeStanice.class);
+        validator = ValidatorFactory.napraviValidator(ZeljeznickaStanica.class);
         try (BufferedReader br = new BufferedReader(new FileReader(putanjaDatoteke))) {
             String line;
             br.readLine();
@@ -47,7 +43,7 @@ public class CitacCSV {
                     continue;
                 }
 
-                ZeljeznickeStanice stanica = new ZeljeznickeStanice.StanicaBuilder()
+                ZeljeznickaStanica stanica = new ZeljeznickaStanica.StanicaBuilder()
                         .setStanica(redovi[0].trim())
                         .setOznakaPruge(redovi[1].trim())
                         .setVrstaStanice(redovi[2].trim())
@@ -74,14 +70,14 @@ public class CitacCSV {
         return stanice;
     }
 
-    public static List<ZeljeznickaPrijevoznaSredstva> ucitajVozilaIzCSV(String putanjaDatoteke) throws Exception {
+    public static List<ZeljeznickoPrijevoznoSredstvo> ucitajVozilaIzCSV(String putanjaDatoteke) throws Exception {
         if (putanjaDatoteke == null) {
             SustavGresaka.getInstance().prijaviGresku(new NullVrijednostGreska("Datoteka za vozila je null"));
             exit(1);
         }
-        List<ZeljeznickaPrijevoznaSredstva> vozila = new ArrayList<ZeljeznickaPrijevoznaSredstva>();
+        List<ZeljeznickoPrijevoznoSredstvo> vozila = new ArrayList<ZeljeznickoPrijevoznoSredstvo>();
         int redakCSV = 1;
-        validator = ValidatorFactory.napraviValidator(ZeljeznickaPrijevoznaSredstva.class);
+        validator = ValidatorFactory.napraviValidator(ZeljeznickoPrijevoznoSredstvo.class);
         try (BufferedReader br = new BufferedReader(new FileReader(putanjaDatoteke))) {
             String line;
             br.readLine();
@@ -95,7 +91,7 @@ public class CitacCSV {
                     continue;
                 }
 
-                ZeljeznickaPrijevoznaSredstva vozilo = new ZeljeznickaPrijevoznaSredstva.VoziloBuilder()
+                ZeljeznickoPrijevoznoSredstvo vozilo = new ZeljeznickoPrijevoznoSredstvo.VoziloBuilder()
                         .setOznaka(redovi[0].trim())
                         .setOpis(redovi[1].trim())
                         .setProizvodac(redovi[2].trim())
@@ -152,7 +148,7 @@ public class CitacCSV {
                         } else {
                             SustavGresaka.getInstance().prijaviGresku(
                                     new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge."),
-                                    "Učitavanje CSV-a kompozicija",
+                                    SustavGresaka.getInstance().getPodrucjaGresaka().get(2),
                                     new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka}
                             );
                         }
@@ -186,7 +182,7 @@ public class CitacCSV {
                         } else {
                             SustavGresaka.getInstance().prijaviGresku(
                                     new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge"),
-                                    "Učitavanje CSV-a kompozicija",
+                                    SustavGresaka.getInstance().getPodrucjaGresaka().get(2),
                                     new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka}
                             );
                         }
@@ -214,7 +210,7 @@ public class CitacCSV {
                 } else {
                     SustavGresaka.getInstance().prijaviGresku(
                             new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge"),
-                            "Učitavanje CSV-a kompozicija",
+                            SustavGresaka.getInstance().getPodrucjaGresaka().get(2),
                             new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka}
                     );
                 }
