@@ -23,6 +23,9 @@ public class StanicaValidator implements IValidator {
     private Pattern DO_PO_DUZINI_PATTERN = Pattern.compile("^(?:[2-9](?:,[0-9])?|10(?:,[0-9])?)$");
     private Pattern STATUS_PRUGE_PATTERN = Pattern.compile("^[IK]$");
     private Pattern DUZINA_PATTERN = Pattern.compile("^(?:[1-9]?[0-9]{0,2}|0)$");
+    private Pattern VRIJEME_NORMALNI_VLAK = Pattern.compile("^([0-9]|[0-9]\\d)");
+    private Pattern VRIJEME_UBRZANI_VLAK = Pattern.compile("^([0-9]|[0-9]\\d)");
+    private Pattern VRIJEME_BRZI_VLAK = Pattern.compile("^([0-9]|[0-9]\\d)");
 
     @Override
     public boolean Validiraj(String[] redovi, int redakCSV, List<Kompozicija> kompzicije) {
@@ -124,6 +127,40 @@ public class StanicaValidator implements IValidator {
                     throw new PrazanStringGreska("Prazan format za DUZINA: očekuje se broj između 0 i 999.");
                 }
                 throw new NevaljaniFormatGreska("Neispravan format za DUZINA: očekuje se broj između 0 i 999.");
+            }
+
+
+            if (redovi != null && redovi.length > 14) {
+                if (redovi[14] != null) {
+                    if (!VRIJEME_NORMALNI_VLAK.matcher(redovi[14].trim()).matches()) {
+                        redak = 14;
+                        if (!redovi[redak].trim().isEmpty()) {
+                            throw new NevaljaniFormatGreska("Neispravan format za VRIJEME_NORMALNI_VLAK: očekuje se broj između 0 i 99.");
+                        }
+                    }
+                }
+            }
+
+            if (redovi != null && redovi.length > 15) {
+                if (redovi[15] != null) {
+                    if (!VRIJEME_UBRZANI_VLAK.matcher(redovi[15].trim()).matches()) {
+                        redak = 15;
+                        if (!redovi[redak].trim().isEmpty()) {
+                            throw new NevaljaniFormatGreska("Neispravan format za VRIJEME_UBRZANI_VLAK: očekuje se broj između 0 i 99.");
+                        }
+                    }
+                }
+            }
+
+            if (redovi != null && redovi.length > 16) {
+                if (redovi[16] != null) {
+                    if (!VRIJEME_BRZI_VLAK.matcher(redovi[16].trim()).matches()) {
+                        redak = 16;
+                        if (!redovi[redak].trim().isEmpty()) {
+                            throw new NevaljaniFormatGreska("Neispravan format za VRIJEME_BRZI_VLAK: očekuje se broj između 0 i 99.");
+                        }
+                    }
+                }
             }
 
         } catch (Exception e) {

@@ -5,7 +5,6 @@ import foi.uzdiz.sbicak20.modeli.ZeljeznickoPrijevoznoSredstvo;
 import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.lang.System.exit;
 
@@ -145,6 +144,11 @@ public class ZeljeznickiSustavSingleton {
 
             System.out.printf(format, oznaka, pocetnaStanica, zavrsnaStanica, ukupnaKilometraza);
         }
+
+
+        for (ZeljeznickaStanica stanica : stanice) {
+            System.out.println(stanica.toString());
+        }
     }
 
 
@@ -226,8 +230,9 @@ public class ZeljeznickiSustavSingleton {
         // DFS za pronalazak puta
         List<ZeljeznickaStanica> rezultat = new ArrayList<>();
         Set<String> posjeceni = new HashSet<>();
-        int ukupnaUdaljenost = 0;
-        if (!dfs(graf, pocetnaStanica, zavrsnaStanica, posjeceni, rezultat, stanice, ukupnaUdaljenost)) {
+        ZeljeznickaStanica pocetna = stanice.stream().filter(s -> s.getStanica().equals(pocetnaStanica)).findFirst().orElse(null);
+        String pocetnaPruge = pocetna != null ? pocetna.getOznakaPruge() : "";
+        if (!dfs(graf, pocetnaStanica, zavrsnaStanica, posjeceni, rezultat, stanice, 0, pocetnaPruge)) {
             System.out.println("Put nije pronaden!");
             return;
         }
@@ -241,7 +246,8 @@ public class ZeljeznickiSustavSingleton {
         }
     }
 
-    private boolean dfs(Map<String, List<ZeljeznickaStanica>> graf, String trenutni, String kraj, Set<String> posjeceni, List<ZeljeznickaStanica> rezultat, List<ZeljeznickaStanica> stanice, int ukupnaUdaljenost) {
+    private boolean dfs(Map<String, List<ZeljeznickaStanica>> graf, String trenutni, String kraj, Set<String> posjeceni,
+                        List<ZeljeznickaStanica> rezultat, List<ZeljeznickaStanica> stanice, int ukupnaUdaljenost, String trenutnaPruge) {
         if (posjeceni.contains(trenutni)) return false;
         posjeceni.add(trenutni);
 
@@ -249,21 +255,25 @@ public class ZeljeznickiSustavSingleton {
         ZeljeznickaStanica trenutnaStanica = stanice.stream().filter(s -> s.getStanica().equals(trenutni)).findFirst().orElse(null);
         if (trenutnaStanica != null) rezultat.add(trenutnaStanica);
 
+        // Ako smo došli do kraja, vraćamo true
         if (trenutni.equals(kraj)) return true;
 
+        // Pretraga susjeda
         for (ZeljeznickaStanica susjed : graf.getOrDefault(trenutni, new ArrayList<>())) {
-            // Nastavi pretragu bez obzira na udaljenost
-            if (!posjeceni.contains(susjed.getStanica())) {
-                if (dfs(graf, susjed.getStanica(), kraj, posjeceni, rezultat, stanice, ukupnaUdaljenost + susjed.getDuzina())) {
+            // Nastavi pretragu samo ako je ista pruga
+            if (!posjeceni.contains(susjed.getStanica()) && susjed.getOznakaPruge().equals(trenutnaPruge)) {
+                if (dfs(graf, susjed.getStanica(), kraj, posjeceni, rezultat, stanice, ukupnaUdaljenost + (int)susjed.getDuzina(), trenutnaPruge)) {
                     return true;
                 }
             }
         }
 
-        // Ukloni stanicu ako nema puta
+        // Ako nismo našli put, uklonimo trenutnu stanicu iz rezultata i vratimo false
         rezultat.remove(rezultat.size() - 1);
         return false;
     }
+
+
 
 
 

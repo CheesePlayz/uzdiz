@@ -18,6 +18,9 @@ public class ZeljeznickaStanica {
     private double doPoDuznomM;
     private ZSStatusPrugeEnum statusPruge;
     private int duzina;
+    private Integer vrijemeNormalniVlak;
+    private Integer vrijemeUbrzaniVlak;
+    private Integer vrijemeBrziVlak;
 
     public String getStanica() {
         return stanica;
@@ -35,6 +38,16 @@ public class ZeljeznickaStanica {
         return duzina;
     }
 
+    public Integer getVrijemeNormalniVlak() {
+        return vrijemeNormalniVlak;
+    }
+    public Integer getVrijemeUbrzaniVlak() {
+        return vrijemeUbrzaniVlak;
+    }
+    public Integer getVrijemeBrziVlak() {
+        return vrijemeBrziVlak;
+    }
+
     private ZeljeznickaStanica(StanicaBuilder builder) {
         this.stanica = builder.stanica;
         this.oznakaPruge = builder.oznakaPruge;
@@ -50,6 +63,9 @@ public class ZeljeznickaStanica {
         this.doPoDuznomM = builder.doPoDuznomM;
         this.statusPruge = ZSStatusPrugeEnum.valueOf(builder.statusPruge);
         this.duzina = builder.duzina;
+        this.vrijemeNormalniVlak = builder.vrijemeNormalniVlak;
+        this.vrijemeUbrzaniVlak = builder.vrijemeUbrzaniVlak;
+        this.vrijemeBrziVlak = builder.vrijemeBrziVlak;
     }
 
     public static class StanicaBuilder {
@@ -67,6 +83,9 @@ public class ZeljeznickaStanica {
         private double doPoDuznomM;
         private String statusPruge;
         private int duzina;
+        private Integer vrijemeNormalniVlak;
+        private Integer vrijemeUbrzaniVlak;
+        private Integer vrijemeBrziVlak;
 
         public StanicaBuilder setStanica(String stanica) {
             this.stanica = stanica;
@@ -138,6 +157,21 @@ public class ZeljeznickaStanica {
             return this;
         }
 
+        public StanicaBuilder setVrijemeNormalniVlak(int vrijemeNormalniVlak){
+            this.vrijemeNormalniVlak = vrijemeNormalniVlak != 0 ? vrijemeNormalniVlak : null;
+            return this;
+        }
+
+        public StanicaBuilder setVrijemeUbrzaniVlak(int vrijemeUbrzaniVlak){
+            this.vrijemeUbrzaniVlak = vrijemeUbrzaniVlak != 0 ? vrijemeUbrzaniVlak : null;
+            return this;
+        }
+
+        public StanicaBuilder setVrijemeBrziVlak(int vrijemeBrziVlak){
+            this.vrijemeBrziVlak = vrijemeBrziVlak != 0 ? vrijemeBrziVlak : null;
+            return this;
+        }
+
         public ZeljeznickaStanica build() {
             return new ZeljeznickaStanica(this);
         }
@@ -160,6 +194,9 @@ public class ZeljeznickaStanica {
                 ", doPoDuznomM=" + doPoDuznomM +
                 ", statusPruge='" + statusPruge + '\'' +
                 ", duzina=" + duzina +
+                ", vrijemeNormalniVlak=" + vrijemeNormalniVlak +
+                ", vrijemeUbrzaniVlak=" + vrijemeUbrzaniVlak +
+                ", vrijemeBrziVlak=" + vrijemeBrziVlak +
                 '}';
     }
 }

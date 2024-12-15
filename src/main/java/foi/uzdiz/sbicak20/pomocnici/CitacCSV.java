@@ -37,7 +37,7 @@ public class CitacCSV {
             while ((line = br.readLine()) != null) {
                 redakCSV++;
                 String[] redovi = line.split(";");
-                if (redovi.length != 14) {
+                if (redovi[0].startsWith("#")) {
                     continue;
                 }
                 boolean ispravnaValidacija = validator.Validiraj(redovi, redakCSV, null);
@@ -45,7 +45,7 @@ public class CitacCSV {
                     continue;
                 }
 
-                ZeljeznickaStanica stanica = new ZeljeznickaStanica.StanicaBuilder()
+                ZeljeznickaStanica.StanicaBuilder builder = new ZeljeznickaStanica.StanicaBuilder()
                         .setStanica(redovi[0].trim())
                         .setOznakaPruge(redovi[1].trim())
                         .setVrstaStanice(redovi[2].trim())
@@ -59,8 +59,21 @@ public class CitacCSV {
                         .setDoPoOsovini(Double.parseDouble(redovi[10].trim().replace(",", ".")))
                         .setDoPoDuznomM(Double.parseDouble(redovi[11].trim().replace(",", ".")))
                         .setStatusPruge(redovi[12].trim())
-                        .setDuzina(Integer.parseInt(redovi[13].trim()))
-                        .build();
+                        .setDuzina(Integer.parseInt(redovi[13].trim()));
+
+                if (redovi.length > 14 && redovi[14] != null && !redovi[14].trim().isEmpty()) {
+                    builder.setVrijemeNormalniVlak(Integer.parseInt(redovi[14].trim()));
+                }
+
+                if (redovi.length > 15 && redovi[15] != null && !redovi[15].trim().isEmpty()) {
+                    builder.setVrijemeUbrzaniVlak(Integer.parseInt(redovi[15].trim()));
+                }
+
+                if (redovi.length > 16 && redovi[16] != null && !redovi[16].trim().isEmpty()) {
+                    builder.setVrijemeBrziVlak(Integer.parseInt(redovi[16].trim()));
+                }
+
+                ZeljeznickaStanica stanica = builder.build();
 
                 stanice.add(stanica);
             }
