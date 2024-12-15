@@ -1,8 +1,10 @@
 package foi.uzdiz.sbicak20;
 
 import foi.uzdiz.sbicak20.modeli.Kompozicija;
+import foi.uzdiz.sbicak20.modeli.VozniRedPodaci;
 import foi.uzdiz.sbicak20.modeli.ZeljeznickoPrijevoznoSredstvo;
 import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
+import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
 
 import java.util.*;
 
@@ -14,16 +16,18 @@ public class ZeljeznickiSustavSingleton {
     private List<ZeljeznickaStanica> stanice;
     private List<ZeljeznickoPrijevoznoSredstvo> vozila;
     private List<List<Kompozicija>> kompozicije;
+    private List<VozniRedPodaci> vozniRed;
 
-    private ZeljeznickiSustavSingleton(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije) {
+    private ZeljeznickiSustavSingleton(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr) {
         this.stanice = stanice;
         this.vozila = vozila;
         this.kompozicije = kompozicije;
+        this.vozniRed = vr;
     }
 
-    public static ZeljeznickiSustavSingleton getInstanca(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije) {
+    public static ZeljeznickiSustavSingleton getInstanca(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr) {
         if (instanca == null) {
-            instanca = new ZeljeznickiSustavSingleton(stanice, vozila, kompozicije);
+            instanca = new ZeljeznickiSustavSingleton(stanice, vozila, kompozicije, vr);
         }
         return instanca;
     }
