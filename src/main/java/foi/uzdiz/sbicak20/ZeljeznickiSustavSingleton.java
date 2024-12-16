@@ -12,11 +12,12 @@ import static java.lang.System.exit;
 public class ZeljeznickiSustavSingleton {
     private static ZeljeznickiSustavSingleton instanca;
 
+    private RegistarKorisnika registarKorisnika;
+
     private List<ZeljeznickaStanica> stanice;
     private List<ZeljeznickoPrijevoznoSredstvo> vozila;
     private List<List<Kompozicija>> kompozicije;
     private List<VozniRedPodaci> vozniRedPodaci;
-
     private List<OznakaDana> oznakeDana;
 
     private ZeljeznickiSustavSingleton(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr, List<OznakaDana> od) {
@@ -25,6 +26,7 @@ public class ZeljeznickiSustavSingleton {
         this.kompozicije = kompozicije;
         this.vozniRedPodaci = vr;
         this.oznakeDana = od;
+        registarKorisnika = new RegistarKorisnika();
     }
 
     public static ZeljeznickiSustavSingleton getInstanca(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr, List<OznakaDana> od) {
@@ -73,6 +75,33 @@ public class ZeljeznickiSustavSingleton {
             }
             Isi2s(stanice, dioKomande[1], dioKomande[3]);
         }
+        else if (komanda.startsWith("DK")){
+            String[] dioKomande = komanda.split(" ");
+            if (dioKomande.length != 3) {
+                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
+                return;
+            }
+            registarKorisnika.dodajKorisnika(dioKomande[1], dioKomande[2]);
+        }
+        else if (komanda.startsWith("DPK")){
+            String[] dioKomande = komanda.split(" - ");
+            if (dioKomande.length < 2 || dioKomande.length > 3) {
+                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
+                return;
+            }
+            String imePrezimePart = dioKomande[0].substring(4).trim();
+            String[] imePrezime = imePrezimePart.split(" ", 2);
+            if (imePrezime.length != 2) {
+                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
+                return;
+            }
+            String ime = imePrezime[0];
+            String prezime = imePrezime[1];
+            String oznakaVlaka = dioKomande[1];
+            String stanica = dioKomande.length == 3 ? dioKomande[2] : null;
+
+            registarKorisnika.dodajPracenjeVlaka(ime, prezime, oznakaVlaka, stanica);
+        }
         else {
             switch (komanda) {
                 case "Q": {
@@ -86,6 +115,11 @@ public class ZeljeznickiSustavSingleton {
 
                 case "IV": {
                     IspisVlakova(vozniRedPodaci);
+                    break;
+                }
+
+                case "PK": {
+                    registarKorisnika.ispisiKorisnike();
                     break;
                 }
                 default:
