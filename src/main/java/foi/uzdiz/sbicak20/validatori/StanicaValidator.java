@@ -8,7 +8,7 @@ import foi.uzdiz.sbicak20.modeli.Kompozicija;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class StanicaValidator implements IValidator {
+public class  StanicaValidator implements IValidator {
     private Pattern STANICA_PATTERN = Pattern.compile("^([A-Za-z0-9ČčĆćĐđŠšŽž\\s-–]+)$");
     private Pattern PRUGA_PATTERN = Pattern.compile("^([A-Za-z0-9ČčĆćĐđŠšŽž]+)$");
     private Pattern VRSTA_STANICE_PATTERN = Pattern.compile("^(kol\\.|staj\\.)$");

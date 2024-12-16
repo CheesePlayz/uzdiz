@@ -24,7 +24,7 @@ public class InitSustava {
         stanice = CitacCSV.ucitajStaniceIzCSV(putanjaCsvStanice, new StanicaFactory());
         vozila = CitacCSV.ucitajVozilaIzCSV(putanjaCsvPrijevoznaSredstva, new PrijevoznoSredstvoFactory());
         kompozicije = CitacCSV.ucitajKompozicijeIzCSV(putanjaCsvKompozicije, new KompozicijaFactory());
-        vozniRed = CitacCSV.ucitajVozniRed(putanjaCsvVozniRed, new VozniRedFactory());
+        vozniRed = CitacCSV.ucitajVozniRedIzCSV(putanjaCsvVozniRed, new VozniRedFactory());
 
     }
 

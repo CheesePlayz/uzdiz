@@ -119,6 +119,21 @@ public class VozniRedPodaci {
             return new VozniRedPodaci(this);
         }
     }
+
+    @Override
+    public String toString() {
+        return "VozniRedPodaci {" +
+                "oznakaPruge='" + oznakaPruge + '\'' +
+                ", smjer='" + smjer + '\'' +
+                ", polaznaStanica='" + polaznaStanica + '\'' +
+                ", odredisnaStanica='" + odredisnaStanica + '\'' +
+                ", oznakaVlaka='" + oznakaVlaka + '\'' +
+                ", vrstaVlaka='" + vrstaVlaka + '\'' +
+                ", vrijemePolaska='" + vrijemePolaska + '\'' +
+                ", trajanjeVoznje='" + trajanjeVoznje + '\'' +
+                ", oznakaDana='" + oznakaDana + '\'' +
+                '}';
+    }
 }
 
 

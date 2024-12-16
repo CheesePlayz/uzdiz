@@ -1,5 +1,6 @@
 package foi.uzdiz.sbicak20.pomocnici;
 
+import foi.uzdiz.sbicak20.greske.NevaljaniFormatGreska;
 import foi.uzdiz.sbicak20.greske.NullVrijednostGreska;
 import foi.uzdiz.sbicak20.greske.SustavGresaka;
 import foi.uzdiz.sbicak20.modeli.Kompozicija;
@@ -13,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.System.exit;
@@ -239,27 +241,29 @@ public class CitacCSV {
     }
 
 
-    public static List<VozniRedPodaci> ucitajVozniRed(String putanjaCsvVozniRed, ValidatorFactory factory) throws Exception {
-        if (putanjaCsvVozniRed == null) {
+    public static List<VozniRedPodaci> ucitajVozniRedIzCSV(String putanjaDatoteke, ValidatorFactory factory) throws Exception {
+        if (putanjaDatoteke == null) {
             SustavGresaka.getInstance().prijaviGresku(new NullVrijednostGreska("Datoteka za vozni red je null"));
             System.exit(1);
         }
 
-        List<VozniRedPodaci> listaPodataka = new ArrayList<>();
+        List<VozniRedPodaci> vozniRedPodaciList = new ArrayList<>();
         int redakCSV = 1;
         IValidator validator = factory.napraviValidator();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(putanjaCsvVozniRed))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(putanjaDatoteke))) {
             String line;
-            br.readLine(); // Preskoci header liniju
+            br.readLine();
 
             while ((line = br.readLine()) != null) {
                 redakCSV++;
                 String[] redovi = line.split(";");
 
-                if (redovi.length > 9) {
-                    System.err.println("Redak " + redakCSV + ": Previše stupaca.");
-                    continue;
+                if (redovi.length < 9) {
+                    String[] tempRedovi = new String[9];
+                    Arrays.fill(tempRedovi, "");
+                    System.arraycopy(redovi, 0, tempRedovi, 0, redovi.length);
+                    redovi = tempRedovi;
                 }
 
                 boolean ispravnaValidacija = validator.Validiraj(redovi, redakCSV, null);
@@ -267,38 +271,30 @@ public class CitacCSV {
                     continue;
                 }
 
-                String oznakaPruge = redovi[0] == null ? "" : redovi[0].trim();
-                String smjer = redovi[1] == null ? "" : redovi[1].trim();
-                String polaznaStanica = redovi[2] == null || redovi[2].trim().isEmpty() ? "Prva stanica" : redovi[2].trim();
-                String odredisnaStanica = redovi[3] == null || redovi[3].trim().isEmpty() ? "Zadnja stanica" : redovi[3].trim();
-                String oznakaVlaka = redovi[4] == null ? "" : redovi[4].trim();
-                String vrstaVlaka = redovi[5] == null || redovi[5].trim().isEmpty() ? "N" : redovi[5].trim();
-                String vrijemePolaska = redovi[6] == null ? "" : redovi[6].trim();
-                String trajanjeVoznje = redovi[7] == null ? "" : redovi[7].trim();
-                String oznakaDana = redovi[8] == null ? "" : redovi[8].trim();
-
                 VozniRedPodaci podaci = new VozniRedPodaci.VozniRedPodaciBuilder()
-                        .oznakaPruge(oznakaPruge)
-                        .smjer(smjer)
-                        .polaznaStanica(polaznaStanica)
-                        .odredisnaStanica(odredisnaStanica)
-                        .oznakaVlaka(oznakaVlaka)
-                        .vrstaVlaka(vrstaVlaka)
-                        .vrijemePolaska(vrijemePolaska)
-                        .trajanjeVoznje(trajanjeVoznje)
-                        .oznakaDana(oznakaDana)
+                        .oznakaPruge(redovi[0].trim())
+                        .smjer(redovi[1].trim())
+                        .polaznaStanica(redovi[2].trim().isEmpty() ? "null" : redovi[2].trim())
+                        .odredisnaStanica(redovi[3].trim().isEmpty() ? "null" : redovi[3].trim())
+                        .oznakaVlaka(redovi[4].trim())
+                        .vrstaVlaka(redovi[5].trim().isEmpty() ? "null" : redovi[5].trim())
+                        .vrijemePolaska(redovi[6].trim())
+                        .trajanjeVoznje(redovi[7].trim())
+                        .oznakaDana(redovi[8].trim().isEmpty() ? "null" : redovi[8].trim())
                         .build();
 
-                listaPodataka.add(podaci);
+                vozniRedPodaciList.add(podaci);
             }
         } catch (IOException e) {
             SustavGresaka.getInstance().prijaviGresku(e, "Greška pri učitavanju datoteke");
             System.exit(1);
         }
 
-        for (VozniRedPodaci podaci : listaPodataka) {
-            System.out.println(podaci.toString());
-        }
-        return listaPodataka;
+
+        return vozniRedPodaciList;
     }
+
+
+
+
 }

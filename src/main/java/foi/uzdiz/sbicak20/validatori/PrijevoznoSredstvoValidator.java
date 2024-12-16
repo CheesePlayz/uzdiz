@@ -34,7 +34,7 @@ public class PrijevoznoSredstvoValidator implements IValidator {
     public boolean Validiraj(String[] redovi, int redakCSV, List<Kompozicija> kompozicije) {
         int redak = 0;
         if (redovi.length != 18) {
-            SustavGresaka.getInstance().prijaviGresku(new NevaljaniFormatGreska("Nema dovoljno podataka u redu."), SustavGresaka.getInstance().getPodrucjaGresaka().get(1));
+            SustavGresaka.getInstance().prijaviGresku(new NevaljaniFormatGreska("CSV redak: " + redakCSV + " - Nema dovoljno podataka u redu."), SustavGresaka.getInstance().getPodrucjaGresaka().get(1));
             return false;
         }
         try {
