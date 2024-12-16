@@ -297,14 +297,17 @@ public class CitacCSV {
         List<String> validneKombinacije = Arrays.asList("Po", "U", "Sr", "Č", "Pe", "Su", "N");
 
         try (BufferedReader br = new BufferedReader(new FileReader(putanjaOznaka))) {
-            String line;
+            String redak;
             br.readLine();
 
             int redakCSV = 0;
-            while ((line = br.readLine()) != null) {
+            while ((redak = br.readLine()) != null) {
                 redakCSV++;
 
-                String[] parts = line.split(";");
+                String[] parts = redak.split(";");
+                if (parts.length == 1){
+                    parts = new String[]{parts[0], "PoUSrČPeSuN"};
+                }
                 if (parts.length == 2) {
                     OznakaDana oznaka = new OznakaDana();
                     try {
@@ -314,13 +317,14 @@ public class CitacCSV {
                                 SustavGresaka.getInstance().getPodrucjaGresaka().get(4),
                                 new String[]{
                                         "CSV redak: " + redakCSV,
-                                        "Trenutni zapis: " + line.trim()
+                                        "Trenutni zapis: " + redak.trim()
                                 });
                         continue;
                     }
-                    oznaka.setDani(parts[1].trim());
+                    //oznaka.setDani(parts[1].trim());
 
-                    String dani = oznaka.getDani();
+                    String dani = parts[1].trim();
+                    oznaka.setDani(dani);
                     List<String> daniList = new ArrayList<>();
                     int i = 0;
 
@@ -339,8 +343,8 @@ public class CitacCSV {
                                     SustavGresaka.getInstance().getPodrucjaGresaka().get(4),
                                     new String[]{
                                             "CSV redak: " + redakCSV,
-                                            "Trenutni zapis: " + line.trim(),
-                                            "Nevalidan unos u oznaci dana: " + oznaka.getDani()
+                                            "Trenutni zapis: " + redak.trim(),
+                                            "Nevalidan unos u oznaci dana"
                                     });
                             break;
                         }
@@ -354,6 +358,10 @@ public class CitacCSV {
         } catch (Exception e) {
             throw new Exception("Greška pri čitanju CSV-a", e);
         }
+        for(OznakaDana dan : oznakeDana){
+            System.out.println(dan.getOznakaDana() + " " + dan.getDani());
+        }
+
         return oznakeDana;
     }
 }
