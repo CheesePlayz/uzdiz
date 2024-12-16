@@ -12,6 +12,7 @@ public class Etapa extends VozniRedKomponenta{
     private String daniUTjednu;
     private LocalTime vrijemePolaska;
     private LocalTime vrijemeDolaska;
+    private double ukupnaKilometraza = 0;
 
     public Etapa(String oznakaVlaka, String oznakaPruge, LocalTime vrijemePolaska, LocalTime vrijemeDolaska, String daniUTjednu) {
         this.oznakaVlaka = oznakaVlaka;
@@ -33,6 +34,10 @@ public class Etapa extends VozniRedKomponenta{
     }
     public String getDaniUTjednu() {
         return daniUTjednu;
+    }
+    public double getUkupnaKilometraza(){ return ukupnaKilometraza; }
+    public void setUkupnaKilometraza(double km){
+        ukupnaKilometraza = km;
     }
 
     @Override
