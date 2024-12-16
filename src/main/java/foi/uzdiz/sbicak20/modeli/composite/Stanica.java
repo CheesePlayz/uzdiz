@@ -5,14 +5,14 @@ import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
 import java.util.List;
 
 public class Stanica extends VozniRedKomponenta {
-    private ZeljeznickaStanica stanica ;
+    private String naziv;
 
-    public Stanica(ZeljeznickaStanica detaljiStanice) {
-        this.stanica = detaljiStanice;
+    public Stanica(String naziv) {
+        this.naziv = naziv;
     }
 
-    public ZeljeznickaStanica getStanica() {
-        return stanica;
+    public String getStanica() {
+        return naziv;
     }
 
     @Override
@@ -33,5 +33,10 @@ public class Stanica extends VozniRedKomponenta {
     @Override
     public void prikaziDetalje() {
 
+    }
+
+    @Override
+    public String toString() {
+        return naziv;
     }
 }

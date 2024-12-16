@@ -1,7 +1,5 @@
 package foi.uzdiz.sbicak20.modeli.composite;
 
-import foi.uzdiz.sbicak20.modeli.ZeljeznickoPrijevoznoSredstvo;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,4 +33,6 @@ public class Vlak extends VozniRedKomponenta{
     public void prikaziDetalje() {
 
     }
+
+
 }

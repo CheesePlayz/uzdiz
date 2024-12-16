@@ -1,7 +1,5 @@
 package foi.uzdiz.sbicak20.modeli.composite;
 
-import foi.uzdiz.sbicak20.modeli.VozniRedPodaci;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,4 +25,6 @@ public class VozniRed extends VozniRedKomponenta{
     public void prikaziDetalje() {
 
     }
+
+
 }

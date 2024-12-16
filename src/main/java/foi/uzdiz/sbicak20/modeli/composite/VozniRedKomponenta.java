@@ -7,4 +7,5 @@ public abstract class VozniRedKomponenta {
     public abstract void ukloniKomponentu(VozniRedKomponenta komponenta);
     public abstract List<VozniRedKomponenta> getDjeca();
     public abstract void prikaziDetalje();
+
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Etapa extends VozniRedKomponenta{
 
-    private List<VozniRedKomponenta> stanice = new ArrayList<VozniRedKomponenta>();
+    private List<VozniRedKomponenta> stanice = new ArrayList<>();
     private String oznakaVlaka;
     private String oznakaPruge;
     private String daniUTjednu;
@@ -57,6 +57,33 @@ public class Etapa extends VozniRedKomponenta{
 
     @Override
     public void prikaziDetalje() {
+        int[] maxDuljine = {12, 12, 20, 20, 15, 15, 18, 15};
 
+        String polaznaStanica = stanice.getFirst().toString();
+        String odredisnaStanica = stanice.getLast().toString();
+
+        maxDuljine[0] = Math.max(maxDuljine[0], oznakaVlaka.length());
+        maxDuljine[1] = Math.max(maxDuljine[1], oznakaPruge.length());
+        maxDuljine[2] = Math.max(maxDuljine[2], polaznaStanica.length());
+        maxDuljine[3] = Math.max(maxDuljine[3], odredisnaStanica.length());
+        maxDuljine[4] = Math.max(maxDuljine[4], vrijemePolaska.toString().length());
+        maxDuljine[5] = Math.max(maxDuljine[5], vrijemeDolaska.toString().length());
+        maxDuljine[6] = Math.max(maxDuljine[6], String.format("%.2f", ukupnaKilometraza).length());
+        maxDuljine[7] = Math.max(maxDuljine[7], daniUTjednu.length());
+
+        StringBuilder formatBuilder = new StringBuilder("|");
+        for (int duljina : maxDuljine) {
+            formatBuilder.append(" %-").append(duljina).append("s |");
+        }
+        formatBuilder.append("%n");
+        String format = formatBuilder.toString();
+
+        System.out.printf(format, "Oznaka Vlaka", "Oznaka Pruge", "Polazna Stanica",
+                "Odredišna Stanica", "Vrijeme Polaska", "Vrijeme Dolaska",
+                "Ukupna Kilometraža", "Dani u Tjednu");
+
+        System.out.printf(format, oznakaVlaka, oznakaPruge, polaznaStanica,
+                odredisnaStanica, vrijemePolaska, vrijemeDolaska,
+                String.format("%.2f", ukupnaKilometraza), daniUTjednu);
     }
 }

@@ -4,6 +4,7 @@ import foi.uzdiz.sbicak20.modeli.*;
 import foi.uzdiz.sbicak20.modeli.composite.Vlak;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRedKomponenta;
+import foi.uzdiz.sbicak20.pomocnici.VozniRedPunjac;
 
 import java.util.*;
 
@@ -20,6 +21,9 @@ public class ZeljeznickiSustavSingleton {
     private List<VozniRedPodaci> vozniRedPodaci;
     private List<OznakaDana> oznakeDana;
 
+    private VozniRed vozniRed;
+    private VozniRedPunjac vozniRedPunjac;
+
     private ZeljeznickiSustavSingleton(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr, List<OznakaDana> od) {
         this.stanice = stanice;
         this.vozila = vozila;
@@ -27,6 +31,8 @@ public class ZeljeznickiSustavSingleton {
         this.vozniRedPodaci = vr;
         this.oznakeDana = od;
         registarKorisnika = new RegistarKorisnika();
+        vozniRedPunjac = new VozniRedPunjac();
+        vozniRed = vozniRedPunjac.napuniVozniRed(stanice, vr, od);
     }
 
     public static ZeljeznickiSustavSingleton getInstanca(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr, List<OznakaDana> od) {
@@ -102,6 +108,14 @@ public class ZeljeznickiSustavSingleton {
 
             registarKorisnika.dodajPracenjeVlaka(ime, prezime, oznakaVlaka, stanica);
         }
+        else if (komanda.startsWith("IEV")){
+//            String[] dioKomande = komanda.split(" ");
+//            if (dioKomande.length != 2) {
+//                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
+//                return;
+//            }
+            IspisIEV("");
+        }
         else {
             switch (komanda) {
                 case "Q": {
@@ -114,7 +128,6 @@ public class ZeljeznickiSustavSingleton {
                 }
 
                 case "IV": {
-                    IspisVlakova(vozniRedPodaci);
                     break;
                 }
 
@@ -378,19 +391,11 @@ public class ZeljeznickiSustavSingleton {
         }
     }
 
-    private void IspisVlakova(List<VozniRedPodaci> vozniRedPodaci) {
-            VozniRed vr = new VozniRed();
-
-            //dodaj vlakove
-            for (VozniRedPodaci podaci : vozniRedPodaci){
-                Vlak vlak = new Vlak(podaci.getOznakaVlaka());
+    private void IspisIEV(String oznakaVlaka) {
+        for(VozniRedKomponenta vlak : vozniRed.getDjeca()){
+            for(VozniRedKomponenta etapa : vlak.getDjeca()){
+                etapa.prikaziDetalje();
             }
-
-
-
-            List<VozniRedKomponenta> vlakovi = vr.getDjeca();
-            for(VozniRedKomponenta vlak : vlakovi){
-                vlak.prikaziDetalje();
-            }
+        }
     }
 }
