@@ -155,11 +155,6 @@ public class ZeljeznickiSustavSingleton {
 
             System.out.printf(format, oznaka, pocetnaStanica, zavrsnaStanica, ukupnaKilometraza);
         }
-
-
-        for (ZeljeznickaStanica stanica : stanice) {
-            System.out.println(stanica.toString());
-        }
     }
 
 

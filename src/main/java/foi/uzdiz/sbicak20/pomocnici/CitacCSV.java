@@ -321,7 +321,6 @@ public class CitacCSV {
                                 });
                         continue;
                     }
-                    //oznaka.setDani(parts[1].trim());
 
                     String dani = parts[1].trim();
                     oznaka.setDani(dani);
@@ -357,9 +356,6 @@ public class CitacCSV {
             }
         } catch (Exception e) {
             throw new Exception("Greška pri čitanju CSV-a", e);
-        }
-        for(OznakaDana dan : oznakeDana){
-            System.out.println(dan.getOznakaDana() + " " + dan.getDani());
         }
 
         return oznakeDana;
