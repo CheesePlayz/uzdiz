@@ -108,7 +108,7 @@ public class VozniRedPunjac {
 
         // Proverite da li je oznaka dana prazna ili null pre nego što radite sa njom
         String oznakaDana = vozniRedPodaci.getOznakaDana();
-        if (oznakaDana == null || oznakaDana.isEmpty()) {
+        if (oznakaDana == null || oznakaDana.isEmpty() || oznakaDana.equals("null")) {
             // Ako je oznaka dana prazna ili null, postavite podrazumevanu vrednost
             dani = "PoUSrČPeSuN";
         } else {
@@ -135,7 +135,7 @@ public class VozniRedPunjac {
 
 
     private String getPolaznaZeljeznickaStanica(VozniRedPodaci vrpodaci, List<ZeljeznickaStanica> stanice, String oznakaPrugeParam) {
-        if (Objects.equals(vrpodaci.getPolaznaStanica(), "null") || Objects.equals(vrpodaci.getPolaznaStanica(), "")) {
+        if (Objects.equals(vrpodaci.getPolaznaStanica(), "null") || vrpodaci.getPolaznaStanica().isEmpty()) {
             String nazivStanice = "";
 
             Map<String, List<ZeljeznickaStanica>> pruge = new HashMap<>();
