@@ -1,9 +1,6 @@
 package foi.uzdiz.sbicak20.pomocnici;
 
-import foi.uzdiz.sbicak20.modeli.Kompozicija;
-import foi.uzdiz.sbicak20.modeli.VozniRedPodaci;
-import foi.uzdiz.sbicak20.modeli.ZeljeznickoPrijevoznoSredstvo;
-import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
+import foi.uzdiz.sbicak20.modeli.*;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
 import foi.uzdiz.sbicak20.validatori.KompozicijaFactory;
 import foi.uzdiz.sbicak20.validatori.PrijevoznoSredstvoFactory;
@@ -18,13 +15,15 @@ public class InitSustava {
     private List<ZeljeznickoPrijevoznoSredstvo> vozila;
     private List<List<Kompozicija>> kompozicije;
     private List<VozniRedPodaci> vozniRed;
+    private List<OznakaDana> oznakeDana;
 
-    public InitSustava(String putanjaCsvStanice, String putanjaCsvPrijevoznaSredstva, String putanjaCsvKompozicije, String putanjaCsvVozniRed) throws Exception {
+    public InitSustava(String putanjaCsvStanice, String putanjaCsvPrijevoznaSredstva, String putanjaCsvKompozicije, String putanjaCsvVozniRed, String putanjaCsvOznakeDana) throws Exception {
         csvcitac = new CitacCSV();
         stanice = CitacCSV.ucitajStaniceIzCSV(putanjaCsvStanice, new StanicaFactory());
         vozila = CitacCSV.ucitajVozilaIzCSV(putanjaCsvPrijevoznaSredstva, new PrijevoznoSredstvoFactory());
         kompozicije = CitacCSV.ucitajKompozicijeIzCSV(putanjaCsvKompozicije, new KompozicijaFactory());
         vozniRed = CitacCSV.ucitajVozniRedIzCSV(putanjaCsvVozniRed, new VozniRedFactory());
+        oznakeDana = CitacCSV.ucitajOznakeDanaIzCSV(putanjaCsvOznakeDana);
 
     }
 
@@ -41,5 +40,9 @@ public class InitSustava {
     }
     public List<VozniRedPodaci> getVozniRed(){
         return vozniRed;
+    }
+
+    public List<OznakaDana> getOznakeDana() {
+        return oznakeDana;
     }
 }

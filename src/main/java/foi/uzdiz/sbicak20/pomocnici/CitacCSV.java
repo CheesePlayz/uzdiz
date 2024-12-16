@@ -3,10 +3,7 @@ package foi.uzdiz.sbicak20.pomocnici;
 import foi.uzdiz.sbicak20.greske.NevaljaniFormatGreska;
 import foi.uzdiz.sbicak20.greske.NullVrijednostGreska;
 import foi.uzdiz.sbicak20.greske.SustavGresaka;
-import foi.uzdiz.sbicak20.modeli.Kompozicija;
-import foi.uzdiz.sbicak20.modeli.VozniRedPodaci;
-import foi.uzdiz.sbicak20.modeli.ZeljeznickoPrijevoznoSredstvo;
-import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
+import foi.uzdiz.sbicak20.modeli.*;
 import foi.uzdiz.sbicak20.validatori.IValidator;
 import foi.uzdiz.sbicak20.validatori.ValidatorFactory;
 
@@ -295,6 +292,68 @@ public class CitacCSV {
     }
 
 
+    public static List<OznakaDana> ucitajOznakeDanaIzCSV(String putanjaOznaka) throws Exception {
+        List<OznakaDana> oznakeDana = new ArrayList<>();
+        List<String> validneKombinacije = Arrays.asList("Po", "U", "Sr", "Č", "Pe", "Su", "N");
 
+        try (BufferedReader br = new BufferedReader(new FileReader(putanjaOznaka))) {
+            String line;
+            br.readLine();
 
+            int redakCSV = 0;
+            while ((line = br.readLine()) != null) {
+                redakCSV++;
+
+                String[] parts = line.split(";");
+                if (parts.length == 2) {
+                    OznakaDana oznaka = new OznakaDana();
+                    try {
+                        oznaka.setOznakaDana(Integer.parseInt(parts[0].trim()));
+                    } catch (NumberFormatException e) {
+                        SustavGresaka.getInstance().prijaviGresku(e,
+                                SustavGresaka.getInstance().getPodrucjaGresaka().get(4),
+                                new String[]{
+                                        "CSV redak: " + redakCSV,
+                                        "Trenutni zapis: " + line.trim()
+                                });
+                        continue;
+                    }
+                    oznaka.setDani(parts[1].trim());
+
+                    String dani = oznaka.getDani();
+                    List<String> daniList = new ArrayList<>();
+                    int i = 0;
+
+                    while (i < dani.length()) {
+                        boolean validan = false;
+                        for (String kombinacija : validneKombinacije) {
+                            if (dani.startsWith(kombinacija, i)) {
+                                daniList.add(kombinacija);
+                                i += kombinacija.length();
+                                validan = true;
+                                break;
+                            }
+                        }
+                        if (!validan) {
+                            SustavGresaka.getInstance().prijaviGresku(new Exception("Nevalidan dan"),
+                                    SustavGresaka.getInstance().getPodrucjaGresaka().get(4),
+                                    new String[]{
+                                            "CSV redak: " + redakCSV,
+                                            "Trenutni zapis: " + line.trim(),
+                                            "Nevalidan unos u oznaci dana: " + oznaka.getDani()
+                                    });
+                            break;
+                        }
+                    }
+
+                    if (i == dani.length()) {
+                        oznakeDana.add(oznaka);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Greška pri čitanju CSV-a", e);
+        }
+        return oznakeDana;
+    }
 }

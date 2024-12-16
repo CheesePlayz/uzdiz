@@ -16,6 +16,7 @@ public class Main {
         String putanjaVozila = null;
         String putanjaKompozicije = null;
         String putanjaVozniRed = null;
+        String putanjaOznakeDana = null;
 
         for (int i = 0; i < args.length; i += 2) {
             if (i + 1 >= args.length) {
@@ -36,13 +37,16 @@ public class Main {
                 case "--zvr":
                     putanjaVozniRed = args[i + 1];
                     break;
+                case "--zod":
+                    putanjaOznakeDana = args[i + 1];
+                    break;
                 default:
                     SustavGresaka.getInstance().prijaviGresku(new Exception("Nepoznat argument: " + args[i]));
                     exit(0);
             }
         }
 
-        if (putanjaStanice == null || putanjaVozila == null || putanjaKompozicije == null || putanjaVozniRed == null) {
+        if (putanjaStanice == null || putanjaVozila == null || putanjaKompozicije == null || putanjaVozniRed == null || putanjaOznakeDana == null) {
             if (putanjaStanice == null) {
                 SustavGresaka.getInstance().prijaviGresku(new Exception("Nije naveden put do datoteke stanica (--zs)"));
             }
@@ -55,15 +59,19 @@ public class Main {
             if (putanjaVozniRed == null) {
                 SustavGresaka.getInstance().prijaviGresku(new Exception("Nije naveden put do datoteke voznog reda (--zvr)"));
             }
+            if (putanjaOznakeDana == null) {
+                SustavGresaka.getInstance().prijaviGresku(new Exception("Nije naveden put do datoteke oznaka dana (--zod)"));
+            }
             exit(0);
         }
 
-        InitSustava initSustava = new InitSustava(putanjaStanice, putanjaVozila, putanjaKompozicije, putanjaVozniRed);
+        InitSustava initSustava = new InitSustava(putanjaStanice, putanjaVozila, putanjaKompozicije, putanjaVozniRed, putanjaOznakeDana);
         ZeljeznickiSustavSingleton sustavSingleton = ZeljeznickiSustavSingleton.getInstanca(
                 initSustava.getStanice(),
                 initSustava.getVozila(),
                 initSustava.getKompozicije(),
-                initSustava.getVozniRed()
+                initSustava.getVozniRed(),
+                initSustava.getOznakeDana()
         );
 
         SustavGresaka.getInstance().ispisiSveGreske();

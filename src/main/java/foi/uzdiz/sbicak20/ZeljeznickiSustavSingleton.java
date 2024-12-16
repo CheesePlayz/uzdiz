@@ -1,10 +1,9 @@
 package foi.uzdiz.sbicak20;
 
-import foi.uzdiz.sbicak20.modeli.Kompozicija;
-import foi.uzdiz.sbicak20.modeli.VozniRedPodaci;
-import foi.uzdiz.sbicak20.modeli.ZeljeznickoPrijevoznoSredstvo;
-import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
+import foi.uzdiz.sbicak20.modeli.*;
+import foi.uzdiz.sbicak20.modeli.composite.Vlak;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
+import foi.uzdiz.sbicak20.modeli.composite.VozniRedKomponenta;
 
 import java.util.*;
 
@@ -16,18 +15,21 @@ public class ZeljeznickiSustavSingleton {
     private List<ZeljeznickaStanica> stanice;
     private List<ZeljeznickoPrijevoznoSredstvo> vozila;
     private List<List<Kompozicija>> kompozicije;
-    private List<VozniRedPodaci> vozniRed;
+    private List<VozniRedPodaci> vozniRedPodaci;
 
-    private ZeljeznickiSustavSingleton(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr) {
+    private List<OznakaDana> oznakeDana;
+
+    private ZeljeznickiSustavSingleton(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr, List<OznakaDana> od) {
         this.stanice = stanice;
         this.vozila = vozila;
         this.kompozicije = kompozicije;
-        this.vozniRed = vr;
+        this.vozniRedPodaci = vr;
+        this.oznakeDana = od;
     }
 
-    public static ZeljeznickiSustavSingleton getInstanca(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr) {
+    public static ZeljeznickiSustavSingleton getInstanca(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr, List<OznakaDana> od) {
         if (instanca == null) {
-            instanca = new ZeljeznickiSustavSingleton(stanice, vozila, kompozicije, vr);
+            instanca = new ZeljeznickiSustavSingleton(stanice, vozila, kompozicije, vr, od);
         }
         return instanca;
     }
@@ -79,6 +81,11 @@ public class ZeljeznickiSustavSingleton {
                 }
                 case "IP": {
                     IspisPruge(stanice);
+                    break;
+                }
+
+                case "IV": {
+                    IspisVlakova(vozniRedPodaci);
                     break;
                 }
                 default:
@@ -340,5 +347,21 @@ public class ZeljeznickiSustavSingleton {
         for (String[] red : podaciZaIspis) {
             System.out.printf(format, (Object[]) red);
         }
+    }
+
+    private void IspisVlakova(List<VozniRedPodaci> vozniRedPodaci) {
+            VozniRed vr = new VozniRed();
+
+            //dodaj vlakove
+            for (VozniRedPodaci podaci : vozniRedPodaci){
+                Vlak vlak = new Vlak(podaci.getOznakaVlaka());
+            }
+
+
+
+            List<VozniRedKomponenta> vlakovi = vr.getDjeca();
+            for(VozniRedKomponenta vlak : vlakovi){
+                vlak.prikaziDetalje();
+            }
     }
 }

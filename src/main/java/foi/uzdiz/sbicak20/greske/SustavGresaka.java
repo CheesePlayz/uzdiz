@@ -10,6 +10,7 @@ public class SustavGresaka {
     private int brojacGresakaVozila = 0;
     private int brojacGresakaKompozicije = 0;
     private int brojacGresakaVozniRed = 0;
+    private int brojacGresakaOznakeDana = 0;
     private StringBuilder logGresaka = new StringBuilder();
     private StringBuilder trenutnaGreska = new StringBuilder();
     private List<String> podrucjaGresaka = new ArrayList<>();
@@ -19,6 +20,7 @@ public class SustavGresaka {
         podrucjaGresaka.add("Ucitavanje CSV-a Vozila");
         podrucjaGresaka.add("Ucitavanje CSV-a Kompozicije");
         podrucjaGresaka.add("Ucitavanje CSV-a Vozni Red");
+        podrucjaGresaka.add("Ucitavanje CSV-a Oznaka Dana");
     }
 
     public static SustavGresaka getInstance() {
@@ -94,6 +96,7 @@ public class SustavGresaka {
             System.out.println("2. Vozila: " + brojacGresakaVozila);
             System.out.println("3. Kompozicije: " + brojacGresakaKompozicije);
             System.out.println("4. Vozni Red: " + brojacGresakaVozniRed);
+            System.out.println("5. Oznake Dana: " + brojacGresakaOznakeDana);
 
         } else {
             System.out.println("Nema prijavljenih grešaka.\n");
@@ -111,6 +114,9 @@ public class SustavGresaka {
             brojacGresakaKompozicije++;
         } else if (podrucjePrimjene.equals(podrucjaGresaka.get(3))){
             brojacGresakaVozniRed++;
+        }
+        else if (podrucjePrimjene.equals(podrucjaGresaka.get(4))){
+            brojacGresakaOznakeDana++;
         }
     }
 

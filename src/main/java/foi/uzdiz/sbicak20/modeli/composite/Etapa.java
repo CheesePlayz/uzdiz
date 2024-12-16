@@ -9,14 +9,27 @@ public class Etapa extends VozniRedKomponenta{
 
     private List<VozniRedKomponenta> stanice = new ArrayList<VozniRedKomponenta>();
     private String oznakaVlaka;
+    private String oznakaPruge;
     private String vrijemePolaska;
     private String vrijemeDolaska;
 
-    public Etapa(String oznakaVlaka, String vrijemePolaska, String vrijemeDolaska) {
+    public Etapa(String oznakaVlaka, String vrijemePolaska, String vrijemeDolaska, String oznakaPruge) {
         this.oznakaVlaka = oznakaVlaka;
+        this.oznakaPruge = oznakaPruge;
         this.vrijemePolaska = vrijemePolaska;
         this.vrijemeDolaska = vrijemeDolaska;
     }
+
+    public String getOznakaVlaka() {
+        return oznakaVlaka;
+    }
+    public String getVrijemePolaska(){
+        return vrijemePolaska;
+    }
+    private String getVrijemeDolaska(){
+        return vrijemeDolaska;
+    }
+
     @Override
     public void dodajKomponentu(VozniRedKomponenta komponenta) {
         stanice.add(komponenta);

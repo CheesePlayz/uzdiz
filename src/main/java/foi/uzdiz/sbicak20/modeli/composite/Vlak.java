@@ -8,10 +8,13 @@ import java.util.List;
 public class Vlak extends VozniRedKomponenta{
     private List<VozniRedKomponenta> etape = new ArrayList<>();
     private String oznakaVlaka;
-    private ZeljeznickoPrijevoznoSredstvo vozilo;
 
-    Vlak(ZeljeznickoPrijevoznoSredstvo vozilo){
-        this.vozilo = vozilo;
+    public String getOznakaVlaka(){
+        return oznakaVlaka;
+    }
+
+    public Vlak(String oznakaVlaka){
+        this.oznakaVlaka = oznakaVlaka;
     }
     @Override
     public void dodajKomponentu(VozniRedKomponenta komponenta) {
