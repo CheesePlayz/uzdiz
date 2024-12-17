@@ -120,13 +120,21 @@ public class ZeljeznickiSustavSingleton {
             return new IV(vozniRed);
         }
 
-        if (komandaString.matches("^IEV \\S+$")) {
-            return new IEV(vozniRed, komandaString.split(" ")[1]);
+        if (komandaString.matches("^IEV .+$")) {
+            String oznakaVlaka = komandaString.substring(4).trim();
+            return new IEV(vozniRed, oznakaVlaka);
         }
 
-        if (komandaString.matches("^IEVD \\S+$")) {
-            return new IEVD(vozniRed, komandaString.split(" ")[1]);
+        if (komandaString.matches("^IEVD .+$")) {
+            String oznakaVlaka = komandaString.substring(5).trim();
+            return new IEVD(vozniRed, oznakaVlaka);
         }
+
+        if (komandaString.matches("^IVRV .+$")) {
+            String oznakaVlaka = komandaString.substring(5).trim();
+            return new IVRV(vozniRed, stanice, oznakaVlaka);
+        }
+
 
         if (komandaString.matches("^DK \\S+ \\S+$")) {
             String[] dioKomande = komandaString.split(" ");
