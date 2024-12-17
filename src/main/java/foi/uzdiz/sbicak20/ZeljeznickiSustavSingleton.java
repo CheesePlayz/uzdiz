@@ -1,6 +1,7 @@
 package foi.uzdiz.sbicak20;
 
 import foi.uzdiz.sbicak20.modeli.*;
+import foi.uzdiz.sbicak20.modeli.composite.Etapa;
 import foi.uzdiz.sbicak20.modeli.composite.Vlak;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRedKomponenta;
@@ -108,13 +109,13 @@ public class ZeljeznickiSustavSingleton {
 
             registarKorisnika.dodajPracenjeVlaka(ime, prezime, oznakaVlaka, stanica);
         }
-        else if (komanda.startsWith("IEV")){
-//            String[] dioKomande = komanda.split(" ");
-//            if (dioKomande.length != 2) {
-//                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
-//                return;
-//            }
-            IspisIEV("");
+        else if (komanda.startsWith("IEV")) {
+            String oznakaVlaka = komanda.substring(4).trim();
+            if (oznakaVlaka.isEmpty()) {
+                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
+                return;
+            }
+            IspisIEV(oznakaVlaka);
         }
         else {
             switch (komanda) {
@@ -392,9 +393,24 @@ public class ZeljeznickiSustavSingleton {
     }
 
     private void IspisIEV(String oznakaVlaka) {
+        int[] maxDuljine = {12, 12, 20, 20, 15, 15, 18, 15};
+        StringBuilder formatBuilder = new StringBuilder("|");
+        for (int duljina : maxDuljine) {
+            formatBuilder.append(" %-").append(duljina).append("s |");
+        }
+        formatBuilder.append("%n");
+        String format = formatBuilder.toString();
+
+        System.out.printf(format, "Oznaka Vlaka", "Oznaka Pruge", "Polazna Stanica",
+                "Odredišna Stanica", "Vrijeme Polaska", "Vrijeme Dolaska",
+                "Ukupna Kilometraža", "Dani u Tjednu");
+
         for(VozniRedKomponenta vlak : vozniRed.getDjeca()){
             for(VozniRedKomponenta etapa : vlak.getDjeca()){
-                etapa.prikaziDetalje();
+                Etapa et = (Etapa) etapa.dohvatiObjekt();
+                if (Objects.equals(oznakaVlaka, et.getOznakaVlaka())){
+                    et.prikaziDetalje();
+                }
             }
         }
     }

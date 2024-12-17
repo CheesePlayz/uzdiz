@@ -26,5 +26,10 @@ public class VozniRed extends VozniRedKomponenta{
 
     }
 
+    @Override
+    public Object dohvatiObjekt() {
+        return null;
+    }
+
 
 }

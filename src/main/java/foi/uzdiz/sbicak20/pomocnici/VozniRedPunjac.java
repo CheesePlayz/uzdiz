@@ -12,7 +12,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static java.lang.System.exit;
 
 public class VozniRedPunjac {
     public VozniRed napuniVozniRed(List<ZeljeznickaStanica> stanice, List<VozniRedPodaci> vrpodaci, List<OznakaDana> oz) {

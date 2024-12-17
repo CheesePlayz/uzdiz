@@ -8,4 +8,6 @@ public abstract class VozniRedKomponenta {
     public abstract List<VozniRedKomponenta> getDjeca();
     public abstract void prikaziDetalje();
 
+    public abstract Object dohvatiObjekt();
+
 }

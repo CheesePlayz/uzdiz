@@ -78,12 +78,13 @@ public class Etapa extends VozniRedKomponenta{
         formatBuilder.append("%n");
         String format = formatBuilder.toString();
 
-        System.out.printf(format, "Oznaka Vlaka", "Oznaka Pruge", "Polazna Stanica",
-                "Odredišna Stanica", "Vrijeme Polaska", "Vrijeme Dolaska",
-                "Ukupna Kilometraža", "Dani u Tjednu");
-
         System.out.printf(format, oznakaVlaka, oznakaPruge, polaznaStanica,
                 odredisnaStanica, vrijemePolaska, vrijemeDolaska,
                 String.format("%.2f", ukupnaKilometraza), daniUTjednu);
+    }
+
+    @Override
+    public Object dohvatiObjekt() {
+        return this;
     }
 }

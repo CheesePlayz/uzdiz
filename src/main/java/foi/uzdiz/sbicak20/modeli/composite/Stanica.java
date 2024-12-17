@@ -36,6 +36,11 @@ public class Stanica extends VozniRedKomponenta {
     }
 
     @Override
+    public Object dohvatiObjekt() {
+        return null;
+    }
+
+    @Override
     public String toString() {
         return naziv;
     }

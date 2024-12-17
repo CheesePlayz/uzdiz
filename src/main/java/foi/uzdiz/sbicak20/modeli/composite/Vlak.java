@@ -34,5 +34,10 @@ public class Vlak extends VozniRedKomponenta{
 
     }
 
+    @Override
+    public Object dohvatiObjekt() {
+        return null;
+    }
+
 
 }
