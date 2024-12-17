@@ -41,25 +41,20 @@ public class VozniRedPunjac {
         return vlak;
     }
 
-    private Etapa napraviEtapu(List<ZeljeznickaStanica> stanice, VozniRedPodaci vozniRedPodaci, List<OznakaDana> oz) {
-        // Preprocess the time string to handle invalid formats
-        String originalVrijemePolaska = vozniRedPodaci.getVrijemePolaska();
-        String processedVrijemePolaska = processTime(originalVrijemePolaska);
+    private Etapa napraviEtapu(List<ZeljeznickaStanica> stanice, VozniRedPodaci podaciVoznogReda, List<OznakaDana> oznakeDana) {
+        String originalnoVrijemePolaska = podaciVoznogReda.getVrijemePolaska();
+        String obradenVrijemePolaska = obradiVrijeme(originalnoVrijemePolaska);
 
-        LocalTime vrijemePolaska = LocalTime.parse(processedVrijemePolaska);
-        LocalTime vrijemeDolaska = vrijemePolaska.plusMinutes(parseTrajanjeVoznje(vozniRedPodaci.getTrajanjeVoznje()));
+        LocalTime vrijemePolaska = LocalTime.parse(obradenVrijemePolaska);
+        LocalTime vrijemeDolaska = vrijemePolaska.plusMinutes(parsirajTrajanjeVoznje(podaciVoznogReda.getTrajanjeVoznje()));
 
-        String daniUTjednu = getDaneUTjednu(vozniRedPodaci, oz);
-        String polaznaStanica = getPolaznaZeljeznickaStanica(vozniRedPodaci, stanice, vozniRedPodaci.getOznakaPruge());
-        String odredisnaStanica = getOdredisnaZeljeznickaStanica(vozniRedPodaci, stanice, vozniRedPodaci.getOznakaPruge());
-
-        // Format times in HH:mm format
-        String formattedVrijemePolaska = vrijemePolaska.format(DateTimeFormatter.ofPattern("HH:mm"));
-        String formattedVrijemeDolaska = vrijemeDolaska.format(DateTimeFormatter.ofPattern("HH:mm"));
+        String daniUTjednu = getDaneUTjednu(podaciVoznogReda, oznakeDana);
+        String polaznaStanica = getPolaznaZeljeznickaStanica(podaciVoznogReda, stanice, podaciVoznogReda.getOznakaPruge());
+        String odredisnaStanica = getOdredisnaZeljeznickaStanica(podaciVoznogReda, stanice, podaciVoznogReda.getOznakaPruge());
 
         Etapa etapa = new Etapa(
-                vozniRedPodaci.getOznakaVlaka(),
-                vozniRedPodaci.getOznakaPruge(),
+                podaciVoznogReda.getOznakaVlaka(),
+                podaciVoznogReda.getOznakaPruge(),
                 vrijemePolaska,
                 vrijemeDolaska,
                 daniUTjednu
@@ -67,71 +62,55 @@ public class VozniRedPunjac {
 
         etapa.dodajKomponentu(new Stanica(polaznaStanica));
         etapa.dodajKomponentu(new Stanica(odredisnaStanica));
-        etapa.setUkupnaKilometraza(izracunajKilometrazu(stanice, polaznaStanica, odredisnaStanica, vozniRedPodaci.getOznakaPruge()));
+        etapa.setUkupnaKilometraza(izracunajKilometrazu(stanice, polaznaStanica, odredisnaStanica, podaciVoznogReda.getOznakaPruge()));
         return etapa;
     }
 
-    // Helper method to process potentially malformed time strings
-    private String processTime(String originalTime) {
-        // Remove any extra colons or unexpected characters
-        String cleanedTime = originalTime.replaceAll("[^0-9:]", "");
+    private String obradiVrijeme(String originalnoVrijeme) {
+        String ociscenoVrijeme = originalnoVrijeme.replaceAll("[^0-9:]", "");
 
-        // Split the time parts
-        String[] timeParts = cleanedTime.split(":");
+        String[] dijeloviVremena = ociscenoVrijeme.split(":");
 
-        if (timeParts.length < 2) {
-            throw new IllegalArgumentException("Invalid time format: " + originalTime);
+        if (dijeloviVremena.length < 2) {
+            throw new IllegalArgumentException("Neispravan format vremena: " + originalnoVrijeme);
         }
 
-        // Ensure hours and minutes are properly formatted
-        int hours = Integer.parseInt(timeParts[0]);
-        int minutes = Integer.parseInt(timeParts[1]);
+        int sati = Integer.parseInt(dijeloviVremena[0]);
+        int minute = Integer.parseInt(dijeloviVremena[1]);
 
-        // Normalize hours and minutes
-        hours += minutes / 60;
-        minutes = minutes % 60;
-
-        // Format back to HH:mm
-        return String.format("%02d:%02d", hours, minutes);
+        sati += minute / 60;
+        minute = minute % 60;
+        return String.format("%02d:%02d", sati, minute);
     }
 
-    // Helper method to parse duration
-    private long parseTrajanjeVoznje(String trajanjeVoznje) {
-        // Remove any non-digit characters and parse
-        String cleanedDuration = trajanjeVoznje.replaceAll("[^0-9]", "");
-        return Long.parseLong(cleanedDuration);
+    private long parsirajTrajanjeVoznje(String trajanjeVoznje) {
+        String ociscenoTrajanje = trajanjeVoznje.replaceAll("[^0-9]", "");
+        return Long.parseLong(ociscenoTrajanje);
     }
+
 
     private String getDaneUTjednu(VozniRedPodaci vozniRedPodaci, List<OznakaDana> oz) {
         String dani = "";
 
-        // Proverite da li je oznaka dana prazna ili null pre nego što radite sa njom
         String oznakaDana = vozniRedPodaci.getOznakaDana();
         if (oznakaDana == null || oznakaDana.isEmpty() || oznakaDana.equals("null")) {
-            // Ako je oznaka dana prazna ili null, postavite podrazumevanu vrednost
             dani = "PoUSrČPeSuN";
         } else {
             try {
-                // Pokušajte parsirati oznaku dana kao broj
                 int oznakaDanaInt = Integer.parseInt(oznakaDana);
-
-                // Pretražujemo listu oznaka dana za odgovarajući unos
                 for (OznakaDana oznaka : oz) {
                     if (oznaka.getOznakaDana() == oznakaDanaInt) {
                         dani = oznaka.getDani();
-                        break;  // Prestanite sa pretrazivanjem kada nađete odgovarajući unos
+                        break;
                     }
                 }
             } catch (NumberFormatException e) {
-                // Ako dođe do greške pri parsiranju, možete baciti izuzetak ili se ponašati na drugi način
                 System.out.println("Greška pri parsiranju oznake dana: " + oznakaDana);
-                dani = "PoUSrČPeSuN"; // Postavite podrazumevanu vrednost u slučaju greške
+                dani = "PoUSrČPeSuN";
             }
         }
-
         return dani;
     }
-
 
     private String getPolaznaZeljeznickaStanica(VozniRedPodaci vrpodaci, List<ZeljeznickaStanica> stanice, String oznakaPrugeParam) {
         if (Objects.equals(vrpodaci.getPolaznaStanica(), "null") || vrpodaci.getPolaznaStanica().isEmpty()) {
@@ -156,8 +135,6 @@ public class VozniRedPunjac {
             return vrpodaci.getPolaznaStanica();
         }
     }
-
-
 
     private String getOdredisnaZeljeznickaStanica(VozniRedPodaci vrpodaci, List<ZeljeznickaStanica> stanice, String oznakaPrugeParam) {
         if (Objects.equals(vrpodaci.getOdredisnaStanica(), "null") || Objects.equals(vrpodaci.getOdredisnaStanica(), "")) {
