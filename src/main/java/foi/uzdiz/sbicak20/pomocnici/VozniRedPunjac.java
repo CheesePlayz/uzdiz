@@ -200,26 +200,33 @@ public class VozniRedPunjac {
             return 0;
         }
 
-        int indeksPolazne = staniceNaPrugi.indexOf(polazna);
-        int indeksOdredisne = staniceNaPrugi.indexOf(odredisna);
-
-        if (indeksPolazne == -1 || indeksOdredisne == -1) {
-            //System.out.println("Polazna ili odredišna stanica nije pronađena na pruzi.");
+        int indeksPolazne = -1, indeksOdredisne = -1;
+        for (int i = 0; i < staniceNaPrugi.size(); i++) {
+            if (staniceNaPrugi.get(i).getStanica().equals(polazna)) {
+                indeksPolazne = i;
+            }
+            if (staniceNaPrugi.get(i).getStanica().equals(odredisna)) {
+                indeksOdredisne = i;
+            }
         }
 
-        double ukupnaKilometraza = 0;
+        if (indeksPolazne == -1 || indeksOdredisne == -1) {
+            return 0;
+        }
 
-        if (indeksPolazne <= indeksOdredisne) {
-            for (int i = indeksPolazne; i < indeksOdredisne; i++) {
-                ukupnaKilometraza += staniceNaPrugi.get(i + 1).getDuzina();
-            }
-        } else {
+        boolean obrnutRedoslijed = indeksPolazne > indeksOdredisne;
+
+        double ukupnaKilometraza = 0;
+        if (obrnutRedoslijed) {
             for (int i = indeksPolazne; i > indeksOdredisne; i--) {
                 ukupnaKilometraza += staniceNaPrugi.get(i).getDuzina();
+            }
+        } else {
+            for (int i = indeksPolazne; i < indeksOdredisne; i++) {
+                ukupnaKilometraza += staniceNaPrugi.get(i + 1).getDuzina();
             }
         }
 
         return ukupnaKilometraza;
     }
-
 }
