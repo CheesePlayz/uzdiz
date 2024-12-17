@@ -20,6 +20,7 @@ public class IVRV implements Komanda{
         this.stanice = stanice;
         this.oznakaVlaka = oznakaVlaka;
     }
+    private double ukupnaKilometraza = 0;
     @Override
     public void prihvati(KomandaVisitor visitor) {
         visitor.visit(this);
@@ -38,22 +39,23 @@ public class IVRV implements Komanda{
 
         System.out.printf(format, "Oznaka Vlaka", "Oznaka Pruge", "Polazna Stanica", "Vrijeme Polaska", "Vrijeme Dolaska", "Ukupna Kilometraža");
 
-        double ukupnaKilometraza = 0;
+
         for(VozniRedKomponenta vlak : vozniRed.getDjeca()){
             Vlak vl = (Vlak) vlak.dohvatiObjekt();
             if (Objects.equals(vl.getOznakaVlaka(), this.oznakaVlaka)){
                 for (VozniRedKomponenta etapa : vlak.getDjeca()){
-                    ukupnaKilometraza += racunica(stanice, etapa, ukupnaKilometraza, format);
+                    racunica(stanice, etapa, format);
                 }
             }
         }
     }
 
-    private double racunica(List<ZeljeznickaStanica> stanice, VozniRedKomponenta etapa, double ukupnaKilometraza, String format) {
+    private void racunica(List<ZeljeznickaStanica> stanice, VozniRedKomponenta etapa, String format) {
         Etapa et = (Etapa) etapa.dohvatiObjekt();
         String polazna = etapa.getDjeca().getFirst().toString();
         String odredisna = etapa.getDjeca().getLast().toString();
         String oznakaPrugeParam = et.getOznakaPruge();
+        String trenutnoVrijeme = String.valueOf(et.getVrijemePolaska());
         Map<String, List<ZeljeznickaStanica>> pruge = new HashMap<>();
         for (ZeljeznickaStanica stanica : stanice) {
             String oznakaPruge = stanica.getOznakaPruge();
@@ -62,7 +64,7 @@ public class IVRV implements Komanda{
 
         List<ZeljeznickaStanica> staniceNaPrugi = pruge.get(oznakaPrugeParam);
         if (staniceNaPrugi == null || staniceNaPrugi.isEmpty()) {
-            return 0;
+            return;
         }
 
         int indeksPolazne = -1, indeksOdredisne = -1;
@@ -76,12 +78,10 @@ public class IVRV implements Komanda{
         }
 
         if (indeksPolazne == -1 || indeksOdredisne == -1) {
-            return 0;
+            return;
         }
 
         boolean obrnutRedoslijed = indeksPolazne > indeksOdredisne;
-
-
 
         if (obrnutRedoslijed) {
             if (staniceNaPrugi.get(indeksPolazne).getDuzina() != 0){
@@ -90,7 +90,8 @@ public class IVRV implements Komanda{
             for (int i = indeksPolazne; i >= indeksOdredisne; i--) {
                 if (i == indeksOdredisne) ukupnaKilometraza += staniceNaPrugi.get(indeksPolazne).getDuzina();
                 ukupnaKilometraza += staniceNaPrugi.get(i).getDuzina();
-                System.out.printf(format, et.getOznakaVlaka(),et.getOznakaPruge(), staniceNaPrugi.get(i).getStanica(), "0:00","1:11", ukupnaKilometraza);
+                System.out.printf(format, et.getOznakaVlaka(),et.getOznakaPruge(), staniceNaPrugi.get(i).getStanica(), trenutnoVrijeme,"1:11", ukupnaKilometraza);
+                trenutnoVrijeme = zbrojiVrijeme(trenutnoVrijeme, String.valueOf(staniceNaPrugi.get(i).getVrijemeNormalniVlak()));
             }
         } else {
             if (staniceNaPrugi.get(indeksPolazne).getDuzina() != 0){
@@ -98,10 +99,29 @@ public class IVRV implements Komanda{
             }
             for (int i = indeksPolazne; i <= indeksOdredisne; i++) {
                 ukupnaKilometraza += staniceNaPrugi.get(i).getDuzina();
-                System.out.printf(format, et.getOznakaVlaka(),et.getOznakaPruge(), staniceNaPrugi.get(i).getStanica(), "0:00","1:11", ukupnaKilometraza);
+                System.out.printf(format, et.getOznakaVlaka(),et.getOznakaPruge(), staniceNaPrugi.get(i).getStanica(), trenutnoVrijeme,"1:11", ukupnaKilometraza);
+                trenutnoVrijeme = zbrojiVrijeme(trenutnoVrijeme, String.valueOf(staniceNaPrugi.get(i).getVrijemeNormalniVlak()));
             }
+
+        }
+    }
+
+    private String zbrojiVrijeme(String pocetnoVrijeme, String vrijemeZaDodati) {
+        if (!vrijemeZaDodati.matches("\\d{1,2}:\\d{2}")) {
+            System.err.println("Neispravan format vremena: " + vrijemeZaDodati + ", hh:mm");
+            vrijemeZaDodati = "00:00";
         }
 
-        return (ukupnaKilometraza);
+        String[] pocetno = pocetnoVrijeme.split(":");
+        String[] dodati = vrijemeZaDodati.split(":");
+
+        int sati = Integer.parseInt(pocetno[0]) + Integer.parseInt(dodati[0]);
+        int minute = Integer.parseInt(pocetno[1]) + Integer.parseInt(dodati[1]);
+
+        sati += minute / 60;
+        minute %= 60;
+
+        return String.format("%02d:%02d", sati, minute);
     }
+
 }
