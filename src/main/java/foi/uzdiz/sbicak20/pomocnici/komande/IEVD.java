@@ -4,6 +4,7 @@ import foi.uzdiz.sbicak20.modeli.composite.Etapa;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRedKomponenta;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IEVD implements Komanda{
@@ -33,38 +34,67 @@ public class IEVD implements Komanda{
         System.out.printf(format, "Oznaka Vlaka", "Oznaka Pruge", "Polazna Stanica",
                 "Odredišna Stanica", "Vrijeme Polaska", "Vrijeme Dolaska", "Dani u Tjednu");
 
+        String[] oznakeDana = {"Po", "U", "Sr", "Č", "Pe", "Su", "N"};
+
+        List<String> trazeniDani = new ArrayList<>();
+        int i = 0;
+        while (i < dani.length()) {
+            boolean pronadenDan = false;
+            for (String oznakaDana : oznakeDana) {
+                if (dani.startsWith(oznakaDana, i)) {
+                    trazeniDani.add(oznakaDana);
+                    i += oznakaDana.length();
+                    pronadenDan = true;
+                    break;
+                }
+            }
+            if (!pronadenDan) {
+                i++;
+            }
+        }
 
         for (VozniRedKomponenta vlak : vozniRed.getDjeca()) {
             List<VozniRedKomponenta> etapeVoznogReda = vlak.getDjeca();
 
-            boolean voziNaDane = false;  // Postavljamo na false, dok ne nađemo odgovarajuće etape
+            boolean sveEtapeIspunjavajuUvjet = true;
 
-            // Provjeravamo svaku etapu vlakova
             for (VozniRedKomponenta etapaKomponenta : etapeVoznogReda) {
                 Etapa etapa = (Etapa) etapaKomponenta.dohvatiObjekt();
-
-                System.out.println("Provjera etape: " + etapa.getOznakaVlaka() + ", Dani: " + etapa.getDaniUTjednu());
-
-                boolean poklapanjeDana = false;
-
-                // Provjeravamo svaki dan u traženim danima
-                for (char dan : dani.toCharArray()) {
-                    if (etapa.getDaniUTjednu().contains(String.valueOf(dan))) {
-                        poklapanjeDana = true;  // Ako postoji barem jedno poklapanje, označimo kao true
-                        break; // Ako postoji poklapanje, prestajemo tražiti
+                List<String> daniEtape = new ArrayList<>();
+                int j = 0;
+                while (j < etapa.getDaniUTjednu().length()) {
+                    boolean pronadenDan = false;
+                    for (String oznakaDana : oznakeDana) {
+                        if (etapa.getDaniUTjednu().startsWith(oznakaDana, j)) {
+                            daniEtape.add(oznakaDana);
+                            j += oznakaDana.length();
+                            pronadenDan = true;
+                            break;
+                        }
+                    }
+                    if (!pronadenDan) {
+                        j++;
                     }
                 }
 
-                // Ako postoji poklapanje dana u etapi, postavljamo voziNaDane na true
-                if (poklapanjeDana) {
-                    voziNaDane = true;
+                boolean sviDaniPronađeni = true;
+                for (String trazenDan : trazeniDani) {
+                    if (!daniEtape.contains(trazenDan)) {
+                        sviDaniPronađeni = false;
+                        break;
+                    }
+                }
+
+                if (!sviDaniPronađeni) {
+                    sveEtapeIspunjavajuUvjet = false;
+                    break;
                 }
             }
 
-            // Ako vlak vozi na tražene dane, ispisujemo njegove etape
-            if (voziNaDane) {
-                System.out.println("Ispisujemo vlak koji vozi na tražene dane:");
+            if (sveEtapeIspunjavajuUvjet) {
+                int brojac = 0;
                 for (VozniRedKomponenta etapaKomponenta : etapeVoznogReda) {
+                    brojac++;
                     Etapa etapa = (Etapa) etapaKomponenta.dohvatiObjekt();
 
                     String polaznaStanica = etapa.getDjeca().get(0).toString();
@@ -72,10 +102,14 @@ public class IEVD implements Komanda{
                     String vrijemePolaska = etapa.getVrijemePolaska().toString();
                     String vrijemeDolaska = etapa.getVrijemeDolaska().toString();
                     String daniUTjednu = etapa.getDaniUTjednu();
-
-                    // Ispisujemo podatke za etapu
-                    System.out.printf(format, etapa.getOznakaVlaka(), etapa.getOznakaPruge(), polaznaStanica,
-                            odredisnaStanica, vrijemePolaska, vrijemeDolaska, daniUTjednu);
+                    if (brojac == 1){
+                        System.out.printf(format, etapa.getOznakaVlaka(), etapa.getOznakaPruge(), polaznaStanica,
+                                odredisnaStanica, vrijemePolaska, vrijemeDolaska, daniUTjednu);
+                    }
+                    else if (brojac > 1){
+                        System.out.printf(format, "#"+brojac+"------->", etapa.getOznakaPruge(), polaznaStanica,
+                                odredisnaStanica, vrijemePolaska, vrijemeDolaska, daniUTjednu);
+                    }
                 }
             }
         }
