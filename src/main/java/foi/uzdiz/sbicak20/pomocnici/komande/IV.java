@@ -4,6 +4,7 @@ import foi.uzdiz.sbicak20.modeli.composite.Etapa;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRedKomponenta;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class IV implements Komanda{
@@ -30,6 +31,8 @@ public class IV implements Komanda{
 
         System.out.printf(format, "Oznaka Vlaka", "Polazna Stanica", "Odredišna Stanica",
                 "Vrijeme Polaska", "Vrijeme Dolaska", "Ukupna Kilometraža");
+
+        vozniRed.getDjeca().sort(Comparator.comparing(vlak -> ((Etapa) vlak.getDjeca().get(0).dohvatiObjekt()).getOznakaVlaka()));
 
         for (VozniRedKomponenta vlak : vozniRed.getDjeca()) {
             List<VozniRedKomponenta> etapeVoznogReda = vlak.getDjeca();

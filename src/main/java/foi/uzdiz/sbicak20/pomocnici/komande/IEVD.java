@@ -5,6 +5,7 @@ import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRedKomponenta;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class IEVD implements Komanda{
@@ -52,6 +53,11 @@ public class IEVD implements Komanda{
                 i++;
             }
         }
+
+        vozniRed.getDjeca().sort(Comparator.comparing(vlak -> {
+            Etapa prvaEtapa = (Etapa) vlak.getDjeca().get(0).dohvatiObjekt();
+            return prvaEtapa.getVrijemePolaska();
+        }));
 
         for (VozniRedKomponenta vlak : vozniRed.getDjeca()) {
             List<VozniRedKomponenta> etapeVoznogReda = vlak.getDjeca();
