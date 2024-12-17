@@ -83,7 +83,7 @@ public class Main {
                     System.out.println("Izlaz iz sustava.");
                     break;
                 }
-                sustavSingleton.IzvrsiKomandu(komanda.trim());
+                sustavSingleton.IzvrsiKomanduVisitor(komanda.trim());
             }
         } catch (IOException e) {
             SustavGresaka.getInstance().prijaviGresku(e, "Greška u čitanju komandi");

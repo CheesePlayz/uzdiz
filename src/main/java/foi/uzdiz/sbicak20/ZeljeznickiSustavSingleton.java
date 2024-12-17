@@ -6,6 +6,7 @@ import foi.uzdiz.sbicak20.modeli.composite.Vlak;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRedKomponenta;
 import foi.uzdiz.sbicak20.pomocnici.VozniRedPunjac;
+import foi.uzdiz.sbicak20.pomocnici.komande.*;
 
 import java.util.*;
 
@@ -25,6 +26,38 @@ public class ZeljeznickiSustavSingleton {
     private VozniRed vozniRed;
     private VozniRedPunjac vozniRedPunjac;
 
+    public List<List<Kompozicija>> getKompozicije() {
+        return kompozicije;
+    }
+
+    public RegistarKorisnika getRegistarKorisnika() {
+        return registarKorisnika;
+    }
+
+    public VozniRed getVozniRed() {
+        return vozniRed;
+    }
+
+    public VozniRedPunjac getVozniRedPunjac() {
+        return vozniRedPunjac;
+    }
+
+    public List<OznakaDana> getOznakeDana() {
+        return oznakeDana;
+    }
+
+    public List<ZeljeznickaStanica> getStanice() {
+        return stanice;
+    }
+
+    public List<VozniRedPodaci> getVozniRedPodaci() {
+        return vozniRedPodaci;
+    }
+
+    public List<ZeljeznickoPrijevoznoSredstvo> getVozila() {
+        return vozila;
+    }
+
     private ZeljeznickiSustavSingleton(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr, List<OznakaDana> od) {
         this.stanice = stanice;
         this.vozila = vozila;
@@ -36,6 +69,13 @@ public class ZeljeznickiSustavSingleton {
         vozniRed = vozniRedPunjac.napuniVozniRed(stanice, vr, od);
     }
 
+    public static ZeljeznickiSustavSingleton getInstanca(){
+        if (instanca != null){
+            return instanca;
+        }
+        return null;
+    }
+
     public static ZeljeznickiSustavSingleton getInstanca(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr, List<OznakaDana> od) {
         if (instanca == null) {
             instanca = new ZeljeznickiSustavSingleton(stanice, vozila, kompozicije, vr, od);
@@ -43,413 +83,80 @@ public class ZeljeznickiSustavSingleton {
         return instanca;
     }
 
-    public void IzvrsiKomandu(String komanda) {
+    public void IzvrsiKomanduVisitor(String komandaString) {
+        Komanda komanda = parseKomandu(komandaString);
 
-        if (komanda.startsWith("IK")) {
-            String[] dioKomande = komanda.split(" ");
-            if (dioKomande.length != 2) {
-                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
-                return;
-            }
-
-            String oznakaKompozicije = dioKomande[1];
-            IspisVozilaIzKompozicije(oznakaKompozicije);
-        } else if (komanda.startsWith("ISP")) {
-            String[] dioKomande = komanda.split(" ");
-            if (dioKomande.length != 3) {
-                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
-                return;
-            }
-
-            String oznakaPruge = dioKomande[1];;
-            boolean obrnutRedoslijed;
-            if (Objects.equals(dioKomande[2], "N")) {
-                obrnutRedoslijed = false;
-            } else if (Objects.equals(dioKomande[2], "O")) {
-                obrnutRedoslijed = true;
-            } else {
-                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
-                return;
-            }
-
-            IspisPregledStanicaNaOdredenojPruzi(stanice, oznakaPruge, obrnutRedoslijed);
+        if (komanda == null) {
+            return;
         }
-        else if (komanda.startsWith("ISI2S")){
-            String[] dioKomande = komanda.split(" ");
-            if (dioKomande.length != 4) {
-                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
-                return;
-            }
-            Isi2s(stanice, dioKomande[1], dioKomande[3]);
+
+        KomandaVisitor visitor = new IzvrsiKomanduVisitor();
+        komanda.prihvati(visitor);
+    }
+
+    private Komanda parseKomandu(String komandaString) {
+        if (komandaString.equals("IP")) {
+            return new IP(stanice);
         }
-        else if (komanda.startsWith("DK")){
-            String[] dioKomande = komanda.split(" ");
-            if (dioKomande.length != 3) {
-                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
-                return;
-            }
-            registarKorisnika.dodajKorisnika(dioKomande[1], dioKomande[2]);
+
+        if (komandaString.matches("^ISP \\S+ [NO]$")) {
+            String[] dioKomande = komandaString.split(" ");
+            boolean obrnut = dioKomande[2].equals("O");
+            return new ISP(stanice, dioKomande[1], obrnut);
         }
-        else if (komanda.startsWith("DPK")){
-            String[] dioKomande = komanda.split(" - ");
-            if (dioKomande.length < 2 || dioKomande.length > 3) {
-                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
-                return;
+
+        if (komandaString.matches("^ISI2S .+ - .+$")) {
+            String[] dioKomande = komandaString.substring(6).trim().split(" - ");
+            if (dioKomande.length == 2) {
+                return new ISI2S(dioKomande[0].trim(), dioKomande[1].trim());
             }
+        }
+
+        if (komandaString.matches("^IK \\S+$")) {
+            return new IK(komandaString.split(" ")[1]);
+        }
+
+        if (komandaString.equals("IV")) {
+            return new IV(vozniRed);
+        }
+
+        if (komandaString.matches("^IEV \\S+$")) {
+            return new IEV(vozniRed, komandaString.split(" ")[1]);
+        }
+
+        if (komandaString.matches("^IEVD \\S+$")) {
+            return new IEVD(vozniRed, komandaString.split(" ")[1]);
+        }
+
+        if (komandaString.matches("^DK \\S+ \\S+$")) {
+            String[] dioKomande = komandaString.split(" ");
+            return new DK(dioKomande[1], dioKomande[2]);
+        }
+
+        if (komandaString.equals("PK")) {
+            return new PK();
+        }
+
+        if (komandaString.matches("^DPK \\S+ \\S+ - \\S+( - .+)?$")) {
+            String[] dioKomande = komandaString.split(" - ");
             String imePrezimePart = dioKomande[0].substring(4).trim();
             String[] imePrezime = imePrezimePart.split(" ", 2);
             if (imePrezime.length != 2) {
-                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
-                return;
+                return null;
             }
             String ime = imePrezime[0];
             String prezime = imePrezime[1];
-            String oznakaVlaka = dioKomande[1];
-            String stanica = dioKomande.length == 3 ? dioKomande[2] : null;
-
-            registarKorisnika.dodajPracenjeVlaka(ime, prezime, oznakaVlaka, stanica);
+            String oznakaVlaka = dioKomande[1].trim();
+            String stanica = dioKomande.length == 3 ? dioKomande[2].trim() : null;
+            return new DPK(ime, prezime, oznakaVlaka, stanica);
         }
-        else if (komanda.startsWith("IEV")) {
-            String oznakaVlaka = komanda.substring(4).trim();
-            if (oznakaVlaka.isEmpty()) {
-                System.out.println("Nepoznata komanda ili pogrešna sintaksa !!!");
-                return;
-            }
-            IspisIEV(oznakaVlaka);
-        }
-        else {
-            switch (komanda) {
-                case "Q": {
-                    exit(0);
-                    break;
-                }
-                case "IP": {
-                    IspisPruge(stanice);
-                    break;
-                }
 
-                case "IV": {
-                    IspisIV();
-                    break;
-                }
-
-                case "PK": {
-                    registarKorisnika.ispisiKorisnike();
-                    break;
-                }
-                default:
-                    System.out.println("Nepoznata komanda !!!");
-            }
+        if (komandaString.equals("Q")) {
+            return new Q();
         }
+
+        System.out.println("Nepoznata komanda ili pogrešna sintaksa: " + komandaString);
+        return null;
     }
 
-    private void IspisPruge(List<ZeljeznickaStanica> stanice) {
-        if (stanice == null || stanice.isEmpty()) {
-            System.out.println("Nema dostupnih podataka o stanicama.");
-            return;
-        }
-
-        Map<String, List<ZeljeznickaStanica>> prugeMap = new HashMap<>();
-        int[] maxDuljine = {6, 15, 15, 18};
-
-
-        for (ZeljeznickaStanica stanica : stanice) {
-            String oznakaPruge = stanica.getOznakaPruge();
-            prugeMap.putIfAbsent(oznakaPruge, new ArrayList<>());
-            prugeMap.get(oznakaPruge).add(stanica);
-
-            maxDuljine[0] = Math.max(maxDuljine[0], oznakaPruge.length());
-        }
-
-        for (Map.Entry<String, List<ZeljeznickaStanica>> entry : prugeMap.entrySet()) {
-            List<ZeljeznickaStanica> stanicePruge = entry.getValue();
-            if (stanicePruge.size() < 2) continue;
-
-
-            String pocetnaStanica = stanicePruge.get(0).getStanica();
-            String zavrsnaStanica = stanicePruge.get(stanicePruge.size() - 1).getStanica();
-
-            maxDuljine[1] = Math.max(maxDuljine[1], pocetnaStanica.length());
-            maxDuljine[2] = Math.max(maxDuljine[2], zavrsnaStanica.length());
-        }
-
-
-        StringBuilder formatBuilder = new StringBuilder("|");
-        for (int duljina : maxDuljine) {
-            formatBuilder.append(" %-").append(duljina).append("s |");
-        }
-        formatBuilder.append("%n");
-        String format = formatBuilder.toString();
-
-        System.out.printf(format, "Oznaka", "Pocetna stanica", "Zavrsna stanica", "Ukupna kilometraza");
-
-        for (Map.Entry<String, List<ZeljeznickaStanica>> entry : prugeMap.entrySet()) {
-            String oznaka = entry.getKey();
-            List<ZeljeznickaStanica> stanicePruge = entry.getValue();
-
-            if (stanicePruge.size() < 2) {
-                continue;
-            }
-
-            String pocetnaStanica = stanicePruge.get(0).getStanica();
-            String zavrsnaStanica = stanicePruge.get(stanicePruge.size() - 1).getStanica();
-            double ukupnaKilometraza = 0;
-
-            for (ZeljeznickaStanica stanica : stanicePruge) {
-                ukupnaKilometraza += stanica.getDuzina();
-            }
-
-            maxDuljine[2] = Math.max(maxDuljine[2], pocetnaStanica.length());
-            maxDuljine[3] = Math.max(maxDuljine[3], zavrsnaStanica.length());
-
-            System.out.printf(format, oznaka, pocetnaStanica, zavrsnaStanica, ukupnaKilometraza);
-        }
-    }
-
-
-    private void IspisPregledStanicaNaOdredenojPruzi(List<ZeljeznickaStanica> stanice, String oznakaPruge, boolean obrnutRedoslijed) {
-        if (stanice == null || stanice.isEmpty()) {
-            System.out.println("Nema dostupnih podataka o stanicama.");
-            return;
-        }
-
-        List<ZeljeznickaStanica> stanicePruge = new ArrayList<>();
-        int[] maxDuljine = {13, 13, 18};
-
-        for (ZeljeznickaStanica stanica : stanice) {
-            if (stanica.getOznakaPruge().equals(oznakaPruge)) {
-                stanicePruge.add(stanica);
-                maxDuljine[0] = Math.max(maxDuljine[0], stanica.getStanica().length());
-                maxDuljine[1] = Math.max(maxDuljine[1], stanica.getVrstaStanice().toString().length());
-            }
-        }
-
-        if (stanicePruge.isEmpty()) {
-            System.out.println("Nema stanica za prugu: " + oznakaPruge);
-            return;
-        }
-
-        if (stanicePruge.size() < 2) {
-            System.out.println("Pruga mora imati barem dvije stanice!");
-            return;
-        }
-
-        StringBuilder formatBuilder = new StringBuilder("|");
-        for (int duljina : maxDuljine) {
-            formatBuilder.append(" %-").append(duljina).append("s |");
-        }
-        formatBuilder.append("%n");
-        String format = formatBuilder.toString();
-
-        System.out.printf(format, "Naziv stanice", "Vrsta stanice", "Ukupna kilometraza");
-
-        double ukupnaKilometraza = 0;
-
-
-        if (obrnutRedoslijed) {
-            int brojElemenataUnutarPruge = stanicePruge.size() - 1;
-            for (int i = brojElemenataUnutarPruge; i >= 0; i--) {
-                ZeljeznickaStanica stanica = stanicePruge.get(i);
-                if (i == brojElemenataUnutarPruge) {
-                    ukupnaKilometraza = 0;
-                } else {
-                    ukupnaKilometraza += stanicePruge.get(i + 1).getDuzina();
-                }
-                System.out.printf(format, stanica.getStanica(), stanica.getVrstaStanice(), String.format("%.1f km", ukupnaKilometraza));
-            }
-        } else {
-            for (ZeljeznickaStanica stanica : stanicePruge) {
-                ukupnaKilometraza += stanica.getDuzina();
-                System.out.printf(format, stanica.getStanica(), stanica.getVrstaStanice(), String.format("%.1f km", ukupnaKilometraza));
-            }
-        }
-    }
-
-
-    private void Isi2s(List<ZeljeznickaStanica> stanice, String pocetnaStanica, String zavrsnaStanica) {
-        // Koristenje grafa za modeliranje povezanosti stanica
-        Map<String, List<ZeljeznickaStanica>> graf = new HashMap<>();
-
-        // Izgradnja grafa s dvosmjernim vezama
-        for (ZeljeznickaStanica stanica : stanice) {
-            graf.putIfAbsent(stanica.getStanica(), new ArrayList<>());
-            for (ZeljeznickaStanica susjed : stanice) {
-                if (!stanica.getStanica().equals(susjed.getStanica()) && stanica.getOznakaPruge().equals(susjed.getOznakaPruge())) {
-                    graf.get(stanica.getStanica()).add(susjed);
-                    graf.putIfAbsent(susjed.getStanica(), new ArrayList<>());
-                    graf.get(susjed.getStanica()).add(stanica); // Dodavanje obrnute veze
-                }
-            }
-        }
-
-        // DFS za pronalazak puta
-        List<ZeljeznickaStanica> rezultat = new ArrayList<>();
-        Set<String> posjeceni = new HashSet<>();
-        ZeljeznickaStanica pocetna = stanice.stream().filter(s -> s.getStanica().equals(pocetnaStanica)).findFirst().orElse(null);
-        String pocetnaPruge = pocetna != null ? pocetna.getOznakaPruge() : "";
-        if (!dfs(graf, pocetnaStanica, zavrsnaStanica, posjeceni, rezultat, stanice, 0, pocetnaPruge)) {
-            System.out.println("Put nije pronaden!");
-            return;
-        }
-
-        // Ispis rezultata
-        System.out.println(String.format("%-20s %-10s %-10s", "Naziv", "Vrsta", "Ukupna udaljenost"));
-        int kumulativnaUdaljenost = 0;
-        for (ZeljeznickaStanica stanica : rezultat) {
-            kumulativnaUdaljenost += stanica.getDuzina();
-            System.out.println(String.format("%-20s %-10s %-10d", stanica.getStanica(), stanica.getVrstaStanice(), kumulativnaUdaljenost));
-        }
-    }
-
-    private boolean dfs(Map<String, List<ZeljeznickaStanica>> graf, String trenutni, String kraj, Set<String> posjeceni,
-                        List<ZeljeznickaStanica> rezultat, List<ZeljeznickaStanica> stanice, int ukupnaUdaljenost, String trenutnaPruge) {
-        if (posjeceni.contains(trenutni)) return false;
-        posjeceni.add(trenutni);
-
-        // Dodavanje trenutne stanice u rezultat
-        ZeljeznickaStanica trenutnaStanica = stanice.stream().filter(s -> s.getStanica().equals(trenutni)).findFirst().orElse(null);
-        if (trenutnaStanica != null) rezultat.add(trenutnaStanica);
-
-        // Ako smo došli do kraja, vraćamo true
-        if (trenutni.equals(kraj)) return true;
-
-        // Pretraga susjeda
-        for (ZeljeznickaStanica susjed : graf.getOrDefault(trenutni, new ArrayList<>())) {
-            // Nastavi pretragu samo ako je ista pruga
-            if (!posjeceni.contains(susjed.getStanica()) && susjed.getOznakaPruge().equals(trenutnaPruge)) {
-                if (dfs(graf, susjed.getStanica(), kraj, posjeceni, rezultat, stanice, ukupnaUdaljenost + (int)susjed.getDuzina(), trenutnaPruge)) {
-                    return true;
-                }
-            }
-        }
-
-        // Ako nismo našli put, uklonimo trenutnu stanicu iz rezultata i vratimo false
-        rezultat.remove(rezultat.size() - 1);
-        return false;
-    }
-
-
-
-
-
-    private void IspisVozilaIzKompozicije(String oznakaKompozicije) {
-        boolean kompozicijaNadena = false;
-        List<Kompozicija> trazenaKompozicija = null;
-
-        for (List<Kompozicija> kompozicija : kompozicije) {
-            if (kompozicija.get(0).getOznaka().equals(oznakaKompozicije)) {
-                trazenaKompozicija = kompozicija;
-                kompozicijaNadena = true;
-                break;
-            }
-        }
-
-        if (!kompozicijaNadena || trazenaKompozicija == null) {
-            System.out.println("Kompozicija s oznakom " + oznakaKompozicije + " nije pronadena.");
-            return;
-        }
-
-        int[] maxInitStupacaDuljine = {7, 5, 4, 6, 7, 12, 12};
-        List<String[]> podaciZaIspis = new ArrayList<>();
-
-        for (Kompozicija kompozicija : trazenaKompozicija) {
-            String oznakaPrijevoznogSredstva = kompozicija.getOznakaPrijevoznogSredstva();
-            ZeljeznickoPrijevoznoSredstvo sredstvo = null;
-            for (ZeljeznickoPrijevoznoSredstvo ps : vozila) {
-                if (ps.getOznaka().equals(oznakaPrijevoznogSredstva)) {
-                    sredstvo = ps;
-                    break;
-                }
-            }
-
-            if (sredstvo != null) {
-                String[] red = {
-                        oznakaPrijevoznogSredstva,
-                        String.valueOf(kompozicija.getUloga()),
-                        sredstvo.getOpis(),
-                        String.valueOf(sredstvo.getGodina()),
-                        String.valueOf(sredstvo.getNamjena()),
-                        String.valueOf(sredstvo.getVrstaPogona()),
-                        sredstvo.getMaxBrzina() + " km/h"
-                };
-                podaciZaIspis.add(red);
-
-                for (int i = 0; i < red.length; i++) {
-                    maxInitStupacaDuljine[i] = Math.max(maxInitStupacaDuljine[i], red[i].length());
-                }
-            }
-        }
-
-        StringBuilder formatBuilder = new StringBuilder("|");
-        for (int duljina : maxInitStupacaDuljine) {
-            formatBuilder.append(" %-").append(duljina).append("s |");
-        }
-        formatBuilder.append("%n");
-        String format = formatBuilder.toString();
-
-        System.out.printf(format, "Oznaka", "Uloga", "Opis", "Godina", "Namjena", "Vrsta pogona", "Maks. brzina");
-        for (String[] red : podaciZaIspis) {
-            System.out.printf(format, (Object[]) red);
-        }
-    }
-
-    private void IspisIEV(String oznakaVlaka) {
-        int[] maxDuljine = {12, 12, 20, 20, 15, 15, 18, 15};
-        StringBuilder formatBuilder = new StringBuilder("|");
-        for (int duljina : maxDuljine) {
-            formatBuilder.append(" %-").append(duljina).append("s |");
-        }
-        formatBuilder.append("%n");
-        String format = formatBuilder.toString();
-
-        System.out.printf(format, "Oznaka Vlaka", "Oznaka Pruge", "Polazna Stanica",
-                "Odredišna Stanica", "Vrijeme Polaska", "Vrijeme Dolaska",
-                "Ukupna Kilometraža", "Dani u Tjednu");
-
-        for(VozniRedKomponenta vlak : vozniRed.getDjeca()){
-            for(VozniRedKomponenta etapa : vlak.getDjeca()){
-                Etapa et = (Etapa) etapa.dohvatiObjekt();
-                if (Objects.equals(oznakaVlaka, et.getOznakaVlaka())){
-                    et.prikaziDetalje();
-                }
-            }
-        }
-    }
-
-    private void IspisIV() {
-        int[] maxDuljine = {12, 20, 20, 20, 15, 15};
-        StringBuilder formatBuilder = new StringBuilder("|");
-        for (int duljina : maxDuljine) {
-            formatBuilder.append(" %-").append(duljina).append("s |");
-        }
-        formatBuilder.append("%n");
-        String format = formatBuilder.toString();
-
-        System.out.printf(format, "Oznaka Vlaka", "Polazna Stanica", "Odredišna Stanica",
-                "Vrijeme Polaska", "Vrijeme Dolaska", "Ukupna Kilometraža");
-
-        for (VozniRedKomponenta vlak : vozniRed.getDjeca()) {
-            List<VozniRedKomponenta> etapeVoznogReda = vlak.getDjeca();
-
-            if (!etapeVoznogReda.isEmpty()) {
-                Etapa prvaEtapa = (Etapa) etapeVoznogReda.get(0).dohvatiObjekt();
-                Etapa zadnjaEtapa = (Etapa) etapeVoznogReda.get(etapeVoznogReda.size() - 1).dohvatiObjekt();
-
-                String polaznaStanica = prvaEtapa.getDjeca().get(0).toString();
-                String odredisnaStanica = zadnjaEtapa.getDjeca().getLast().toString();
-
-                String vrijemePolaska = prvaEtapa.getVrijemePolaska().toString();
-                String vrijemeDolaska = zadnjaEtapa.getVrijemeDolaska().toString();
-
-                double ukupnaKilometraza = 0;
-                for (VozniRedKomponenta etapa : etapeVoznogReda) {
-                    Etapa et = (Etapa) etapa.dohvatiObjekt();
-                    ukupnaKilometraza += et.getUkupnaKilometraza();
-                }
-
-                System.out.printf(format, prvaEtapa.getOznakaVlaka(), polaznaStanica, odredisnaStanica,
-                        vrijemePolaska, vrijemeDolaska, String.format("%.2f km", ukupnaKilometraza));
-            }
-        }
-    }
 }
