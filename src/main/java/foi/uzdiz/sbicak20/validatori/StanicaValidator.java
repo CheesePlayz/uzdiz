@@ -1,31 +1,31 @@
 package foi.uzdiz.sbicak20.validatori;
 
-import foi.uzdiz.sbicak20.greske.PrazanStringGreska;
-import foi.uzdiz.sbicak20.greske.SustavGresaka;
 import foi.uzdiz.sbicak20.greske.NevaljaniFormatGreska;
+import foi.uzdiz.sbicak20.greske.PrazanStringGreska;
+import foi.uzdiz.sbicak20.greske.SustavGresakaSingleton;
 import foi.uzdiz.sbicak20.modeli.Kompozicija;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class  StanicaValidator implements IValidator {
-    private Pattern STANICA_PATTERN = Pattern.compile("^([A-Za-z0-9ČčĆćĐđŠšŽž\\s-–]+)$");
-    private Pattern PRUGA_PATTERN = Pattern.compile("^([A-Za-z0-9ČčĆćĐđŠšŽž]+)$");
-    private Pattern VRSTA_STANICE_PATTERN = Pattern.compile("^(kol\\.|staj\\.)$");
-    private Pattern STATUS_STANICE_PATTERN = Pattern.compile("^[OK]$");
-    private Pattern PUTNICI_PATTERN = Pattern.compile("^(DA|NE)$");
-    private Pattern ROBA_PATTERN = Pattern.compile("^(DA|NE)$");
-    private Pattern KATEGORIJA_PATTERN = Pattern.compile("^[MLR]$");
-    private Pattern BROJ_PERONA_PATTERN = Pattern.compile("^([1-9]|[1-9]\\d)$");
-    private Pattern VRSTA_PRUGE_PATTERN = Pattern.compile("^[KE]$");
-    private Pattern BROJ_KOLOSIJEKA_PATTERN = Pattern.compile("^[12]$");
-    private Pattern DO_PO_OSOVINI_PATTERN = Pattern.compile("^(1[0-9]|[2-4][0-9]|50)(?:,[0-9])?$");
-    private Pattern DO_PO_DUZINI_PATTERN = Pattern.compile("^(?:[2-9](?:,[0-9])?|10(?:,[0-9])?)$");
-    private Pattern STATUS_PRUGE_PATTERN = Pattern.compile("^[IK]$");
-    private Pattern DUZINA_PATTERN = Pattern.compile("^(?:[1-9]?[0-9]{0,2}|0)$");
-    private Pattern VRIJEME_NORMALNI_VLAK = Pattern.compile("^([0-9]|[0-9]\\d)");
-    private Pattern VRIJEME_UBRZANI_VLAK = Pattern.compile("^([0-9]|[0-9]\\d)");
-    private Pattern VRIJEME_BRZI_VLAK = Pattern.compile("^([0-9]|[0-9]\\d)");
+public class StanicaValidator implements IValidator {
+    private final Pattern STANICA_PATTERN = Pattern.compile("^([A-Za-z0-9ČčĆćĐđŠšŽž\\s-–]+)$");
+    private final Pattern PRUGA_PATTERN = Pattern.compile("^([A-Za-z0-9ČčĆćĐđŠšŽž]+)$");
+    private final Pattern VRSTA_STANICE_PATTERN = Pattern.compile("^(kol\\.|staj\\.)$");
+    private final Pattern STATUS_STANICE_PATTERN = Pattern.compile("^[OK]$");
+    private final Pattern PUTNICI_PATTERN = Pattern.compile("^(DA|NE)$");
+    private final Pattern ROBA_PATTERN = Pattern.compile("^(DA|NE)$");
+    private final Pattern KATEGORIJA_PATTERN = Pattern.compile("^[MLR]$");
+    private final Pattern BROJ_PERONA_PATTERN = Pattern.compile("^([1-9]|[1-9]\\d)$");
+    private final Pattern VRSTA_PRUGE_PATTERN = Pattern.compile("^[KE]$");
+    private final Pattern BROJ_KOLOSIJEKA_PATTERN = Pattern.compile("^[12]$");
+    private final Pattern DO_PO_OSOVINI_PATTERN = Pattern.compile("^(1[0-9]|[2-4][0-9]|50)(?:,[0-9])?$");
+    private final Pattern DO_PO_DUZINI_PATTERN = Pattern.compile("^(?:[2-9](?:,[0-9])?|10(?:,[0-9])?)$");
+    private final Pattern STATUS_PRUGE_PATTERN = Pattern.compile("^[IK]$");
+    private final Pattern DUZINA_PATTERN = Pattern.compile("^(?:[1-9]?[0-9]{0,2}|0)$");
+    private final Pattern VRIJEME_NORMALNI_VLAK = Pattern.compile("^([0-9]|[0-9]\\d)");
+    private final Pattern VRIJEME_UBRZANI_VLAK = Pattern.compile("^([0-9]|[0-9]\\d)");
+    private final Pattern VRIJEME_BRZI_VLAK = Pattern.compile("^([0-9]|[0-9]\\d)");
 
     @Override
     public boolean Validiraj(String[] redovi, int redakCSV, List<Kompozicija> kompzicije) {
@@ -164,7 +164,7 @@ public class  StanicaValidator implements IValidator {
             }
 
         } catch (Exception e) {
-            SustavGresaka.getInstance().prijaviGresku(e, SustavGresaka.getInstance().getPodrucjaGresaka().getFirst(), new String[]{"CSV redak: " + redakCSV, "Trenutni zapis: " + redovi[redak].trim()});
+            SustavGresakaSingleton.getInstance().prijaviGresku(e, SustavGresakaSingleton.getInstance().getPodrucjaGresaka().getFirst(), new String[]{"CSV redak: " + redakCSV, "Trenutni zapis: " + redovi[redak].trim()});
             return false;
         }
         return true;

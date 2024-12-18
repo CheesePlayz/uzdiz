@@ -8,23 +8,23 @@ import foi.uzdiz.sbicak20.enumeracije.ZeljeznickaPrijevoznaSredstvaEnum.ZPSVrsta
 public class ZeljeznickoPrijevoznoSredstvo {
 
     private String oznaka;
-    private String opis;
-    private String proizvodac;
-    private int godina;
-    private ZPSNamjenaEnum namjena;
-    private ZPSVrstaPrijevozaEnum vrstaPrijevoza;
-    private ZPSVrstaPogona vrstaPogona;
-    private int maxBrzina;
-    private double maxSnaga;
-    private int brojSjedecihMjesta;
-    private int brojStajucihMjesta;
-    private int brojBicikala;
-    private int brojKreveta;
-    private int brojAutomobila;
-    private double nosivost;
-    private double povrsina;
-    private double zapremina;
-    private ZPSStatusEnum status;
+    private final String opis;
+    private final String proizvodac;
+    private final int godina;
+    private final ZPSNamjenaEnum namjena;
+    private final ZPSVrstaPrijevozaEnum vrstaPrijevoza;
+    private final ZPSVrstaPogona vrstaPogona;
+    private final int maxBrzina;
+    private final double maxSnaga;
+    private final int brojSjedecihMjesta;
+    private final int brojStajucihMjesta;
+    private final int brojBicikala;
+    private final int brojKreveta;
+    private final int brojAutomobila;
+    private final double nosivost;
+    private final double povrsina;
+    private final double zapremina;
+    private final ZPSStatusEnum status;
 
 
     private ZeljeznickoPrijevoznoSredstvo(VoziloBuilder builder) {
@@ -52,6 +52,10 @@ public class ZeljeznickoPrijevoznoSredstvo {
         return oznaka;
     }
 
+    public void setOznaka(String oznaka) {
+        this.oznaka = oznaka;
+    }
+
     public String getOpis() {
         return opis;
     }
@@ -72,8 +76,33 @@ public class ZeljeznickoPrijevoznoSredstvo {
         return maxBrzina;
     }
 
-    public void setOznaka(String oznaka) {
-        this.oznaka = oznaka;
+    @Override
+    public String toString() {
+        return "PrijevoznoSredstvo {" +
+                "oznaka='" + oznaka + '\'' +
+                ", opis='" + opis + '\'' +
+                ", proizvodac='" + proizvodac + '\'' +
+                ", godina=" + godina +
+                ", namjena='" + namjena + '\'' +
+                ", vrstaPrijevoza='" + vrstaPrijevoza + '\'' +
+                ", vrstaPogona='" + vrstaPogona + '\'' +
+                ", maxBrzina=" + maxBrzina +
+                " km/h" +
+                ", maxSnaga=" + maxSnaga +
+                " kW" +
+                ", brojSjedecihMjesta=" + brojSjedecihMjesta +
+                ", brojStajucihMjesta=" + brojStajucihMjesta +
+                ", brojBicikala=" + brojBicikala +
+                ", brojKreveta=" + brojKreveta +
+                ", brojAutomobila=" + brojAutomobila +
+                ", nosivost=" + nosivost +
+                " kg" +
+                ", povrsina=" + povrsina +
+                " m²" +
+                ", zapremina=" + zapremina +
+                " m³" +
+                ", status='" + status + '\'' +
+                '}';
     }
 
     public static class VoziloBuilder {
@@ -189,35 +218,6 @@ public class ZeljeznickoPrijevoznoSredstvo {
         public ZeljeznickoPrijevoznoSredstvo build() {
             return new ZeljeznickoPrijevoznoSredstvo(this);
         }
-    }
-
-    @Override
-    public String toString() {
-        return "PrijevoznoSredstvo {" +
-                "oznaka='" + oznaka + '\'' +
-                ", opis='" + opis + '\'' +
-                ", proizvodac='" + proizvodac + '\'' +
-                ", godina=" + godina +
-                ", namjena='" + namjena + '\'' +
-                ", vrstaPrijevoza='" + vrstaPrijevoza + '\'' +
-                ", vrstaPogona='" + vrstaPogona + '\'' +
-                ", maxBrzina=" + maxBrzina +
-                " km/h" +
-                ", maxSnaga=" + maxSnaga +
-                " kW" +
-                ", brojSjedecihMjesta=" + brojSjedecihMjesta +
-                ", brojStajucihMjesta=" + brojStajucihMjesta +
-                ", brojBicikala=" + brojBicikala +
-                ", brojKreveta=" + brojKreveta +
-                ", brojAutomobila=" + brojAutomobila +
-                ", nosivost=" + nosivost +
-                " kg" +
-                ", povrsina=" + povrsina +
-                " m²" +
-                ", zapremina=" + zapremina +
-                " m³" +
-                ", status='" + status + '\'' +
-                '}';
     }
 }
 

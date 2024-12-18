@@ -1,6 +1,6 @@
 package foi.uzdiz.sbicak20;
 
-import foi.uzdiz.sbicak20.greske.SustavGresaka;
+import foi.uzdiz.sbicak20.greske.SustavGresakaSingleton;
 import foi.uzdiz.sbicak20.pomocnici.InitSustava;
 
 import java.io.BufferedReader;
@@ -20,7 +20,7 @@ public class Main {
 
         for (int i = 0; i < args.length; i += 2) {
             if (i + 1 >= args.length) {
-                SustavGresaka.getInstance().prijaviGresku(new Exception("Nedostaje vrijednost za argument: " + args[i]));
+                SustavGresakaSingleton.getInstance().prijaviGresku(new Exception("Nedostaje vrijednost za argument: " + args[i]));
                 exit(0);
             }
 
@@ -41,26 +41,26 @@ public class Main {
                     putanjaOznakeDana = args[i + 1];
                     break;
                 default:
-                    SustavGresaka.getInstance().prijaviGresku(new Exception("Nepoznat argument: " + args[i]));
+                    SustavGresakaSingleton.getInstance().prijaviGresku(new Exception("Nepoznat argument: " + args[i]));
                     exit(0);
             }
         }
 
         if (putanjaStanice == null || putanjaVozila == null || putanjaKompozicije == null || putanjaVozniRed == null || putanjaOznakeDana == null) {
             if (putanjaStanice == null) {
-                SustavGresaka.getInstance().prijaviGresku(new Exception("Nije naveden put do datoteke stanica (--zs)"));
+                SustavGresakaSingleton.getInstance().prijaviGresku(new Exception("Nije naveden put do datoteke stanica (--zs)"));
             }
             if (putanjaVozila == null) {
-                SustavGresaka.getInstance().prijaviGresku(new Exception("Nije naveden put do datoteke vozila (--zps)"));
+                SustavGresakaSingleton.getInstance().prijaviGresku(new Exception("Nije naveden put do datoteke vozila (--zps)"));
             }
             if (putanjaKompozicije == null) {
-                SustavGresaka.getInstance().prijaviGresku(new Exception("Nije naveden put do datoteke kompozicija (--zk)"));
+                SustavGresakaSingleton.getInstance().prijaviGresku(new Exception("Nije naveden put do datoteke kompozicija (--zk)"));
             }
             if (putanjaVozniRed == null) {
-                SustavGresaka.getInstance().prijaviGresku(new Exception("Nije naveden put do datoteke voznog reda (--zvr)"));
+                SustavGresakaSingleton.getInstance().prijaviGresku(new Exception("Nije naveden put do datoteke voznog reda (--zvr)"));
             }
             if (putanjaOznakeDana == null) {
-                SustavGresaka.getInstance().prijaviGresku(new Exception("Nije naveden put do datoteke oznaka dana (--zod)"));
+                SustavGresakaSingleton.getInstance().prijaviGresku(new Exception("Nije naveden put do datoteke oznaka dana (--zod)"));
             }
             exit(0);
         }
@@ -74,7 +74,7 @@ public class Main {
                 initSustava.getOznakeDana()
         );
 
-        SustavGresaka.getInstance().ispisiSveGreske();
+        SustavGresakaSingleton.getInstance().ispisiSveGreske();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             while (true) {
                 System.out.print("Komanda >> ");
@@ -86,7 +86,7 @@ public class Main {
                 sustavSingleton.IzvrsiKomanduVisitor(komanda.trim());
             }
         } catch (IOException e) {
-            SustavGresaka.getInstance().prijaviGresku(e, "Greška u čitanju komandi");
+            SustavGresakaSingleton.getInstance().prijaviGresku(e, "Greška u čitanju komandi");
         }
     }
 }

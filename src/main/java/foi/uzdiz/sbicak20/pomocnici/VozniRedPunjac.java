@@ -84,6 +84,9 @@ public class VozniRedPunjac {
 
     private long parsirajTrajanjeVoznje(String trajanjeVoznje) {
         String ociscenoTrajanje = trajanjeVoznje.replaceAll("[^0-9]", "");
+        if (trajanjeVoznje.isEmpty()) {
+            return 0;
+        }
         return Long.parseLong(ociscenoTrajanje);
     }
 
@@ -148,12 +151,11 @@ public class VozniRedPunjac {
             }
 
             List<ZeljeznickaStanica> staniceNaPrugi = pruge.get(oznakaPrugeParam);
-            if (Objects.equals(vrpodaci.getSmjer(), "N")){
+            if (Objects.equals(vrpodaci.getSmjer(), "N")) {
                 if (staniceNaPrugi != null && !staniceNaPrugi.isEmpty()) {
                     nazivStanica = staniceNaPrugi.get(staniceNaPrugi.size() - 1).getStanica();
                 }
-            }
-            else if (Objects.equals(vrpodaci.getSmjer(), "O")){
+            } else if (Objects.equals(vrpodaci.getSmjer(), "O")) {
                 if (staniceNaPrugi != null && !staniceNaPrugi.isEmpty()) {
                     nazivStanica = staniceNaPrugi.get(0).getStanica();
                 }

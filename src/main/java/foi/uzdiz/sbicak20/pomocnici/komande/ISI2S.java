@@ -2,14 +2,12 @@ package foi.uzdiz.sbicak20.pomocnici.komande;
 
 import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
 
-import java.util.List;
-
 import java.util.*;
 
 public class ISI2S implements Komanda {
-    private String oznakaStanicePolazna;
-    private String oznakaStaniceOdredisna;
-    private List<ZeljeznickaStanica> stanice;
+    private final String oznakaStanicePolazna;
+    private final String oznakaStaniceOdredisna;
+    private final List<ZeljeznickaStanica> stanice;
 
     public ISI2S(List<ZeljeznickaStanica> stanice, String oznakaStaniceStart, String oznakaStaniceEnd) {
         this.stanice = stanice;
@@ -28,13 +26,11 @@ public class ISI2S implements Komanda {
         Map<String, List<String>> graf = new HashMap<>();
         Map<String, Map<String, Integer>> udaljenosti = new HashMap<>();
 
-        // Organiziraj stanice po oznakama pruga
         for (ZeljeznickaStanica stanica : stanice) {
             pruge.putIfAbsent(stanica.getOznakaPruge(), new ArrayList<>());
             pruge.get(stanica.getOznakaPruge()).add(stanica);
         }
 
-        // Popunjavaj graf i udaljenosti na temelju stvarnih duljina
         for (String oznakaPruge : pruge.keySet()) {
             List<ZeljeznickaStanica> trenutnaPruga = pruge.get(oznakaPruge);
 
@@ -51,14 +47,12 @@ public class ISI2S implements Komanda {
                 udaljenosti.putIfAbsent(sljedeca.getStanica(), new HashMap<>());
 
                 if (trenutna.getDuzina() > 0) {
-                    // Dodaj stvarnu udaljenost samo ako je veća od 0
                     udaljenosti.get(trenutna.getStanica()).put(sljedeca.getStanica(), trenutna.getDuzina());
                     udaljenosti.get(sljedeca.getStanica()).put(trenutna.getStanica(), trenutna.getDuzina());
                 } else {
-                    // Ako udaljenost nije definirana, traži iduću stvarnu udaljenost
                     int j = i;
                     while (j < trenutnaPruga.size() - 1 && trenutnaPruga.get(j + 1).getDuzina() == 0) {
-                        j++;  // Preskoči stanice koje nemaju udaljenost
+                        j++;
                     }
 
                     if (j < trenutnaPruga.size() - 1) {
@@ -66,18 +60,17 @@ public class ISI2S implements Komanda {
                         if (trenutna.getDuzina() == 0 && stvarnaSljedeca.getDuzina() > 0) {
                             udaljenosti.get(trenutna.getStanica()).put(stvarnaSljedeca.getStanica(), stvarnaSljedeca.getDuzina());
                             udaljenosti.get(stvarnaSljedeca.getStanica()).put(trenutna.getStanica(), stvarnaSljedeca.getDuzina());
-                            i = j; // Preskoči nepotrebne stanice
+                            i = j;
                         }
                     }
                 }
             }
         }
 
-        // Izračunaj put koristeći BFS
-        List<String> put = bfs(graf, udaljenosti, oznakaStanicePolazna, oznakaStaniceOdredisna);
+        List<String> put = bfs(graf, oznakaStanicePolazna, oznakaStaniceOdredisna);
 
         if (put != null) {
-            double ukupnaKilometraža = 0.0;
+            double ukupnaKilometraza = 0.0;
             int[] maxDuljine = {20, 20, 20};
             StringBuilder formatBuilder = new StringBuilder("|");
             for (int duljina : maxDuljine) {
@@ -87,7 +80,6 @@ public class ISI2S implements Komanda {
             String format = formatBuilder.toString();
             System.out.printf(format, "Naziv stanice", "Vrsta stanice", "Ukupna kilometraža");
 
-            // Ispis stanica i kilometraže
             for (int i = 0; i < put.size(); i++) {
                 String trenutna = put.get(i);
 
@@ -103,18 +95,13 @@ public class ISI2S implements Komanda {
                 if (i > 0) {
                     String prethodna = put.get(i - 1);
 
-                    // Pronađi stvarnu udaljenost između prethodne i trenutne stanice
                     Integer udaljenost = udaljenosti.get(prethodna).get(trenutna);
                     if (udaljenost != null) {
-                        ukupnaKilometraža += udaljenost; // Dodaj stvarnu udaljenost
+                        ukupnaKilometraza += udaljenost;
                     }
                 }
 
-                System.out.printf(
-                        format,
-                        trenutna,
-                        stanicaObjekt.getVrstaStanice(),
-                        String.format("%.1f km", ukupnaKilometraža)
+                System.out.printf(format, trenutna, stanicaObjekt.getVrstaStanice(), ukupnaKilometraza
                 );
             }
         } else {
@@ -122,7 +109,7 @@ public class ISI2S implements Komanda {
         }
     }
 
-    private List<String> bfs(Map<String, List<String>> graf, Map<String, Map<String, Integer>> udaljenosti, String start, String cilj) {
+    private List<String> bfs(Map<String, List<String>> graf, String start, String cilj) {
         Queue<List<String>> queue = new LinkedList<>();
         Set<String> posjecene = new HashSet<>();
 

@@ -4,23 +4,43 @@ import foi.uzdiz.sbicak20.enumeracije.ZeljeznickeStaniceEnum.*;
 
 public class ZeljeznickaStanica {
 
-    private String stanica;
-    private String oznakaPruge;
-    private ZSVrstaStaniceEnum vrstaStanice;
-    private ZSStatusStaniceEnum statusStanice;
-    private ZSPutniciUlIzEnum putniciUlIz;
-    private ZSRobaUtIstEnum robaUtIst;
-    private ZSKategorijaPrugeEnum kategorijaPruge;
-    private int brojPerona;
-    private ZSVrstaPrugeEnum vrstaPruge;
-    private int brojKolosjeka;
-    private double doPoOsovini;
-    private double doPoDuznomM;
-    private ZSStatusPrugeEnum statusPruge;
-    private int duzina;
-    private Integer vrijemeNormalniVlak;
-    private Integer vrijemeUbrzaniVlak;
-    private Integer vrijemeBrziVlak;
+    private final String stanica;
+    private final String oznakaPruge;
+    private final ZSVrstaStaniceEnum vrstaStanice;
+    private final ZSStatusStaniceEnum statusStanice;
+    private final ZSPutniciUlIzEnum putniciUlIz;
+    private final ZSRobaUtIstEnum robaUtIst;
+    private final ZSKategorijaPrugeEnum kategorijaPruge;
+    private final int brojPerona;
+    private final ZSVrstaPrugeEnum vrstaPruge;
+    private final int brojKolosjeka;
+    private final double doPoOsovini;
+    private final double doPoDuznomM;
+    private final ZSStatusPrugeEnum statusPruge;
+    private final int duzina;
+    private final Integer vrijemeNormalniVlak;
+    private final Integer vrijemeUbrzaniVlak;
+    private final Integer vrijemeBrziVlak;
+
+    private ZeljeznickaStanica(StanicaBuilder builder) {
+        this.stanica = builder.stanica;
+        this.oznakaPruge = builder.oznakaPruge;
+        this.vrstaStanice = ZSVrstaStaniceEnum.fromLabel(builder.vrstaStanice);
+        this.statusStanice = ZSStatusStaniceEnum.valueOf(builder.statusStanice);
+        this.putniciUlIz = ZSPutniciUlIzEnum.valueOf(builder.putniciUlIz);
+        this.robaUtIst = ZSRobaUtIstEnum.valueOf(builder.robaUtIst);
+        this.kategorijaPruge = ZSKategorijaPrugeEnum.valueOf(builder.kategorijaPruge);
+        this.brojPerona = builder.brojPerona;
+        this.vrstaPruge = ZSVrstaPrugeEnum.valueOf(builder.vrstaPruge);
+        this.brojKolosjeka = builder.brojKolosjeka;
+        this.doPoOsovini = builder.doPoOsovini;
+        this.doPoDuznomM = builder.doPoDuznomM;
+        this.statusPruge = ZSStatusPrugeEnum.valueOf(builder.statusPruge);
+        this.duzina = builder.duzina;
+        this.vrijemeNormalniVlak = builder.vrijemeNormalniVlak;
+        this.vrijemeUbrzaniVlak = builder.vrijemeUbrzaniVlak;
+        this.vrijemeBrziVlak = builder.vrijemeBrziVlak;
+    }
 
     public String getStanica() {
         return stanica;
@@ -41,31 +61,36 @@ public class ZeljeznickaStanica {
     public Integer getVrijemeNormalniVlak() {
         return vrijemeNormalniVlak;
     }
+
     public Integer getVrijemeUbrzaniVlak() {
         return vrijemeUbrzaniVlak;
     }
+
     public Integer getVrijemeBrziVlak() {
         return vrijemeBrziVlak;
     }
 
-    private ZeljeznickaStanica(StanicaBuilder builder) {
-        this.stanica = builder.stanica;
-        this.oznakaPruge = builder.oznakaPruge;
-        this.vrstaStanice = ZSVrstaStaniceEnum.fromLabel(builder.vrstaStanice);
-        this.statusStanice = ZSStatusStaniceEnum.valueOf(builder.statusStanice);
-        this.putniciUlIz = ZSPutniciUlIzEnum.valueOf(builder.putniciUlIz);
-        this.robaUtIst = ZSRobaUtIstEnum.valueOf(builder.robaUtIst);
-        this.kategorijaPruge = ZSKategorijaPrugeEnum.valueOf(builder.kategorijaPruge);
-        this.brojPerona = builder.brojPerona;
-        this.vrstaPruge = ZSVrstaPrugeEnum.valueOf(builder.vrstaPruge);
-        this.brojKolosjeka = builder.brojKolosjeka;
-        this.doPoOsovini = builder.doPoOsovini;
-        this.doPoDuznomM = builder.doPoDuznomM;
-        this.statusPruge = ZSStatusPrugeEnum.valueOf(builder.statusPruge);
-        this.duzina = builder.duzina;
-        this.vrijemeNormalniVlak = builder.vrijemeNormalniVlak;
-        this.vrijemeUbrzaniVlak = builder.vrijemeUbrzaniVlak;
-        this.vrijemeBrziVlak = builder.vrijemeBrziVlak;
+    @Override
+    public String toString() {
+        return "ZeljeznickeStanice{" +
+                "stanica='" + stanica + '\'' +
+                ", oznakaPruge='" + oznakaPruge + '\'' +
+                ", vrstaStanice='" + vrstaStanice + '\'' +
+                ", statusStanice='" + statusStanice + '\'' +
+                ", putniciUlIz=" + putniciUlIz +
+                ", robaUtIst=" + robaUtIst +
+                ", kategorijaPruge='" + kategorijaPruge + '\'' +
+                ", brojPerona=" + brojPerona +
+                ", vrstaPruge='" + vrstaPruge + '\'' +
+                ", brojKolosjeka=" + brojKolosjeka +
+                ", doPoOsovini=" + doPoOsovini +
+                ", doPoDuznomM=" + doPoDuznomM +
+                ", statusPruge='" + statusPruge + '\'' +
+                ", duzina=" + duzina +
+                ", vrijemeNormalniVlak=" + vrijemeNormalniVlak +
+                ", vrijemeUbrzaniVlak=" + vrijemeUbrzaniVlak +
+                ", vrijemeBrziVlak=" + vrijemeBrziVlak +
+                '}';
     }
 
     public static class StanicaBuilder {
@@ -157,17 +182,17 @@ public class ZeljeznickaStanica {
             return this;
         }
 
-        public StanicaBuilder setVrijemeNormalniVlak(int vrijemeNormalniVlak){
+        public StanicaBuilder setVrijemeNormalniVlak(int vrijemeNormalniVlak) {
             this.vrijemeNormalniVlak = vrijemeNormalniVlak != 0 ? vrijemeNormalniVlak : null;
             return this;
         }
 
-        public StanicaBuilder setVrijemeUbrzaniVlak(int vrijemeUbrzaniVlak){
+        public StanicaBuilder setVrijemeUbrzaniVlak(int vrijemeUbrzaniVlak) {
             this.vrijemeUbrzaniVlak = vrijemeUbrzaniVlak != 0 ? vrijemeUbrzaniVlak : null;
             return this;
         }
 
-        public StanicaBuilder setVrijemeBrziVlak(int vrijemeBrziVlak){
+        public StanicaBuilder setVrijemeBrziVlak(int vrijemeBrziVlak) {
             this.vrijemeBrziVlak = vrijemeBrziVlak != 0 ? vrijemeBrziVlak : null;
             return this;
         }
@@ -175,29 +200,6 @@ public class ZeljeznickaStanica {
         public ZeljeznickaStanica build() {
             return new ZeljeznickaStanica(this);
         }
-    }
-
-    @Override
-    public String toString() {
-        return "ZeljeznickeStanice{" +
-                "stanica='" + stanica + '\'' +
-                ", oznakaPruge='" + oznakaPruge + '\'' +
-                ", vrstaStanice='" + vrstaStanice + '\'' +
-                ", statusStanice='" + statusStanice + '\'' +
-                ", putniciUlIz=" + putniciUlIz +
-                ", robaUtIst=" + robaUtIst +
-                ", kategorijaPruge='" + kategorijaPruge + '\'' +
-                ", brojPerona=" + brojPerona +
-                ", vrstaPruge='" + vrstaPruge + '\'' +
-                ", brojKolosjeka=" + brojKolosjeka +
-                ", doPoOsovini=" + doPoOsovini +
-                ", doPoDuznomM=" + doPoDuznomM +
-                ", statusPruge='" + statusPruge + '\'' +
-                ", duzina=" + duzina +
-                ", vrijemeNormalniVlak=" + vrijemeNormalniVlak +
-                ", vrijemeUbrzaniVlak=" + vrijemeUbrzaniVlak +
-                ", vrijemeBrziVlak=" + vrijemeBrziVlak +
-                '}';
     }
 }
 

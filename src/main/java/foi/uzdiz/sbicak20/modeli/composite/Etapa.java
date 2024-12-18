@@ -4,14 +4,14 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Etapa extends VozniRedKomponenta{
+public class Etapa extends VozniRedKomponenta {
 
-    private List<VozniRedKomponenta> stanice = new ArrayList<>();
-    private String oznakaVlaka;
-    private String oznakaPruge;
-    private String daniUTjednu;
-    private LocalTime vrijemePolaska;
-    private LocalTime vrijemeDolaska;
+    private final List<VozniRedKomponenta> stanice = new ArrayList<>();
+    private final String oznakaVlaka;
+    private final String oznakaPruge;
+    private final String daniUTjednu;
+    private final LocalTime vrijemePolaska;
+    private final LocalTime vrijemeDolaska;
     private double ukupnaKilometraza = 0;
 
     public Etapa(String oznakaVlaka, String oznakaPruge, LocalTime vrijemePolaska, LocalTime vrijemeDolaska, String daniUTjednu) {
@@ -25,18 +25,28 @@ public class Etapa extends VozniRedKomponenta{
     public String getOznakaVlaka() {
         return oznakaVlaka;
     }
-    public String getOznakaPruge() { return oznakaPruge; }
-    public LocalTime getVrijemePolaska(){
+
+    public String getOznakaPruge() {
+        return oznakaPruge;
+    }
+
+    public LocalTime getVrijemePolaska() {
         return vrijemePolaska;
     }
-    public LocalTime getVrijemeDolaska(){
+
+    public LocalTime getVrijemeDolaska() {
         return vrijemeDolaska;
     }
+
     public String getDaniUTjednu() {
         return daniUTjednu;
     }
-    public double getUkupnaKilometraza(){ return ukupnaKilometraza; }
-    public void setUkupnaKilometraza(double km){
+
+    public double getUkupnaKilometraza() {
+        return ukupnaKilometraza;
+    }
+
+    public void setUkupnaKilometraza(double km) {
         ukupnaKilometraza = km;
     }
 

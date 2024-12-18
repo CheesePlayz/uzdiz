@@ -4,13 +4,14 @@ import foi.uzdiz.sbicak20.ZeljeznickiSustavSingleton;
 
 public class DK implements Komanda {
 
-    private String ime;
-    private String prezime;
+    private final String ime;
+    private final String prezime;
 
     public DK(String ime, String prezime) {
         this.ime = ime;
         this.prezime = prezime;
     }
+
     @Override
     public void prihvati(KomandaVisitor visitor) {
         visitor.visit(this);

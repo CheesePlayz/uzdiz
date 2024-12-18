@@ -5,40 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class RegistarKorisnika {
-    static class Korisnik {
-        String ime;
-        String prezime;
-
-        public Korisnik(String ime, String prezime) {
-            this.ime = ime;
-            this.prezime = prezime;
-        }
-
-        @Override
-        public String toString() {
-            return ime + " " + prezime;
-        }
-    }
-
-    static class PracenjeVlaka {
-        Korisnik korisnik;
-        String oznakaVlaka;
-        String stanica;
-
-        public PracenjeVlaka(Korisnik korisnik, String oznakaVlaka, String stanica) {
-            this.korisnik = korisnik;
-            this.oznakaVlaka = oznakaVlaka;
-            this.stanica = stanica;
-        }
-
-        @Override
-        public String toString() {
-            return korisnik + " - " + oznakaVlaka + (stanica != null ? " - " + stanica : "");
-        }
-    }
-
-    private List<Korisnik> korisnici = new ArrayList<>();
-    private List<PracenjeVlaka> pracenjaVlaka = new ArrayList<>();
+    private final List<Korisnik> korisnici = new ArrayList<>();
+    private final List<PracenjeVlaka> pracenjaVlaka = new ArrayList<>();
 
     public void dodajKorisnika(String ime, String prezime) {
         Korisnik korisnik = new Korisnik(ime, prezime);
@@ -68,6 +36,38 @@ public class RegistarKorisnika {
             System.out.println("Dodano praćenje: " + pracenje);
         } else {
             System.out.println("Korisnik " + ime + " " + prezime + " nije pronađen u registru.");
+        }
+    }
+
+    static class Korisnik {
+        String ime;
+        String prezime;
+
+        public Korisnik(String ime, String prezime) {
+            this.ime = ime;
+            this.prezime = prezime;
+        }
+
+        @Override
+        public String toString() {
+            return ime + " " + prezime;
+        }
+    }
+
+    static class PracenjeVlaka {
+        Korisnik korisnik;
+        String oznakaVlaka;
+        String stanica;
+
+        public PracenjeVlaka(Korisnik korisnik, String oznakaVlaka, String stanica) {
+            this.korisnik = korisnik;
+            this.oznakaVlaka = oznakaVlaka;
+            this.stanica = stanica;
+        }
+
+        @Override
+        public String toString() {
+            return korisnik + " - " + oznakaVlaka + (stanica != null ? " - " + stanica : "");
         }
     }
 }

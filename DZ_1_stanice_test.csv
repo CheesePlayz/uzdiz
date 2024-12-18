@@ -1,0 +1,15 @@
+﻿Stanica;Oznaka pruge;Vrsta stanice;Status stanice;Putnici ul/iz;Roba ut/ist;Kategorija pruge;Broj perona;Vrsta pruge;Broj kolosjeka;DO po osovini;DO po duznom m;Status pruge;Dužina
+Kotoriba;M501;kol.;O;DA;DA;M;1;K;1;22,5;8;I;0
+Donji Mihaljevec;M501;staj.;O;DA;NE;M;1;K;1;22,5;8;I;5
+Donji Kraljevec;M501;kol.;O;DA;DA;M;1;K;1;22,5;8;I;10
+Medugorje;M501;kol.;O;DA;DA;M;1;K;1;22,5;8;I;3
+#;;;;;;;;;;;;;
+Medugorje;L101;kol.;O;DA;DA;M;1;K;1;22,5;8;I;0
+Varazdin;L101;staj.;O;DA;NE;M;1;K;1;22,5;8;I;2
+Ghost;L101;kol.;O;DA;DA;M;1;K;1;22,5;8;I;4
+Krapina;L101;kol.;O;DA;DA;M;1;K;1;22,5;2;I;4
+#;;;;;;;;;;;;;
+Zagreb;P301;kol.;O;DA;DA;M;1;K;1;22,5;8;I;0
+Split;P301;staj.;O;DA;NE;M;1;K;1;22,5;8;I;6
+Dubrovnik;P301;kol.;O;DA;DA;M;1;K;1;22,5;8;I;11
+Krapina;P301;kol.;O;DA;DA;M;1;K;1;22,5;8;I;7

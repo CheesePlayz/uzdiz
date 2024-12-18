@@ -7,13 +7,14 @@ import foi.uzdiz.sbicak20.modeli.composite.VozniRedKomponenta;
 import java.util.Comparator;
 import java.util.List;
 
-public class IV implements Komanda{
+public class IV implements Komanda {
 
-    private VozniRed vozniRed;
+    private final VozniRed vozniRed;
 
-    public IV(VozniRed vozniRed){
+    public IV(VozniRed vozniRed) {
         this.vozniRed = vozniRed;
     }
+
     @Override
     public void prihvati(KomandaVisitor visitor) {
         visitor.visit(this);

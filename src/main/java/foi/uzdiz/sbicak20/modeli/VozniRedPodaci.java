@@ -59,6 +59,42 @@ public class VozniRedPodaci {
         return oznakaDana;
     }
 
+    public void setOznakaPruge(String oznakaPruge) {
+        this.oznakaPruge = oznakaPruge;
+    }
+
+    public void setSmjer(String smjer) {
+        this.smjer = smjer;
+    }
+
+    public void setPolaznaStanica(String polaznaStanica) {
+        this.polaznaStanica = polaznaStanica;
+    }
+
+    public void setOdredisnaStanica(String odredisnaStanica) {
+        this.odredisnaStanica = odredisnaStanica;
+    }
+
+    public void setOznakaVlaka(String oznakaVlaka) {
+        this.oznakaVlaka = oznakaVlaka;
+    }
+
+    public void setVrstaVlaka(String vrstaVlaka) {
+        this.vrstaVlaka = vrstaVlaka;
+    }
+
+    public void setVrijemePolaska(String vrijemePolaska) {
+        this.vrijemePolaska = vrijemePolaska;
+    }
+
+    public void setTrajanjeVoznje(String trajanjeVoznje) {
+        this.trajanjeVoznje = trajanjeVoznje;
+    }
+
+    public void setOznakaDana(String oznakaDana) {
+        this.oznakaDana = oznakaDana;
+    }
+
     public static class VozniRedPodaciBuilder {
         private String oznakaPruge;
         private String smjer;

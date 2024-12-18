@@ -3,7 +3,7 @@ package foi.uzdiz.sbicak20.validatori;
 import foi.uzdiz.sbicak20.enumeracije.KompozicijeEnum.KUlogeEnum;
 import foi.uzdiz.sbicak20.greske.NevaljaniFormatGreska;
 import foi.uzdiz.sbicak20.greske.PrazanStringGreska;
-import foi.uzdiz.sbicak20.greske.SustavGresaka;
+import foi.uzdiz.sbicak20.greske.SustavGresakaSingleton;
 import foi.uzdiz.sbicak20.modeli.Kompozicija;
 
 import java.util.List;
@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 
 public class KompozicijaValidator implements IValidator {
 
-    private Pattern ULOGA_PATTERN = Pattern.compile("^[PV]$");
     int redak = 0;
+    private final Pattern ULOGA_PATTERN = Pattern.compile("^[PV]$");
 
     @Override
     public boolean Validiraj(String[] redovi, int redakCSV, List<Kompozicija> kompozicija) {
@@ -26,7 +26,7 @@ public class KompozicijaValidator implements IValidator {
                     throw new NevaljaniFormatGreska("Neispravan format za ULOGA_PATTERN: očekuje se 'P' ili 'V'.");
                 }
             } catch (Exception e) {
-                SustavGresaka.getInstance().prijaviGresku(e, SustavGresaka.getInstance().getPodrucjaGresaka().get(2), new String[]{"CSV redak: " + redakCSV, "Trenutni zapis: " + redovi[redak].trim()});
+                SustavGresakaSingleton.getInstance().prijaviGresku(e, SustavGresakaSingleton.getInstance().getPodrucjaGresaka().get(2), new String[]{"CSV redak: " + redakCSV, "Trenutni zapis: " + redovi[redak].trim()});
                 return false;
             }
         }

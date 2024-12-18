@@ -3,16 +3,14 @@ package foi.uzdiz.sbicak20.pomocnici.komande;
 import foi.uzdiz.sbicak20.ZeljeznickiSustavSingleton;
 import foi.uzdiz.sbicak20.modeli.Kompozicija;
 import foi.uzdiz.sbicak20.modeli.ZeljeznickoPrijevoznoSredstvo;
-import foi.uzdiz.sbicak20.pomocnici.InitSustava;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class IK implements Komanda {
-    private String oznakaKompozicije;
-
     List<List<Kompozicija>> kompozicije;
     List<ZeljeznickoPrijevoznoSredstvo> vozila;
+    private final String oznakaKompozicije;
 
     public IK(List<List<Kompozicija>> kompozicije, List<ZeljeznickoPrijevoznoSredstvo> vozila, String oznakaKompozicije) {
         this.vozila = vozila;

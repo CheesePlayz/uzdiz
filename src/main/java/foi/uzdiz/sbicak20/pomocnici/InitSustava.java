@@ -1,7 +1,6 @@
 package foi.uzdiz.sbicak20.pomocnici;
 
 import foi.uzdiz.sbicak20.modeli.*;
-import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
 import foi.uzdiz.sbicak20.validatori.KompozicijaFactory;
 import foi.uzdiz.sbicak20.validatori.PrijevoznoSredstvoFactory;
 import foi.uzdiz.sbicak20.validatori.StanicaFactory;
@@ -11,11 +10,11 @@ import java.util.List;
 
 public class InitSustava {
     CitacCSV csvcitac;
-    private List<ZeljeznickaStanica> stanice;
-    private List<ZeljeznickoPrijevoznoSredstvo> vozila;
-    private List<List<Kompozicija>> kompozicije;
-    private List<VozniRedPodaci> vozniRed;
-    private List<OznakaDana> oznakeDana;
+    private final List<ZeljeznickaStanica> stanice;
+    private final List<ZeljeznickoPrijevoznoSredstvo> vozila;
+    private final List<List<Kompozicija>> kompozicije;
+    private final List<VozniRedPodaci> vozniRed;
+    private final List<OznakaDana> oznakeDana;
 
     public InitSustava(String putanjaCsvStanice, String putanjaCsvPrijevoznaSredstva, String putanjaCsvKompozicije, String putanjaCsvVozniRed, String putanjaCsvOznakeDana) throws Exception {
         csvcitac = new CitacCSV();
@@ -38,7 +37,8 @@ public class InitSustava {
     public List<List<Kompozicija>> getKompozicije() {
         return kompozicije;
     }
-    public List<VozniRedPodaci> getVozniRed(){
+
+    public List<VozniRedPodaci> getVozniRed() {
         return vozniRed;
     }
 

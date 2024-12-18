@@ -1,40 +1,39 @@
 package foi.uzdiz.sbicak20.validatori;
 
+import foi.uzdiz.sbicak20.greske.NevaljaniFormatGreska;
+import foi.uzdiz.sbicak20.greske.PrazanStringGreska;
+import foi.uzdiz.sbicak20.greske.SustavGresakaSingleton;
+import foi.uzdiz.sbicak20.modeli.Kompozicija;
+
 import java.util.List;
 import java.util.regex.Pattern;
 
-import foi.uzdiz.sbicak20.greske.NevaljaniFormatGreska;
-import foi.uzdiz.sbicak20.greske.NullVrijednostGreska;
-import foi.uzdiz.sbicak20.greske.PrazanStringGreska;
-import foi.uzdiz.sbicak20.greske.SustavGresaka;
-import foi.uzdiz.sbicak20.modeli.Kompozicija;
-
 public class PrijevoznoSredstvoValidator implements IValidator {
 
-    private Pattern OZNAKA_PATTERN = Pattern.compile("^([A-Za-z0-9ČčĆćĐđŠšŽž\\s-–]+)$");
-    private Pattern OPIS_PATTERN = Pattern.compile("^([A-Za-z0-9ČčĆćĐđŠšŽž\\s-–\"„“.…]+)$");
-    private Pattern PROIZVODAC_PATTERN = Pattern.compile("^([A-Za-z0-9ČčĆćĐđŠšŽž\\s-–]+)$");
-    private Pattern GODINA_PATTERN = Pattern.compile("^([0-2]\\d{3}|3000)$");
-    private Pattern NAMJENA_PATTERN = Pattern.compile("^(PSVPVK|PSVP|PSBP)$");
-    private Pattern VRSTA_PRIJEVOZA_PATTERN = Pattern.compile("^(N|P|TA|TK|TRS|TTS)$");
-    private Pattern VRSTA_POGONA_PATTERN = Pattern.compile("^[DBEN]$");
-    private Pattern MAX_BRZINA_PATTERN = Pattern.compile("^([1-9][0-9]?|1[0-9]{2}|200)$");
-    private Pattern MAX_SNAGA_PATTERN = Pattern.compile("^(-1|([0-9]|10)(,\\d+)?)$");
-    private Pattern BROJ_SJEDECIH_MJESTA_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)$");
-    private Pattern BROJ_STAJUCIH_MJESTA_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)$");
-    private Pattern BROJ_BICIKALA_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)$");
-    private Pattern BROJ_KREVETA_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)$");
-    private Pattern BROJ_AUTOMOBILA_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)$");
-    private Pattern NOSIVOST_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)(,\\d+)?$");
-    private Pattern POVRSINA_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)(,\\d+)?$");
-    private Pattern ZAPREMINA_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)(,\\d+)?$");
-    private Pattern STATUS_PATTERN = Pattern.compile("^[IK]$");
+    private final Pattern OZNAKA_PATTERN = Pattern.compile("^([A-Za-z0-9ČčĆćĐđŠšŽž\\s-–]+)$");
+    private final Pattern OPIS_PATTERN = Pattern.compile("^([A-Za-z0-9ČčĆćĐđŠšŽž\\s-–\"„“.…]+)$");
+    private final Pattern PROIZVODAC_PATTERN = Pattern.compile("^([A-Za-z0-9ČčĆćĐđŠšŽž\\s-–]+)$");
+    private final Pattern GODINA_PATTERN = Pattern.compile("^([0-2]\\d{3}|3000)$");
+    private final Pattern NAMJENA_PATTERN = Pattern.compile("^(PSVPVK|PSVP|PSBP)$");
+    private final Pattern VRSTA_PRIJEVOZA_PATTERN = Pattern.compile("^(N|P|TA|TK|TRS|TTS)$");
+    private final Pattern VRSTA_POGONA_PATTERN = Pattern.compile("^[DBEN]$");
+    private final Pattern MAX_BRZINA_PATTERN = Pattern.compile("^([1-9][0-9]?|1[0-9]{2}|200)$");
+    private final Pattern MAX_SNAGA_PATTERN = Pattern.compile("^(-1|([0-9]|10)(,\\d+)?)$");
+    private final Pattern BROJ_SJEDECIH_MJESTA_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)$");
+    private final Pattern BROJ_STAJUCIH_MJESTA_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)$");
+    private final Pattern BROJ_BICIKALA_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)$");
+    private final Pattern BROJ_KREVETA_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)$");
+    private final Pattern BROJ_AUTOMOBILA_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)$");
+    private final Pattern NOSIVOST_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)(,\\d+)?$");
+    private final Pattern POVRSINA_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)(,\\d+)?$");
+    private final Pattern ZAPREMINA_PATTERN = Pattern.compile("^([0-9]{1,3}|1000)(,\\d+)?$");
+    private final Pattern STATUS_PATTERN = Pattern.compile("^[IK]$");
 
     @Override
     public boolean Validiraj(String[] redovi, int redakCSV, List<Kompozicija> kompozicije) {
         int redak = 0;
         if (redovi.length != 18) {
-            SustavGresaka.getInstance().prijaviGresku(new NevaljaniFormatGreska("CSV redak: " + redakCSV + " - Nema dovoljno podataka u redu."), SustavGresaka.getInstance().getPodrucjaGresaka().get(1));
+            SustavGresakaSingleton.getInstance().prijaviGresku(new NevaljaniFormatGreska("CSV redak: " + redakCSV + " - Nema dovoljno podataka u redu."), SustavGresakaSingleton.getInstance().getPodrucjaGresaka().get(1));
             return false;
         }
         try {
@@ -164,7 +163,7 @@ public class PrijevoznoSredstvoValidator implements IValidator {
                 throw new NevaljaniFormatGreska("Neispravan format za STATUS: očekuje se 'I' ili 'K'.");
             }
         } catch (Exception e) {
-            SustavGresaka.getInstance().prijaviGresku(e, SustavGresaka.getInstance().getPodrucjaGresaka().get(1), new String[]{"CSV redak: " + redakCSV, "Trenutni zapis: " + redovi[redak].trim()});
+            SustavGresakaSingleton.getInstance().prijaviGresku(e, SustavGresakaSingleton.getInstance().getPodrucjaGresaka().get(1), new String[]{"CSV redak: " + redakCSV, "Trenutni zapis: " + redovi[redak].trim()});
             return false;
         }
 

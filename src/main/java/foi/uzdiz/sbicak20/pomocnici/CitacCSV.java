@@ -1,8 +1,7 @@
 package foi.uzdiz.sbicak20.pomocnici;
 
-import foi.uzdiz.sbicak20.greske.NevaljaniFormatGreska;
 import foi.uzdiz.sbicak20.greske.NullVrijednostGreska;
-import foi.uzdiz.sbicak20.greske.SustavGresaka;
+import foi.uzdiz.sbicak20.greske.SustavGresakaSingleton;
 import foi.uzdiz.sbicak20.modeli.*;
 import foi.uzdiz.sbicak20.validatori.IValidator;
 import foi.uzdiz.sbicak20.validatori.ValidatorFactory;
@@ -22,7 +21,7 @@ public class CitacCSV {
 
     public static List<ZeljeznickaStanica> ucitajStaniceIzCSV(String putanjaDatoteke, ValidatorFactory factory) throws Exception {
         if (putanjaDatoteke == null) {
-            SustavGresaka.getInstance().prijaviGresku(new NullVrijednostGreska("Datoteka za stanice je null"));
+            SustavGresakaSingleton.getInstance().prijaviGresku(new NullVrijednostGreska("Datoteka za stanice je null"));
             exit(1);
         }
         List<ZeljeznickaStanica> stanice = new ArrayList<>();
@@ -76,7 +75,7 @@ public class CitacCSV {
                 stanice.add(stanica);
             }
         } catch (IOException e) {
-            SustavGresaka.getInstance().prijaviGresku(e, "Greška pri učitavanju datoteke");
+            SustavGresakaSingleton.getInstance().prijaviGresku(e, "Greška pri učitavanju datoteke");
             exit(1);
         }
 
@@ -85,7 +84,7 @@ public class CitacCSV {
 
     public static List<ZeljeznickoPrijevoznoSredstvo> ucitajVozilaIzCSV(String putanjaDatoteke, ValidatorFactory factory) throws Exception {
         if (putanjaDatoteke == null) {
-            SustavGresaka.getInstance().prijaviGresku(new NullVrijednostGreska("Datoteka za vozila je null"));
+            SustavGresakaSingleton.getInstance().prijaviGresku(new NullVrijednostGreska("Datoteka za vozila je null"));
             exit(1);
         }
         List<ZeljeznickoPrijevoznoSredstvo> vozila = new ArrayList<ZeljeznickoPrijevoznoSredstvo>();
@@ -98,7 +97,9 @@ public class CitacCSV {
             while ((line = br.readLine()) != null) {
                 redakCSV++;
                 String[] redovi = line.split(";");
-
+                if (redovi.length != 14) {
+                    continue;
+                }
                 boolean ispravnaValidacija = validator.Validiraj(redovi, redakCSV, null);
                 if (!ispravnaValidacija) {
                     continue;
@@ -128,7 +129,7 @@ public class CitacCSV {
                 vozila.add(vozilo);
             }
         } catch (IOException e) {
-            SustavGresaka.getInstance().prijaviGresku(e, "Greška pri učitavanju datoteke");
+            SustavGresakaSingleton.getInstance().prijaviGresku(e, "Greška pri učitavanju datoteke");
             exit(1);
         }
 
@@ -138,7 +139,7 @@ public class CitacCSV {
 
     public static List<List<Kompozicija>> ucitajKompozicijeIzCSV(String putanjaCsvKompozicije, ValidatorFactory factory) throws Exception {
         if (putanjaCsvKompozicije == null) {
-            SustavGresaka.getInstance().prijaviGresku(new NullVrijednostGreska("Datoteka za kompozicije je null"));
+            SustavGresakaSingleton.getInstance().prijaviGresku(new NullVrijednostGreska("Datoteka za kompozicije je null"));
             System.exit(1);
         }
         validator = factory.napraviValidator();
@@ -147,21 +148,21 @@ public class CitacCSV {
         String trenutnaOznaka = null;
 
         try (BufferedReader br = new BufferedReader(new FileReader(putanjaCsvKompozicije))) {
-            String line;
+            String redak;
             br.readLine();
             int redakCSV = 1;
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
+            while ((redak = br.readLine()) != null) {
+                redak = redak.trim();
                 redakCSV++;
 
-                if (line.equals(";;")) {
+                if (redak.equals(";;")) {
                     if (!trenutnaKompozicija.isEmpty()) {
                         if (validator.Validiraj(null, 0, trenutnaKompozicija)) {
                             listaKompozicija.add(new ArrayList<>(trenutnaKompozicija));
                         } else {
-                            SustavGresaka.getInstance().prijaviGresku(
+                            SustavGresakaSingleton.getInstance().prijaviGresku(
                                     new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge."),
-                                    SustavGresaka.getInstance().getPodrucjaGresaka().get(2),
+                                    SustavGresakaSingleton.getInstance().getPodrucjaGresaka().get(2),
                                     new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka}
                             );
                         }
@@ -171,7 +172,7 @@ public class CitacCSV {
                     continue;
                 }
 
-                String[] redovi = line.split(";");
+                String[] redovi = redak.split(";");
                 if (redovi.length != 3) {
                     continue;
                 }
@@ -193,9 +194,9 @@ public class CitacCSV {
                         if (validator.Validiraj(null, 0, trenutnaKompozicija)) {
                             listaKompozicija.add(new ArrayList<>(trenutnaKompozicija));
                         } else {
-                            SustavGresaka.getInstance().prijaviGresku(
+                            SustavGresakaSingleton.getInstance().prijaviGresku(
                                     new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge"),
-                                    SustavGresaka.getInstance().getPodrucjaGresaka().get(2),
+                                    SustavGresakaSingleton.getInstance().getPodrucjaGresaka().get(2),
                                     new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka}
                             );
                         }
@@ -211,7 +212,7 @@ public class CitacCSV {
                     Kompozicija dioKompozicije = new Kompozicija(oznaka, oznakaPrijevoznogSredstva, uloga);
                     trenutnaKompozicija.add(dioKompozicije);
                 } catch (IllegalArgumentException e) {
-                    SustavGresaka.getInstance().prijaviGresku(e, "Pogrešan zapis kompozicije", new String[]{"CSV Redak: " + redakCSV, line});
+                    SustavGresakaSingleton.getInstance().prijaviGresku(e, "Pogrešan zapis kompozicije", new String[]{"CSV Redak: " + redakCSV, redak});
                     trenutnaKompozicija.clear();
                     trenutnaOznaka = null;
                 }
@@ -221,16 +222,16 @@ public class CitacCSV {
                 if (validator.Validiraj(null, 0, trenutnaKompozicija)) {
                     listaKompozicija.add(new ArrayList<>(trenutnaKompozicija));
                 } else {
-                    SustavGresaka.getInstance().prijaviGresku(
+                    SustavGresakaSingleton.getInstance().prijaviGresku(
                             new IllegalArgumentException("Kompozicija nije validna: mora imati barem jedan pogon, ispravan redoslijed i uloge"),
-                            SustavGresaka.getInstance().getPodrucjaGresaka().get(2),
+                            SustavGresakaSingleton.getInstance().getPodrucjaGresaka().get(2),
                             new String[]{"CSV Redak: " + redakCSV, "Kompozicija " + trenutnaOznaka}
                     );
                 }
             }
 
         } catch (IOException e) {
-            SustavGresaka.getInstance().prijaviGresku(e, "Greška pri učitavanju datoteke");
+            SustavGresakaSingleton.getInstance().prijaviGresku(e, "Greška pri učitavanju datoteke");
             System.exit(1);
         }
 
@@ -240,7 +241,7 @@ public class CitacCSV {
 
     public static List<VozniRedPodaci> ucitajVozniRedIzCSV(String putanjaDatoteke, ValidatorFactory factory) throws Exception {
         if (putanjaDatoteke == null) {
-            SustavGresaka.getInstance().prijaviGresku(new NullVrijednostGreska("Datoteka za vozni red je null"));
+            SustavGresakaSingleton.getInstance().prijaviGresku(new NullVrijednostGreska("Datoteka za vozni red je null"));
             System.exit(1);
         }
 
@@ -255,14 +256,12 @@ public class CitacCSV {
             while ((line = br.readLine()) != null) {
                 redakCSV++;
                 String[] redovi = line.split(";");
-
                 if (redovi.length < 9) {
                     String[] tempRedovi = new String[9];
                     Arrays.fill(tempRedovi, "");
                     System.arraycopy(redovi, 0, tempRedovi, 0, redovi.length);
                     redovi = tempRedovi;
                 }
-
                 boolean ispravnaValidacija = validator.Validiraj(redovi, redakCSV, null);
                 if (!ispravnaValidacija) {
                     continue;
@@ -283,7 +282,7 @@ public class CitacCSV {
                 vozniRedPodaciList.add(podaci);
             }
         } catch (IOException e) {
-            SustavGresaka.getInstance().prijaviGresku(e, "Greška pri učitavanju datoteke");
+            SustavGresakaSingleton.getInstance().prijaviGresku(e, "Greška pri učitavanju datoteke");
             System.exit(1);
         }
 
@@ -304,17 +303,17 @@ public class CitacCSV {
             while ((redak = br.readLine()) != null) {
                 redakCSV++;
 
-                String[] parts = redak.split(";");
-                if (parts.length == 1){
-                    parts = new String[]{parts[0], "PoUSrČPeSuN"};
+                String[] dio = redak.split(";");
+                if (dio.length == 1) {
+                    dio = new String[]{dio[0], "PoUSrČPeSuN"};
                 }
-                if (parts.length == 2) {
+                if (dio.length == 2) {
                     OznakaDana oznaka = new OznakaDana();
                     try {
-                        oznaka.setOznakaDana(Integer.parseInt(parts[0].trim()));
+                        oznaka.setOznakaDana(Integer.parseInt(dio[0].trim()));
                     } catch (NumberFormatException e) {
-                        SustavGresaka.getInstance().prijaviGresku(e,
-                                SustavGresaka.getInstance().getPodrucjaGresaka().get(4),
+                        SustavGresakaSingleton.getInstance().prijaviGresku(e,
+                                SustavGresakaSingleton.getInstance().getPodrucjaGresaka().get(4),
                                 new String[]{
                                         "CSV redak: " + redakCSV,
                                         "Trenutni zapis: " + redak.trim()
@@ -322,7 +321,7 @@ public class CitacCSV {
                         continue;
                     }
 
-                    String dani = parts[1].trim();
+                    String dani = dio[1].trim();
                     oznaka.setDani(dani);
                     List<String> daniList = new ArrayList<>();
                     int i = 0;
@@ -338,8 +337,8 @@ public class CitacCSV {
                             }
                         }
                         if (!validan) {
-                            SustavGresaka.getInstance().prijaviGresku(new Exception("Nevalidan dan"),
-                                    SustavGresaka.getInstance().getPodrucjaGresaka().get(4),
+                            SustavGresakaSingleton.getInstance().prijaviGresku(new Exception("Nevalidan dan"),
+                                    SustavGresakaSingleton.getInstance().getPodrucjaGresaka().get(4),
                                     new String[]{
                                             "CSV redak: " + redakCSV,
                                             "Trenutni zapis: " + redak.trim(),

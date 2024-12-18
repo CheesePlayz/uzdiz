@@ -1,16 +1,14 @@
 package foi.uzdiz.sbicak20.pomocnici.komande;
 
-import foi.uzdiz.sbicak20.ZeljeznickiSustavSingleton;
 import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ISP implements Komanda {
-    private String oznakaPruge;
-    private boolean obrnutRedoslijed;
-
     List<ZeljeznickaStanica> stanice;
+    private final String oznakaPruge;
+    private final boolean obrnutRedoslijed;
 
     public ISP(List<ZeljeznickaStanica> stanice, String oznakaPruge, boolean obrnutRedoslijed) {
         this.oznakaPruge = oznakaPruge;
@@ -73,12 +71,12 @@ public class ISP implements Komanda {
                 } else {
                     ukupnaKilometraza += stanicePruge.get(i + 1).getDuzina();
                 }
-                System.out.printf(format, stanica.getStanica(), stanica.getVrstaStanice(), String.format("%.1f km", ukupnaKilometraza));
+                System.out.printf(format, stanica.getStanica(), stanica.getVrstaStanice(), ukupnaKilometraza);
             }
         } else {
             for (ZeljeznickaStanica stanica : stanicePruge) {
                 ukupnaKilometraza += stanica.getDuzina();
-                System.out.printf(format, stanica.getStanica(), stanica.getVrstaStanice(), String.format("%.1f km", ukupnaKilometraza));
+                System.out.printf(format, stanica.getStanica(), stanica.getVrstaStanice(), ukupnaKilometraza);
             }
         }
     }

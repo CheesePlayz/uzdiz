@@ -7,12 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class IP implements Komanda{
+public class IP implements Komanda {
     List<ZeljeznickaStanica> stanice;
 
-    public IP(List<ZeljeznickaStanica> stanice){
+    public IP(List<ZeljeznickaStanica> stanice) {
         this.stanice = stanice;
     }
+
     @Override
     public void prihvati(KomandaVisitor visitor) {
         visitor.visit(this);

@@ -1,14 +1,13 @@
 package foi.uzdiz.sbicak20.pomocnici.komande;
 
 import foi.uzdiz.sbicak20.ZeljeznickiSustavSingleton;
-import foi.uzdiz.sbicak20.modeli.RegistarKorisnika;
 
-public class DPK implements Komanda{
+public class DPK implements Komanda {
 
-    private String ime;
-    private String prezime;
-    private String oznakaVlaka;
-    private String stanica;
+    private final String ime;
+    private final String prezime;
+    private final String oznakaVlaka;
+    private final String stanica;
 
     public DPK(String ime, String prezime, String oznakaVlaka, String stanica) {
         this.ime = ime;
@@ -16,6 +15,7 @@ public class DPK implements Komanda{
         this.oznakaVlaka = oznakaVlaka;
         this.stanica = stanica;
     }
+
     @Override
     public void prihvati(KomandaVisitor visitor) {
         visitor.visit(this);

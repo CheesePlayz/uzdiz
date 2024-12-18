@@ -3,17 +3,18 @@ package foi.uzdiz.sbicak20.modeli.composite;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Vlak extends VozniRedKomponenta{
-    private List<VozniRedKomponenta> etape = new ArrayList<>();
-    private String oznakaVlaka;
+public class Vlak extends VozniRedKomponenta {
+    private final List<VozniRedKomponenta> etape = new ArrayList<>();
+    private final String oznakaVlaka;
 
-    public String getOznakaVlaka(){
+    public Vlak(String oznakaVlaka) {
+        this.oznakaVlaka = oznakaVlaka;
+    }
+
+    public String getOznakaVlaka() {
         return oznakaVlaka;
     }
 
-    public Vlak(String oznakaVlaka){
-        this.oznakaVlaka = oznakaVlaka;
-    }
     @Override
     public void dodajKomponentu(VozniRedKomponenta komponenta) {
         etape.add(komponenta);

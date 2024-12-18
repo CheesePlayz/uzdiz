@@ -6,15 +6,16 @@ import foi.uzdiz.sbicak20.modeli.composite.VozniRedKomponenta;
 
 import java.util.Objects;
 
-public class IEV implements Komanda{
+public class IEV implements Komanda {
 
-    private VozniRed vozniRed;
-    private String oznakaVlaka;
+    private final VozniRed vozniRed;
+    private final String oznakaVlaka;
 
     public IEV(VozniRed vozniRed, String oznakaVlaka) {
         this.vozniRed = vozniRed;
         this.oznakaVlaka = oznakaVlaka;
     }
+
     @Override
     public void prihvati(KomandaVisitor visitor) {
         visitor.visit(this);
@@ -31,12 +32,12 @@ public class IEV implements Komanda{
         String format = formatBuilder.toString();
 
         int brojac = 0;
-        for(VozniRedKomponenta vlak : vozniRed.getDjeca()){
+        for (VozniRedKomponenta vlak : vozniRed.getDjeca()) {
 
-            for(VozniRedKomponenta etapa : vlak.getDjeca()){
+            for (VozniRedKomponenta etapa : vlak.getDjeca()) {
                 Etapa et = (Etapa) etapa.dohvatiObjekt();
-                if (Objects.equals(oznakaVlaka, et.getOznakaVlaka())){
-                    if (brojac == 0){
+                if (Objects.equals(oznakaVlaka, et.getOznakaVlaka())) {
+                    if (brojac == 0) {
                         System.out.printf(format, "Oznaka Vlaka", "Oznaka Pruge", "Polazna Stanica",
                                 "Odredišna Stanica", "Vrijeme Polaska", "Vrijeme Dolaska",
                                 "Ukupna Kilometraža", "Dani u Tjednu");
@@ -46,8 +47,8 @@ public class IEV implements Komanda{
                 }
             }
         }
-        if (brojac == 0){
-            System.out.println("Ne postoje etape za vlak " +  oznakaVlaka + "." );
+        if (brojac == 0) {
+            System.out.println("Ne postoje etape za vlak " + oznakaVlaka + ".");
         }
     }
 }

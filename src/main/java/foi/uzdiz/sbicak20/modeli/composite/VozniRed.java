@@ -3,8 +3,8 @@ package foi.uzdiz.sbicak20.modeli.composite;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VozniRed extends VozniRedKomponenta{
-    private List<VozniRedKomponenta> vlakovi = new ArrayList<>();
+public class VozniRed extends VozniRedKomponenta {
+    private final List<VozniRedKomponenta> vlakovi = new ArrayList<>();
 
     @Override
     public void dodajKomponentu(VozniRedKomponenta komponenta) {

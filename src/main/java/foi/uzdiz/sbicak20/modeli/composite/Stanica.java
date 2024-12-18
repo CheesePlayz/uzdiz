@@ -1,11 +1,9 @@
 package foi.uzdiz.sbicak20.modeli.composite;
 
-import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
-
 import java.util.List;
 
 public class Stanica extends VozniRedKomponenta {
-    private String naziv;
+    private final String naziv;
 
     public Stanica(String naziv) {
         this.naziv = naziv;

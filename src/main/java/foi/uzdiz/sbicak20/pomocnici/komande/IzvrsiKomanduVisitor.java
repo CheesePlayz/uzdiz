@@ -1,6 +1,6 @@
 package foi.uzdiz.sbicak20.pomocnici.komande;
 
-public class IzvrsiKomanduVisitor implements KomandaVisitor{
+public class IzvrsiKomanduVisitor implements KomandaVisitor {
 
 
     @Override

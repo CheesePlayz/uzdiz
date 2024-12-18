@@ -2,20 +2,21 @@ package foi.uzdiz.sbicak20.modeli;
 
 public class OznakaDana {
     private int oznakaDana;
-    public int getOznakaDana(){
-        return oznakaDana;
-    };
+    private String dani;
 
-    public void setOznakaDana(int oznaka){
+    public int getOznakaDana() {
+        return oznakaDana;
+    }
+
+    public void setOznakaDana(int oznaka) {
         oznakaDana = oznaka;
     }
 
-    private String dani;
-    public String getDani(){
+    public String getDani() {
         return dani;
     }
 
-    public void setDani(String dani){
+    public void setDani(String dani) {
         this.dani = dani;
     }
 }

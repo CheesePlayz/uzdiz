@@ -3,8 +3,8 @@ package foi.uzdiz.sbicak20.greske;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SustavGresaka {
-    private static SustavGresaka instance;
+public class SustavGresakaSingleton {
+    private static SustavGresakaSingleton instance;
     private int brojacGresakaGlobalno = 0;
     private int brojacGresakaStanice = 0;
     private int brojacGresakaVozila = 0;
@@ -15,7 +15,7 @@ public class SustavGresaka {
     private StringBuilder trenutnaGreska = new StringBuilder();
     private List<String> podrucjaGresaka = new ArrayList<>();
 
-    private SustavGresaka() {
+    private SustavGresakaSingleton() {
         podrucjaGresaka.add("Ucitavanje CSV-a Stanica");
         podrucjaGresaka.add("Ucitavanje CSV-a Vozila");
         podrucjaGresaka.add("Ucitavanje CSV-a Kompozicije");
@@ -23,19 +23,23 @@ public class SustavGresaka {
         podrucjaGresaka.add("Ucitavanje CSV-a Oznaka Dana");
     }
 
-    public static SustavGresaka getInstance() {
+    public static SustavGresakaSingleton getInstance() {
         if (instance == null) {
-            instance = new SustavGresaka();
+            instance = new SustavGresakaSingleton();
         }
         return instance;
     }
 
-    public static void setInstance(SustavGresaka instance) {
-        SustavGresaka.instance = instance;
+    public static void setInstance(SustavGresakaSingleton instance) {
+        SustavGresakaSingleton.instance = instance;
     }
 
     public List<String> getPodrucjaGresaka() {
         return podrucjaGresaka;
+    }
+
+    public void setPodrucjaGresaka(List<String> podrucjaGresaka) {
+        this.podrucjaGresaka = podrucjaGresaka;
     }
 
     public void prijaviGresku(Exception e) {
@@ -86,7 +90,6 @@ public class SustavGresaka {
         ispisiTrenutnuGresku(trenutnaGreska);
     }
 
-
     private void ispisiTrenutnuGresku(StringBuilder trenutnaGreska) {
         System.out.println(trenutnaGreska.toString());
     }
@@ -108,18 +111,16 @@ public class SustavGresaka {
         System.out.println("------------------------------\n");
     }
 
-
-    private void povecajBrojacGresakaPrimjene(String podrucjePrimjene){
+    private void povecajBrojacGresakaPrimjene(String podrucjePrimjene) {
         if (podrucjePrimjene.equals(podrucjaGresaka.get(0))) {
             brojacGresakaStanice++;
         } else if (podrucjePrimjene.equals(podrucjaGresaka.get(1))) {
             brojacGresakaVozila++;
         } else if (podrucjePrimjene.equals(podrucjaGresaka.get(2))) {
             brojacGresakaKompozicije++;
-        } else if (podrucjePrimjene.equals(podrucjaGresaka.get(3))){
+        } else if (podrucjePrimjene.equals(podrucjaGresaka.get(3))) {
             brojacGresakaVozniRed++;
-        }
-        else if (podrucjePrimjene.equals(podrucjaGresaka.get(4))){
+        } else if (podrucjePrimjene.equals(podrucjaGresaka.get(4))) {
             brojacGresakaOznakeDana++;
         }
     }
@@ -191,9 +192,5 @@ public class SustavGresaka {
 
     public void setTrenutnaGreska(StringBuilder trenutnaGreska) {
         this.trenutnaGreska = trenutnaGreska;
-    }
-
-    public void setPodrucjaGresaka(List<String> podrucjaGresaka) {
-        this.podrucjaGresaka = podrucjaGresaka;
     }
 }

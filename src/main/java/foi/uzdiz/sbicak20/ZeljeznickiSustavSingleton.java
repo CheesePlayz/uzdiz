@@ -1,16 +1,11 @@
 package foi.uzdiz.sbicak20;
 
 import foi.uzdiz.sbicak20.modeli.*;
-import foi.uzdiz.sbicak20.modeli.composite.Etapa;
-import foi.uzdiz.sbicak20.modeli.composite.Vlak;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
-import foi.uzdiz.sbicak20.modeli.composite.VozniRedKomponenta;
 import foi.uzdiz.sbicak20.pomocnici.VozniRedPunjac;
 import foi.uzdiz.sbicak20.pomocnici.komande.*;
 
-import java.util.*;
-
-import static java.lang.System.exit;
+import java.util.List;
 
 public class ZeljeznickiSustavSingleton {
     private static ZeljeznickiSustavSingleton instanca;
@@ -26,74 +21,6 @@ public class ZeljeznickiSustavSingleton {
     private VozniRed vozniRed;
     private VozniRedPunjac vozniRedPunjac;
 
-    public static void setInstanca(ZeljeznickiSustavSingleton instanca) {
-        ZeljeznickiSustavSingleton.instanca = instanca;
-    }
-
-    public void setRegistarKorisnika(RegistarKorisnika registarKorisnika) {
-        this.registarKorisnika = registarKorisnika;
-    }
-
-    public void setStanice(List<ZeljeznickaStanica> stanice) {
-        this.stanice = stanice;
-    }
-
-    public void setVozila(List<ZeljeznickoPrijevoznoSredstvo> vozila) {
-        this.vozila = vozila;
-    }
-
-    public void setKompozicije(List<List<Kompozicija>> kompozicije) {
-        this.kompozicije = kompozicije;
-    }
-
-    public void setVozniRedPodaci(List<VozniRedPodaci> vozniRedPodaci) {
-        this.vozniRedPodaci = vozniRedPodaci;
-    }
-
-    public void setOznakeDana(List<OznakaDana> oznakeDana) {
-        this.oznakeDana = oznakeDana;
-    }
-
-    public void setVozniRed(VozniRed vozniRed) {
-        this.vozniRed = vozniRed;
-    }
-
-    public void setVozniRedPunjac(VozniRedPunjac vozniRedPunjac) {
-        this.vozniRedPunjac = vozniRedPunjac;
-    }
-
-    public List<List<Kompozicija>> getKompozicije() {
-        return kompozicije;
-    }
-
-    public RegistarKorisnika getRegistarKorisnika() {
-        return registarKorisnika;
-    }
-
-    public VozniRed getVozniRed() {
-        return vozniRed;
-    }
-
-    public VozniRedPunjac getVozniRedPunjac() {
-        return vozniRedPunjac;
-    }
-
-    public List<OznakaDana> getOznakeDana() {
-        return oznakeDana;
-    }
-
-    public List<ZeljeznickaStanica> getStanice() {
-        return stanice;
-    }
-
-    public List<VozniRedPodaci> getVozniRedPodaci() {
-        return vozniRedPodaci;
-    }
-
-    public List<ZeljeznickoPrijevoznoSredstvo> getVozila() {
-        return vozila;
-    }
-
     private ZeljeznickiSustavSingleton(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr, List<OznakaDana> od) {
         this.stanice = stanice;
         this.vozila = vozila;
@@ -105,11 +32,15 @@ public class ZeljeznickiSustavSingleton {
         vozniRed = vozniRedPunjac.napuniVozniRed(stanice, vr, od);
     }
 
-    public static ZeljeznickiSustavSingleton getInstanca(){
-        if (instanca != null){
+    public static ZeljeznickiSustavSingleton getInstanca() {
+        if (instanca != null) {
             return instanca;
         }
         return null;
+    }
+
+    public static void setInstanca(ZeljeznickiSustavSingleton instanca) {
+        ZeljeznickiSustavSingleton.instanca = instanca;
     }
 
     public static ZeljeznickiSustavSingleton getInstanca(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr, List<OznakaDana> od) {
@@ -117,6 +48,70 @@ public class ZeljeznickiSustavSingleton {
             instanca = new ZeljeznickiSustavSingleton(stanice, vozila, kompozicije, vr, od);
         }
         return instanca;
+    }
+
+    public List<List<Kompozicija>> getKompozicije() {
+        return kompozicije;
+    }
+
+    public void setKompozicije(List<List<Kompozicija>> kompozicije) {
+        this.kompozicije = kompozicije;
+    }
+
+    public RegistarKorisnika getRegistarKorisnika() {
+        return registarKorisnika;
+    }
+
+    public void setRegistarKorisnika(RegistarKorisnika registarKorisnika) {
+        this.registarKorisnika = registarKorisnika;
+    }
+
+    public VozniRed getVozniRed() {
+        return vozniRed;
+    }
+
+    public void setVozniRed(VozniRed vozniRed) {
+        this.vozniRed = vozniRed;
+    }
+
+    public VozniRedPunjac getVozniRedPunjac() {
+        return vozniRedPunjac;
+    }
+
+    public void setVozniRedPunjac(VozniRedPunjac vozniRedPunjac) {
+        this.vozniRedPunjac = vozniRedPunjac;
+    }
+
+    public List<OznakaDana> getOznakeDana() {
+        return oznakeDana;
+    }
+
+    public void setOznakeDana(List<OznakaDana> oznakeDana) {
+        this.oznakeDana = oznakeDana;
+    }
+
+    public List<ZeljeznickaStanica> getStanice() {
+        return stanice;
+    }
+
+    public void setStanice(List<ZeljeznickaStanica> stanice) {
+        this.stanice = stanice;
+    }
+
+    public List<VozniRedPodaci> getVozniRedPodaci() {
+        return vozniRedPodaci;
+    }
+
+    public void setVozniRedPodaci(List<VozniRedPodaci> vozniRedPodaci) {
+        this.vozniRedPodaci = vozniRedPodaci;
+    }
+
+    public List<ZeljeznickoPrijevoznoSredstvo> getVozila() {
+        return vozila;
+    }
+
+    public void setVozila(List<ZeljeznickoPrijevoznoSredstvo> vozila) {
+        this.vozila = vozila;
     }
 
     public void IzvrsiKomanduVisitor(String komandaString) {

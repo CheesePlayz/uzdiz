@@ -3,9 +3,9 @@ package foi.uzdiz.sbicak20.modeli;
 import foi.uzdiz.sbicak20.enumeracije.KompozicijeEnum.KUlogeEnum;
 
 public class Kompozicija {
-    private String oznaka;
-    private String oznakaPrijevoznogSredstva;
-    private KUlogeEnum uloga;
+    private final String oznaka;
+    private final String oznakaPrijevoznogSredstva;
+    private final KUlogeEnum uloga;
 
     public Kompozicija(String oznaka, String oznakaPrijevoznogSredstva, String uloga) {
         this.oznaka = oznaka;

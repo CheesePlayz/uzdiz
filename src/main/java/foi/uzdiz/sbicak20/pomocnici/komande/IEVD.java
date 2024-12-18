@@ -8,15 +8,16 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class IEVD implements Komanda{
+public class IEVD implements Komanda {
 
-    private VozniRed vozniRed;
-    private String dani;
+    private final VozniRed vozniRed;
+    private final String dani;
 
     public IEVD(VozniRed vozniRed, String dani) {
         this.vozniRed = vozniRed;
         this.dani = dani;
     }
+
     @Override
     public void prihvati(KomandaVisitor visitor) {
         visitor.visit(this);
@@ -39,10 +40,10 @@ public class IEVD implements Komanda{
         if (!dani.matches("(Po|U|Sr|Č|Pe|Su|N)+")) {
             StringBuilder builder = new StringBuilder();
             builder.append("Dozvoljene su kombinacije samo ovih oznaka: ");
-            for (String oznakaDana : oznakeDana){
+            for (String oznakaDana : oznakeDana) {
                 builder.append(oznakaDana).append(" ");
             }
-            System.out.println(builder.toString());
+            System.out.println(builder);
             return;
         }
         System.out.printf(format, "Oznaka Vlaka", "Oznaka Pruge", "Polazna Stanica",
@@ -119,12 +120,11 @@ public class IEVD implements Komanda{
                     String vrijemePolaska = etapa.getVrijemePolaska().toString();
                     String vrijemeDolaska = etapa.getVrijemeDolaska().toString();
                     String daniUTjednu = etapa.getDaniUTjednu();
-                    if (brojac == 1){
+                    if (brojac == 1) {
                         System.out.printf(format, etapa.getOznakaVlaka(), etapa.getOznakaPruge(), polaznaStanica,
                                 odredisnaStanica, vrijemePolaska, vrijemeDolaska, daniUTjednu);
-                    }
-                    else if (brojac > 1){
-                        System.out.printf(format, "#"+brojac+"------->", etapa.getOznakaPruge(), polaznaStanica,
+                    } else if (brojac > 1) {
+                        System.out.printf(format, "#" + brojac + "------->", etapa.getOznakaPruge(), polaznaStanica,
                                 odredisnaStanica, vrijemePolaska, vrijemeDolaska, daniUTjednu);
                     }
                 }
