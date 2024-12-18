@@ -22,6 +22,7 @@ public class ISI2S implements Komanda {
 
     @Override
     public void izvrsi() {
+
         Map<String, List<ZeljeznickaStanica>> pruge = new HashMap<>();
         Map<String, List<String>> graf = new HashMap<>();
         Map<String, Map<String, Integer>> udaljenosti = new HashMap<>();
@@ -50,20 +51,29 @@ public class ISI2S implements Komanda {
                     udaljenosti.get(trenutna.getStanica()).put(sljedeca.getStanica(), trenutna.getDuzina());
                     udaljenosti.get(sljedeca.getStanica()).put(trenutna.getStanica(), trenutna.getDuzina());
                 } else {
-                    int j = i;
-                    while (j < trenutnaPruga.size() - 1 && trenutnaPruga.get(j + 1).getDuzina() == 0) {
+                    int ukupnaUdaljenost = 0;
+                    int j = i + 1;
+
+                    while (j < trenutnaPruga.size() && trenutnaPruga.get(j).getDuzina() == 0) {
                         j++;
                     }
 
-                    if (j < trenutnaPruga.size() - 1) {
-                        ZeljeznickaStanica stvarnaSljedeca = trenutnaPruga.get(j + 1);
-                        if (trenutna.getDuzina() == 0 && stvarnaSljedeca.getDuzina() > 0) {
-                            udaljenosti.get(trenutna.getStanica()).put(stvarnaSljedeca.getStanica(), stvarnaSljedeca.getDuzina());
-                            udaljenosti.get(stvarnaSljedeca.getStanica()).put(trenutna.getStanica(), stvarnaSljedeca.getDuzina());
-                            i = j;
+                    if (j < trenutnaPruga.size()) {
+                        ZeljeznickaStanica stvarnaSljedeca = trenutnaPruga.get(j);
+                        ukupnaUdaljenost = stvarnaSljedeca.getDuzina();
+
+                        udaljenosti.get(trenutna.getStanica()).put(stvarnaSljedeca.getStanica(), ukupnaUdaljenost);
+                        udaljenosti.get(stvarnaSljedeca.getStanica()).put(trenutna.getStanica(), ukupnaUdaljenost);
+
+                        for (int k = i; k < j; k++) {
+                            udaljenosti.putIfAbsent(trenutnaPruga.get(k).getStanica(), new HashMap<>());
+                            udaljenosti.get(trenutnaPruga.get(k).getStanica())
+                                    .put(trenutnaPruga.get(k + 1).getStanica(), stvarnaSljedeca.getDuzina() / (j - i));
                         }
+                        i = j - 1;
                     }
                 }
+
             }
         }
 
@@ -94,16 +104,15 @@ public class ISI2S implements Komanda {
 
                 if (i > 0) {
                     String prethodna = put.get(i - 1);
-
-                    Integer udaljenost = udaljenosti.get(prethodna).get(trenutna);
+                    Integer udaljenost = udaljenosti.getOrDefault(prethodna, Collections.emptyMap()).get(trenutna);
                     if (udaljenost != null) {
                         ukupnaKilometraza += udaljenost;
                     }
                 }
 
-                System.out.printf(format, trenutna, stanicaObjekt.getVrstaStanice(), ukupnaKilometraza
-                );
+                System.out.printf(format, trenutna, stanicaObjekt.getVrstaStanice(), ukupnaKilometraza);
             }
+
         } else {
             System.out.println("Nije moguće pronaći put između " + oznakaStanicePolazna + " i " + oznakaStaniceOdredisna);
         }
