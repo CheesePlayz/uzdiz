@@ -6,6 +6,7 @@ import foi.uzdiz.sbicak20.modeli.composite.Vlak;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRedKomponenta;
 
+import java.time.LocalTime;
 import java.util.*;
 
 public class IVRV implements Komanda{
@@ -28,7 +29,7 @@ public class IVRV implements Komanda{
 
     @Override
     public void izvrsi() {
-        int[] maxDuljine = {12, 20, 20, 20, 10, 15};
+        int[] maxDuljine = {12, 14, 23, 15, 18};
         StringBuilder formatBuilder = new StringBuilder("|");
 
         for (int duljina : maxDuljine) {
@@ -37,7 +38,7 @@ public class IVRV implements Komanda{
         formatBuilder.append("%n");
         String format = formatBuilder.toString();
 
-        System.out.printf(format, "Oznaka Vlaka", "Oznaka Pruge", "Polazna Stanica", "Vrijeme Polaska", "Vrijeme Dolaska", "Ukupna Kilometraža");
+        System.out.printf(format, "Oznaka Vlaka", "Oznaka Pruge", "Polazna Stanica", "Vrijeme Polaska", "Ukupna Kilometraža");
 
 
         for(VozniRedKomponenta vlak : vozniRed.getDjeca()){
@@ -55,7 +56,7 @@ public class IVRV implements Komanda{
         String polazna = etapa.getDjeca().getFirst().toString();
         String odredisna = etapa.getDjeca().getLast().toString();
         String oznakaPrugeParam = et.getOznakaPruge();
-        String trenutnoVrijeme = String.valueOf(et.getVrijemePolaska());
+        LocalTime trenutnoVrijeme = et.getVrijemePolaska();
         Map<String, List<ZeljeznickaStanica>> pruge = new HashMap<>();
         for (ZeljeznickaStanica stanica : stanice) {
             String oznakaPruge = stanica.getOznakaPruge();
@@ -90,7 +91,7 @@ public class IVRV implements Komanda{
             for (int i = indeksPolazne; i >= indeksOdredisne; i--) {
                 if (i == indeksOdredisne) ukupnaKilometraza += staniceNaPrugi.get(indeksPolazne).getDuzina();
                 ukupnaKilometraza += staniceNaPrugi.get(i).getDuzina();
-                System.out.printf(format, et.getOznakaVlaka(),et.getOznakaPruge(), staniceNaPrugi.get(i).getStanica(), trenutnoVrijeme,"1:11", ukupnaKilometraza);
+                System.out.printf(format, et.getOznakaVlaka(),et.getOznakaPruge(), staniceNaPrugi.get(i).getStanica(), trenutnoVrijeme, ukupnaKilometraza);
                 trenutnoVrijeme = zbrojiVrijeme(trenutnoVrijeme, String.valueOf(staniceNaPrugi.get(i).getVrijemeNormalniVlak()));
             }
         } else {
@@ -99,29 +100,37 @@ public class IVRV implements Komanda{
             }
             for (int i = indeksPolazne; i <= indeksOdredisne; i++) {
                 ukupnaKilometraza += staniceNaPrugi.get(i).getDuzina();
-                System.out.printf(format, et.getOznakaVlaka(),et.getOznakaPruge(), staniceNaPrugi.get(i).getStanica(), trenutnoVrijeme,"1:11", ukupnaKilometraza);
+                System.out.printf(format, et.getOznakaVlaka(),et.getOznakaPruge(), staniceNaPrugi.get(i).getStanica(), trenutnoVrijeme, ukupnaKilometraza);
                 trenutnoVrijeme = zbrojiVrijeme(trenutnoVrijeme, String.valueOf(staniceNaPrugi.get(i).getVrijemeNormalniVlak()));
             }
 
         }
     }
 
-    private String zbrojiVrijeme(String pocetnoVrijeme, String vrijemeZaDodati) {
-        if (!vrijemeZaDodati.matches("\\d{1,2}:\\d{2}")) {
-            System.err.println("Neispravan format vremena: " + vrijemeZaDodati + ", hh:mm");
-            vrijemeZaDodati = "00:00";
+    private LocalTime zbrojiVrijeme(LocalTime pocetnoVrijeme, String vrijemeZaDodati) {
+        int minuteZaDodati = 0;
+
+        try {
+            minuteZaDodati = Integer.parseInt(vrijemeZaDodati);
+        } catch (NumberFormatException e) {
         }
 
-        String[] pocetno = pocetnoVrijeme.split(":");
-        String[] dodati = vrijemeZaDodati.split(":");
+        LocalTime novoVrijeme = pocetnoVrijeme.plusMinutes(minuteZaDodati);
 
-        int sati = Integer.parseInt(pocetno[0]) + Integer.parseInt(dodati[0]);
-        int minute = Integer.parseInt(pocetno[1]) + Integer.parseInt(dodati[1]);
+        return novoVrijeme;
+    }
 
-        sati += minute / 60;
-        minute %= 60;
+    private LocalTime oduzmiVrijeme(LocalTime pocetnoVrijeme, String vrijemeZaDodati) {
+        int minuteZaDodati = 0;
 
-        return String.format("%02d:%02d", sati, minute);
+        try {
+            minuteZaDodati = Integer.parseInt(vrijemeZaDodati);
+        } catch (NumberFormatException e) {
+        }
+
+        LocalTime novoVrijeme = pocetnoVrijeme.minusMinutes(minuteZaDodati);
+
+        return novoVrijeme;
     }
 
 }
