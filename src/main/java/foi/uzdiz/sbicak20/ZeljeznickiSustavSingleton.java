@@ -26,6 +26,42 @@ public class ZeljeznickiSustavSingleton {
     private VozniRed vozniRed;
     private VozniRedPunjac vozniRedPunjac;
 
+    public static void setInstanca(ZeljeznickiSustavSingleton instanca) {
+        ZeljeznickiSustavSingleton.instanca = instanca;
+    }
+
+    public void setRegistarKorisnika(RegistarKorisnika registarKorisnika) {
+        this.registarKorisnika = registarKorisnika;
+    }
+
+    public void setStanice(List<ZeljeznickaStanica> stanice) {
+        this.stanice = stanice;
+    }
+
+    public void setVozila(List<ZeljeznickoPrijevoznoSredstvo> vozila) {
+        this.vozila = vozila;
+    }
+
+    public void setKompozicije(List<List<Kompozicija>> kompozicije) {
+        this.kompozicije = kompozicije;
+    }
+
+    public void setVozniRedPodaci(List<VozniRedPodaci> vozniRedPodaci) {
+        this.vozniRedPodaci = vozniRedPodaci;
+    }
+
+    public void setOznakeDana(List<OznakaDana> oznakeDana) {
+        this.oznakeDana = oznakeDana;
+    }
+
+    public void setVozniRed(VozniRed vozniRed) {
+        this.vozniRed = vozniRed;
+    }
+
+    public void setVozniRedPunjac(VozniRedPunjac vozniRedPunjac) {
+        this.vozniRedPunjac = vozniRedPunjac;
+    }
+
     public List<List<Kompozicija>> getKompozicije() {
         return kompozicije;
     }
@@ -108,12 +144,12 @@ public class ZeljeznickiSustavSingleton {
         if (komandaString.matches("^ISI2S .+ - .+$")) {
             String[] dioKomande = komandaString.substring(6).trim().split(" - ");
             if (dioKomande.length == 2) {
-                return new ISI2S(dioKomande[0].trim(), dioKomande[1].trim());
+                return new ISI2S(stanice, dioKomande[0].trim(), dioKomande[1].trim());
             }
         }
 
         if (komandaString.matches("^IK \\S+$")) {
-            return new IK(komandaString.split(" ")[1]);
+            return new IK(kompozicije, vozila, komandaString.split(" ")[1]);
         }
 
         if (komandaString.equals("IV")) {
@@ -126,8 +162,8 @@ public class ZeljeznickiSustavSingleton {
         }
 
         if (komandaString.matches("^IEVD .+$")) {
-            String oznakaVlaka = komandaString.substring(5).trim();
-            return new IEVD(vozniRed, oznakaVlaka);
+            String dani = komandaString.substring(5).trim();
+            return new IEVD(vozniRed, dani);
         }
 
         if (komandaString.matches("^IVRV .+$")) {

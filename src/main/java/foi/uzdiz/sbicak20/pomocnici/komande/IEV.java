@@ -22,7 +22,7 @@ public class IEV implements Komanda{
 
     @Override
     public void izvrsi() {
-        int[] maxDuljine = {12, 12, 20, 20, 15, 15, 18, 15};
+        int[] maxDuljine = {12, 12, 23, 23, 15, 15, 18, 15};
         StringBuilder formatBuilder = new StringBuilder("|");
         for (int duljina : maxDuljine) {
             formatBuilder.append(" %-").append(duljina).append("s |");
@@ -30,17 +30,24 @@ public class IEV implements Komanda{
         formatBuilder.append("%n");
         String format = formatBuilder.toString();
 
-        System.out.printf(format, "Oznaka Vlaka", "Oznaka Pruge", "Polazna Stanica",
-                "Odredišna Stanica", "Vrijeme Polaska", "Vrijeme Dolaska",
-                "Ukupna Kilometraža", "Dani u Tjednu");
-
+        int brojac = 0;
         for(VozniRedKomponenta vlak : vozniRed.getDjeca()){
+
             for(VozniRedKomponenta etapa : vlak.getDjeca()){
                 Etapa et = (Etapa) etapa.dohvatiObjekt();
                 if (Objects.equals(oznakaVlaka, et.getOznakaVlaka())){
+                    if (brojac == 0){
+                        System.out.printf(format, "Oznaka Vlaka", "Oznaka Pruge", "Polazna Stanica",
+                                "Odredišna Stanica", "Vrijeme Polaska", "Vrijeme Dolaska",
+                                "Ukupna Kilometraža", "Dani u Tjednu");
+                    }
+                    brojac++;
                     et.prikaziDetalje();
                 }
             }
+        }
+        if (brojac == 0){
+            System.out.println("Ne postoje etape za vlak " +  oznakaVlaka + "." );
         }
     }
 }

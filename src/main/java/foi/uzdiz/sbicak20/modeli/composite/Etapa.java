@@ -57,7 +57,7 @@ public class Etapa extends VozniRedKomponenta{
 
     @Override
     public void prikaziDetalje() {
-        int[] maxDuljine = {12, 12, 20, 20, 15, 15, 18, 15};
+        int[] maxDuljine = {12, 12, 23, 23, 15, 15, 18, 15};
 
         String polaznaStanica = stanice.getFirst().toString();
         String odredisnaStanica = stanice.getLast().toString();

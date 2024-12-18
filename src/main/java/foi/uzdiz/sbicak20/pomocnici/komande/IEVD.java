@@ -24,7 +24,9 @@ public class IEVD implements Komanda{
 
     @Override
     public void izvrsi() {
-        int[] maxDuljine = {12, 12, 20, 20, 15, 15, 15};
+
+
+        int[] maxDuljine = {12, 12, 23, 23, 15, 15, 15};
         StringBuilder formatBuilder = new StringBuilder("|");
         for (int duljina : maxDuljine) {
             formatBuilder.append(" %-").append(duljina).append("s |");
@@ -32,10 +34,19 @@ public class IEVD implements Komanda{
         formatBuilder.append("%n");
         String format = formatBuilder.toString();
 
+        String[] oznakeDana = {"Po", "U", "Sr", "Č", "Pe", "Su", "N"};
+
+        if (!dani.matches("(Po|U|Sr|Č|Pe|Su|N)+")) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("Dozvoljene su kombinacije samo ovih oznaka: ");
+            for (String oznakaDana : oznakeDana){
+                builder.append(oznakaDana).append(" ");
+            }
+            System.out.println(builder.toString());
+            return;
+        }
         System.out.printf(format, "Oznaka Vlaka", "Oznaka Pruge", "Polazna Stanica",
                 "Odredišna Stanica", "Vrijeme Polaska", "Vrijeme Dolaska", "Dani u Tjednu");
-
-        String[] oznakeDana = {"Po", "U", "Sr", "Č", "Pe", "Su", "N"};
 
         List<String> trazeniDani = new ArrayList<>();
         int i = 0;

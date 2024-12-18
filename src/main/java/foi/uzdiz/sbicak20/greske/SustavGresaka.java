@@ -30,6 +30,10 @@ public class SustavGresaka {
         return instance;
     }
 
+    public static void setInstance(SustavGresaka instance) {
+        SustavGresaka.instance = instance;
+    }
+
     public List<String> getPodrucjaGresaka() {
         return podrucjaGresaka;
     }
@@ -123,5 +127,73 @@ public class SustavGresaka {
     public void resetirajGreske() {
         brojacGresakaGlobalno = 0;
         logGresaka.setLength(0);
+    }
+
+    public int getBrojacGresakaGlobalno() {
+        return brojacGresakaGlobalno;
+    }
+
+    public void setBrojacGresakaGlobalno(int brojacGresakaGlobalno) {
+        this.brojacGresakaGlobalno = brojacGresakaGlobalno;
+    }
+
+    public int getBrojacGresakaStanice() {
+        return brojacGresakaStanice;
+    }
+
+    public void setBrojacGresakaStanice(int brojacGresakaStanice) {
+        this.brojacGresakaStanice = brojacGresakaStanice;
+    }
+
+    public int getBrojacGresakaVozila() {
+        return brojacGresakaVozila;
+    }
+
+    public void setBrojacGresakaVozila(int brojacGresakaVozila) {
+        this.brojacGresakaVozila = brojacGresakaVozila;
+    }
+
+    public int getBrojacGresakaKompozicije() {
+        return brojacGresakaKompozicije;
+    }
+
+    public void setBrojacGresakaKompozicije(int brojacGresakaKompozicije) {
+        this.brojacGresakaKompozicije = brojacGresakaKompozicije;
+    }
+
+    public int getBrojacGresakaVozniRed() {
+        return brojacGresakaVozniRed;
+    }
+
+    public void setBrojacGresakaVozniRed(int brojacGresakaVozniRed) {
+        this.brojacGresakaVozniRed = brojacGresakaVozniRed;
+    }
+
+    public int getBrojacGresakaOznakeDana() {
+        return brojacGresakaOznakeDana;
+    }
+
+    public void setBrojacGresakaOznakeDana(int brojacGresakaOznakeDana) {
+        this.brojacGresakaOznakeDana = brojacGresakaOznakeDana;
+    }
+
+    public StringBuilder getLogGresaka() {
+        return logGresaka;
+    }
+
+    public void setLogGresaka(StringBuilder logGresaka) {
+        this.logGresaka = logGresaka;
+    }
+
+    public StringBuilder getTrenutnaGreska() {
+        return trenutnaGreska;
+    }
+
+    public void setTrenutnaGreska(StringBuilder trenutnaGreska) {
+        this.trenutnaGreska = trenutnaGreska;
+    }
+
+    public void setPodrucjaGresaka(List<String> podrucjaGresaka) {
+        this.podrucjaGresaka = podrucjaGresaka;
     }
 }

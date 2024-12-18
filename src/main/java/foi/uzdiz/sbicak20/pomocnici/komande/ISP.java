@@ -34,7 +34,7 @@ public class ISP implements Komanda {
         List<ZeljeznickaStanica> stanicePruge = new ArrayList<>();
         int[] maxDuljine = {13, 13, 18};
 
-        for (ZeljeznickaStanica stanica : ZeljeznickiSustavSingleton.getInstanca().getStanice()) {
+        for (ZeljeznickaStanica stanica : stanice) {
             if (stanica.getOznakaPruge().equals(oznakaPruge)) {
                 stanicePruge.add(stanica);
                 maxDuljine[0] = Math.max(maxDuljine[0], stanica.getStanica().length());

@@ -21,7 +21,7 @@ public class IV implements Komanda{
 
     @Override
     public void izvrsi() {
-        int[] maxDuljine = {12, 20, 20, 20, 15, 15};
+        int[] maxDuljine = {12, 23, 23, 15, 15, 18};
         StringBuilder formatBuilder = new StringBuilder("|");
         for (int duljina : maxDuljine) {
             formatBuilder.append(" %-").append(duljina).append("s |");
@@ -54,7 +54,7 @@ public class IV implements Komanda{
                 }
 
                 System.out.printf(format, prvaEtapa.getOznakaVlaka(), polaznaStanica, odredisnaStanica,
-                        vrijemePolaska, vrijemeDolaska, String.format("%.2f km", ukupnaKilometraza));
+                        vrijemePolaska, vrijemeDolaska, ukupnaKilometraza);
             }
         }
     }

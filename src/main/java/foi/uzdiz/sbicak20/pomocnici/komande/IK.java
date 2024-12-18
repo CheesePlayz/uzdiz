@@ -11,7 +11,12 @@ import java.util.List;
 public class IK implements Komanda {
     private String oznakaKompozicije;
 
-    public IK(String oznakaKompozicije) {
+    List<List<Kompozicija>> kompozicije;
+    List<ZeljeznickoPrijevoznoSredstvo> vozila;
+
+    public IK(List<List<Kompozicija>> kompozicije, List<ZeljeznickoPrijevoznoSredstvo> vozila, String oznakaKompozicije) {
+        this.vozila = vozila;
+        this.kompozicije = kompozicije;
         this.oznakaKompozicije = oznakaKompozicije;
     }
 
@@ -26,7 +31,7 @@ public class IK implements Komanda {
         List<Kompozicija> trazenaKompozicija = null;
 
         assert ZeljeznickiSustavSingleton.getInstanca() != null;
-        for (List<Kompozicija> kompozicija : ZeljeznickiSustavSingleton.getInstanca().getKompozicije()) {
+        for (List<Kompozicija> kompozicija : kompozicije) {
             if (kompozicija.get(0).getOznaka().equals(oznakaKompozicije)) {
                 trazenaKompozicija = kompozicija;
                 kompozicijaNadena = true;
@@ -45,7 +50,7 @@ public class IK implements Komanda {
         for (Kompozicija kompozicija : trazenaKompozicija) {
             String oznakaPrijevoznogSredstva = kompozicija.getOznakaPrijevoznogSredstva();
             ZeljeznickoPrijevoznoSredstvo sredstvo = null;
-            for (ZeljeznickoPrijevoznoSredstvo ps : ZeljeznickiSustavSingleton.getInstanca().getVozila()) {
+            for (ZeljeznickoPrijevoznoSredstvo ps : vozila) {
                 if (ps.getOznaka().equals(oznakaPrijevoznogSredstva)) {
                     sredstvo = ps;
                     break;
