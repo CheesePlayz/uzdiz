@@ -59,6 +59,9 @@ public class IzvrsiKomanduVisitor implements KomandaVisitor {
     }
 
     @Override
+    public void visit(CVP komanda) {komanda.izvrsi();}
+
+    @Override
     public void visit(Q komanda) {
         komanda.izvrsi();
     }

@@ -21,6 +21,8 @@ public class ZeljeznickiSustavSingleton {
     private VozniRed vozniRed;
     private VozniRedPunjac vozniRedPunjac;
 
+    public CjenikKarti cjenikKarti;
+
     private ZeljeznickiSustavSingleton(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr, List<OznakaDana> od) {
         this.stanice = stanice;
         this.vozila = vozila;
@@ -114,6 +116,14 @@ public class ZeljeznickiSustavSingleton {
         this.vozila = vozila;
     }
 
+    public CjenikKarti getCJenikKarti(){
+        return cjenikKarti;
+    }
+
+    public void setCjenikKarti(CjenikKarti cjenikKarti) {
+        this.cjenikKarti = cjenikKarti;
+    }
+
     public void IzvrsiKomanduVisitor(String komandaString) {
         Komanda komanda = parseKomandu(komandaString);
 
@@ -188,6 +198,19 @@ public class ZeljeznickiSustavSingleton {
             String oznakaVlaka = dioKomande[1].trim();
             String stanica = dioKomande.length == 3 ? dioKomande[2].trim() : null;
             return new DPK(ime, prezime, oznakaVlaka, stanica);
+        }
+
+        if (komandaString.matches("^CVP \\d+([.,]\\d+)? \\d+([.,]\\d+)? \\d+([.,]\\d+)? \\d+([.,]\\d+)? \\d+([.,]\\d+)? \\d+([.,]\\d+)?$")) {
+            String[] dijelovi = komandaString.substring(4).trim().split(" ");
+
+            double cijenaNormalni = Double.parseDouble(dijelovi[0].replace(',','.'));
+            double cijenaUbrzani = Double.parseDouble(dijelovi[1].replace(',','.'));
+            double cijenaBrzi = Double.parseDouble(dijelovi[2].replace(',','.'));
+            double popustSuN = Double.parseDouble(dijelovi[3].replace(',','.'));
+            double popustWebMob = Double.parseDouble(dijelovi[4].replace(',','.'));
+            double uvecanjeVlak = Double.parseDouble(dijelovi[5].replace(',','.'));
+
+            return new CVP(cijenaNormalni, cijenaUbrzani, cijenaBrzi, popustSuN, popustWebMob, uvecanjeVlak);
         }
 
         if (komandaString.equals("Q")) {

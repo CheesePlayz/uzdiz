@@ -23,5 +23,7 @@ public interface KomandaVisitor {
 
     void visit(DPK komanda);
 
+    void visit(CVP komanda);
+
     void visit(Q komanda);
 }
