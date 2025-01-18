@@ -4,8 +4,9 @@ import foi.uzdiz.sbicak20.modeli.*;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
 import foi.uzdiz.sbicak20.pomocnici.VozniRedPunjac;
 import foi.uzdiz.sbicak20.pomocnici.komande.*;
+import foi.uzdiz.sbicak20.pomocnici.stanja.IspravnaState;
 
-import java.util.List;
+import java.util.*;
 
 public class ZeljeznickiSustavSingleton {
     private static ZeljeznickiSustavSingleton instanca;
@@ -21,7 +22,11 @@ public class ZeljeznickiSustavSingleton {
     private VozniRed vozniRed;
     private VozniRedPunjac vozniRedPunjac;
 
+    private Map<String, List<ZeljeznickaStanica>> prugeMap = new HashMap<>();
+
     public CjenikKarti cjenikKarti;
+
+    private List<Pruga> prugeList;
 
     private ZeljeznickiSustavSingleton(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr, List<OznakaDana> od) {
         this.stanice = stanice;
@@ -32,6 +37,20 @@ public class ZeljeznickiSustavSingleton {
         registarKorisnika = new RegistarKorisnika();
         vozniRedPunjac = new VozniRedPunjac();
         vozniRed = vozniRedPunjac.napuniVozniRed(stanice, vr, od);
+
+        for (ZeljeznickaStanica stanica : stanice) {
+            prugeMap.putIfAbsent(stanica.getOznakaPruge(), new ArrayList<>());
+            prugeMap.get(stanica.getOznakaPruge()).add(stanica);
+        }
+
+        prugeList = new ArrayList<>();
+        for (Map.Entry<String, List<ZeljeznickaStanica>> entry : prugeMap.entrySet()) {
+            String oznakaPruge = entry.getKey();
+            List<ZeljeznickaStanica> staniceNaPrugi = entry.getValue();
+
+            Pruga novaPruga = new Pruga(oznakaPruge, staniceNaPrugi, new IspravnaState());
+            prugeList.add(novaPruga);
+        }
     }
 
     public static ZeljeznickiSustavSingleton getInstanca() {
@@ -55,6 +74,8 @@ public class ZeljeznickiSustavSingleton {
     public List<List<Kompozicija>> getKompozicije() {
         return kompozicije;
     }
+
+    public List<Pruga> getPruge(){return prugeList;}
 
     public void setKompozicije(List<List<Kompozicija>> kompozicije) {
         this.kompozicije = kompozicije;
@@ -212,6 +233,35 @@ public class ZeljeznickiSustavSingleton {
 
             return new CVP(cijenaNormalni, cijenaUbrzani, cijenaBrzi, popustSuN, popustWebMob, uvecanjeVlak);
         }
+
+        if (komandaString.matches("PSP2S\\s+[^\\-]+\\s*-\\s*[^\\-]+\\s*-\\s*[^\\-]+\\s*-\\s*[A-Z]")) {
+
+            String[] dijelovi = komandaString.substring(5).trim().split("\\s*-\\s*");
+            String oznaka = null, polaznaStanica = null, odredisnaStanica = null, status = null;
+            if (dijelovi.length == 4) {
+                List<String> ispravniStatusi = Arrays.asList("I", "K", "T", "Z");
+                oznaka = dijelovi[0].trim();
+                polaznaStanica = dijelovi[1].trim();
+                odredisnaStanica = dijelovi[2].trim();
+                if (!ispravniStatusi.contains(dijelovi[3].trim())){
+                    System.out.println("Krivi status za komandu! Statusi su: [I]spravna, U [K]varu, U [T]estiranju, [Z]atvorena");
+                    return null;
+                } else {
+                    status = dijelovi[3].trim();
+                }
+            }
+
+            return new PSP2S(oznaka, polaznaStanica, odredisnaStanica, status);
+        }
+
+        if (komandaString.matches("IRPS\\s+[A-Z](\\s+[A-Z0-9]+)?")) {
+            String[] dijelovi = komandaString.split("\\s+");
+            String status = dijelovi[1];
+            String oznaka = (dijelovi.length > 2) ? dijelovi[2] : null;
+
+            return new IRPS(oznaka, status);
+        }
+
 
         if (komandaString.equals("Q")) {
             return new Q();

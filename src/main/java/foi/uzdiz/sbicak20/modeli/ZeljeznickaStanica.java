@@ -16,7 +16,7 @@ public class ZeljeznickaStanica {
     private final int brojKolosjeka;
     private final double doPoOsovini;
     private final double doPoDuznomM;
-    private final ZSStatusPrugeEnum statusPruge;
+    private ZSStatusPrugeEnum statusPruge;
     private final int duzina;
     private final Integer vrijemeNormalniVlak;
     private final Integer vrijemeUbrzaniVlak;
@@ -40,6 +40,12 @@ public class ZeljeznickaStanica {
         this.vrijemeNormalniVlak = builder.vrijemeNormalniVlak;
         this.vrijemeUbrzaniVlak = builder.vrijemeUbrzaniVlak;
         this.vrijemeBrziVlak = builder.vrijemeBrziVlak;
+    }
+    public void setStatusPruge(String oznakaStatusa){
+        statusPruge = ZSStatusPrugeEnum.valueOf(oznakaStatusa);
+    }
+    public String getStatusPruge(){
+        return statusPruge.toString();
     }
 
     public String getStanica() {

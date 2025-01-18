@@ -62,6 +62,11 @@ public class IzvrsiKomanduVisitor implements KomandaVisitor {
     public void visit(CVP komanda) {komanda.izvrsi();}
 
     @Override
+    public void visit(PSP2S komanda) {komanda.izvrsi();}
+
+    @Override
+    public void visit(IRPS komanda) {komanda.izvrsi();}
+    @Override
     public void visit(Q komanda) {
         komanda.izvrsi();
     }

@@ -1,5 +1,5 @@
 package foi.uzdiz.sbicak20.enumeracije.ZeljeznickeStaniceEnum;
 
 public enum ZSStatusPrugeEnum {
-    I, K
+    I, K, T, Z
 }
