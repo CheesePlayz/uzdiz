@@ -4,8 +4,14 @@ import foi.uzdiz.sbicak20.modeli.*;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
 import foi.uzdiz.sbicak20.pomocnici.VozniRedPunjac;
 import foi.uzdiz.sbicak20.pomocnici.komande.*;
+import foi.uzdiz.sbicak20.pomocnici.kupovanje.BlagajnaKupovanje;
+import foi.uzdiz.sbicak20.pomocnici.kupovanje.NacinKupovanjaStrategy;
+import foi.uzdiz.sbicak20.pomocnici.kupovanje.VlakKupovanje;
+import foi.uzdiz.sbicak20.pomocnici.kupovanje.WebMobilnoKupovanje;
 import foi.uzdiz.sbicak20.pomocnici.stanja.IspravnaState;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ZeljeznickiSustavSingleton {
@@ -24,7 +30,7 @@ public class ZeljeznickiSustavSingleton {
 
     private Map<String, List<ZeljeznickaStanica>> prugeMap = new HashMap<>();
 
-    public CjenikKarti cjenikKarti;
+    private CjenikKarti cjenikKarti;
 
     private List<Pruga> prugeList;
 
@@ -233,6 +239,39 @@ public class ZeljeznickiSustavSingleton {
 
             return new CVP(cijenaNormalni, cijenaUbrzani, cijenaBrzi, popustSuN, popustWebMob, uvecanjeVlak);
         }
+
+        if (komandaString.matches("KKPV2S\\s+[0-9]+\\s+-\\s+[A-Za-zČčĆćĐđŠšŽž ]+\\s+-\\s+[A-Za-zČčĆćĐđŠšŽž ]+\\s+-\\s+[0-3][0-9]\\.[0-1][0-9]\\.\\d{4}\\.\\s+-\\s+[A-Z]{1,2}")) {
+            String[] dijelovi = komandaString.substring(7).split("\\s+-\\s+");
+
+            String oznaka = dijelovi[0].trim();
+            String polazna = dijelovi[1].trim();
+            String odredisna = dijelovi[2].trim();
+
+            Date datum = null;
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy.");
+                datum = dateFormat.parse(dijelovi[3].trim());
+            } catch (ParseException e) {
+                System.out.println("Greška: Datum nije u ispravnom formatu.");
+                return null;
+            }
+
+            String kupnjaKarata = dijelovi[4].trim();
+            NacinKupovanjaStrategy nacinKupovine = null;
+            switch (kupnjaKarata) {
+                case "WM": nacinKupovine = new WebMobilnoKupovanje(); break;
+                case "B": nacinKupovine = new BlagajnaKupovanje(); break;
+                case "V": nacinKupovine = new VlakKupovanje(); break;
+                default:
+                    System.out.println("Greška: Neispravan način kupovine.");
+                    return null;
+            }
+
+            return new KKPV2S(oznaka, polazna, odredisna, datum, nacinKupovine);
+        }
+
+
+
 
         if (komandaString.matches("PSP2S\\s+[^\\-]+\\s*-\\s*[^\\-]+\\s*-\\s*[^\\-]+\\s*-\\s*[A-Z]")) {
 

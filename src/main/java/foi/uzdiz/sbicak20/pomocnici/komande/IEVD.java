@@ -25,8 +25,6 @@ public class IEVD implements Komanda {
 
     @Override
     public void izvrsi() {
-
-
         int[] maxDuljine = {12, 12, 23, 23, 15, 15, 15};
         StringBuilder formatBuilder = new StringBuilder("|");
         for (int duljina : maxDuljine) {

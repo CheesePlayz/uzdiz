@@ -25,6 +25,10 @@ public interface KomandaVisitor {
 
     void visit(CVP komanda);
 
+    void visit(KKPV2S komanda);
+
+    void visit(IKKPV komanda);
+
     void visit(PSP2S komanda);
     void visit(IRPS komanda);
 

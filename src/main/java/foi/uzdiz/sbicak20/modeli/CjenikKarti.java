@@ -42,15 +42,16 @@ public class CjenikKarti {
         return uvecanjeVlak;
     }
     public void ispisiCjenik() {
-        System.out.println("Cjenik karata:");
-        System.out.println("Cijena normalnog vlaka: " + cijenaNormalni + " €/km");
-        System.out.println("Cijena ubrzanog vlaka: " + cijenaUbrzani + " €/km");
-        System.out.println("Cijena brzog vlaka: " + cijenaBrzi + " €/km");
-        System.out.println("Popust za subotu i nedjelju: " + popustSuN + "%");
-        System.out.println("Popust za kupovinu putem web/mobilne aplikacije: " + popustWebMob + "%");
-        System.out.println("Uvećanje za kupovinu karte u vlaku: " + uvecanjeVlak + "%");
+        System.out.printf("%-50s | %1s%n", "Cjenik karata", "Vrijednosti");
+        System.out.printf("%-50s | %1.2f €/km%n", "Cijena normalnog vlaka:", cijenaNormalni);
+        System.out.printf("%-50s | %1.2f €/km%n", "Cijena ubrzanog vlaka:", cijenaUbrzani);
+        System.out.printf("%-50s | %1.2f €/km%n", "Cijena brzog vlaka:", cijenaBrzi);
+        System.out.printf("%-50s | %1.2f%%%n", "Popust za subotu i nedjelju:", popustSuN);
+        System.out.printf("%-50s | %1.2f%%%n", "Popust za kupovinu putem web/mobilne aplikacije:", popustWebMob);
+        System.out.printf("%-50s | %1.2f%%%n", "Uvećanje za kupovinu karte u vlaku:", uvecanjeVlak);
         System.out.println();
     }
+
 
     public static class CjenikKartiBuilder {
         private double cijenaNormalni;
