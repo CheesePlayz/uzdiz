@@ -31,7 +31,7 @@ public class CVP implements Komanda{
     public void izvrsi() {
         assert ZeljeznickiSustavSingleton.getInstanca() != null;
         ZeljeznickiSustavSingleton.getInstanca().setCjenikKarti(new CjenikKarti.CjenikKartiBuilder().setCijenaNormalni(cijenaNormalni).setCijenaUbrzani(cijenaUbrzani).setCijenaBrzi(cijenaBrzi).setPopustSuN(popustSuN).setPopustWebMob(popustWebMob).setUvecanjeVlak(uvecanjeVlak).build());
-        CjenikKarti ck = ZeljeznickiSustavSingleton.getInstanca().getCJenikKarti();
+        CjenikKarti ck = ZeljeznickiSustavSingleton.getInstanca().getCjenikKarti();
         ck.ispisiCjenik();
     }
 }

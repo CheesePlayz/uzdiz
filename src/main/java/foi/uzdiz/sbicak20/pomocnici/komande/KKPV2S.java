@@ -32,7 +32,10 @@ public class KKPV2S implements Komanda{
     @Override
     public void izvrsi() {
         Karta novaKarta = nacinKupovanja.kupiKartu(oznakaVlaka, polaznaStanica, odlaznaStanica, datum);
-        assert ZeljeznickiSustavSingleton.getInstanca() != null;
-        ZeljeznickiSustavSingleton.getInstanca().getKartaCaretaker().dodajMemento(new Memento(novaKarta));
+        if (novaKarta != null) {
+            assert ZeljeznickiSustavSingleton.getInstanca() != null;
+            ZeljeznickiSustavSingleton.getInstanca().getKartaCaretaker().dodajMemento(new Memento(novaKarta));
+        }
+
     }
 }

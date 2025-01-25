@@ -1,28 +1,17 @@
-package foi.uzdiz.sbicak20.pomocnici.komande;
+package foi.uzdiz.sbicak20.pomocnici;
 
+import foi.uzdiz.sbicak20.ZeljeznickiSustavSingleton;
 import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
 import java.util.*;
 
-public class ISI2S implements Komanda {
-    private final String oznakaStanicePolazna;
-    private final String oznakaStaniceOdredisna;
-    private final List<ZeljeznickaStanica> stanice;
+public class ISI2Spomocnik {
 
-    public ISI2S(List<ZeljeznickaStanica> stanice, String oznakaStaniceStart, String oznakaStaniceEnd) {
-        this.stanice = stanice;
-        this.oznakaStanicePolazna = oznakaStaniceStart;
-        this.oznakaStaniceOdredisna = oznakaStaniceEnd;
-    }
-
-    @Override
-    public void prihvati(KomandaVisitor visitor) {
-        visitor.visit(this);
-    }
-
-    @Override
-    public void izvrsi() {
+    public static double izracunajUdaljenost(
+                                             String pocetnaStanica,
+                                             String odredisnaStanica) {
         Map<String, List<ZeljeznickaStanica>> pruge = new HashMap<>();
-        for (ZeljeznickaStanica s : stanice) {
+        assert ZeljeznickiSustavSingleton.getInstanca() != null;
+        for (ZeljeznickaStanica s : ZeljeznickiSustavSingleton.getInstanca().getStanice()) {
             pruge.putIfAbsent(s.getOznakaPruge(), new ArrayList<>());
             pruge.get(s.getOznakaPruge()).add(s);
         }
@@ -41,37 +30,35 @@ public class ISI2S implements Komanda {
                 }
             }
         }
-        List<String> put = bfs(grafTezine, oznakaStanicePolazna, oznakaStaniceOdredisna);
+        List<String> put = bfsPronadjiPut(grafTezine, pocetnaStanica, odredisnaStanica);
         if (put == null) {
-            System.out.println("Nije moguće pronaći put između " + oznakaStanicePolazna + " i " + oznakaStaniceOdredisna);
-        } else {
-            double ukupnaKm = 0;
-            System.out.printf("| %-20s | %-20s%n", "Stanica", "Ukupna Kilometraža");
-            for (int i = 0; i < put.size(); i++) {
-                if (i > 0) {
-                    String prethodna = put.get(i - 1);
-                    String trenutna = put.get(i);
-                    Integer dist = grafTezine.getOrDefault(prethodna, Collections.emptyMap()).get(trenutna);
-                    if (dist != null) {
-                        ukupnaKm += dist;
-                    }
-                }
-                System.out.printf("| %-20s | %1s%n", put.get(i), ukupnaKm);
+            return 0.0;
+        }
+        double ukupnaKm = 0.0;
+        for (int i = 1; i < put.size(); i++) {
+            String prethodna = put.get(i - 1);
+            String trenutna = put.get(i);
+            Integer dist = grafTezine.getOrDefault(prethodna, Collections.emptyMap()).get(trenutna);
+            if (dist != null) {
+                ukupnaKm += dist;
             }
         }
+        return ukupnaKm;
     }
 
-    private List<String> bfs(Map<String, Map<String, Integer>> graf, String start, String cilj) {
+    private static List<String> bfsPronadjiPut(Map<String, Map<String, Integer>> graf,
+                                               String pocetna,
+                                               String odredisna) {
         Queue<List<String>> red = new LinkedList<>();
         Set<String> posjecene = new HashSet<>();
-        List<String> pocetniPut = new ArrayList<>();
-        pocetniPut.add(start);
-        red.add(pocetniPut);
-        posjecene.add(start);
+        List<String> startPut = new ArrayList<>();
+        startPut.add(pocetna);
+        red.add(startPut);
+        posjecene.add(pocetna);
         while (!red.isEmpty()) {
             List<String> trenutniPut = red.poll();
             String zadnja = trenutniPut.get(trenutniPut.size() - 1);
-            if (zadnja.equals(cilj)) {
+            if (zadnja.equals(odredisna)) {
                 return trenutniPut;
             }
             for (Map.Entry<String, Integer> e : graf.getOrDefault(zadnja, Collections.emptyMap()).entrySet()) {
@@ -86,3 +73,4 @@ public class ISI2S implements Komanda {
         return null;
     }
 }
+

@@ -147,7 +147,7 @@ public class ZeljeznickiSustavSingleton {
         this.vozila = vozila;
     }
 
-    public CjenikKarti getCJenikKarti(){
+    public CjenikKarti getCjenikKarti(){
         return cjenikKarti;
     }
 
@@ -248,7 +248,7 @@ public class ZeljeznickiSustavSingleton {
             return new CVP(cijenaNormalni, cijenaUbrzani, cijenaBrzi, popustSuN, popustWebMob, uvecanjeVlak);
         }
 
-        if (komandaString.matches("KKPV2S\\s+[0-9]+\\s+-\\s+[A-Za-zČčĆćĐđŠšŽž ]+\\s+-\\s+[A-Za-zČčĆćĐđŠšŽž ]+\\s+-\\s+[0-3][0-9]\\.[0-1][0-9]\\.\\d{4}\\.\\s+-\\s+[A-Z]{1,2}")) {
+        if (komandaString.matches("^KKPV2S\\s+.+\\s+-\\s+[A-Za-zČčĆćĐđŠšŽž ]+\\s+-\\s+[A-Za-zČčĆćĐđŠšŽž ]+\\s+-\\s+[0-3][0-9]\\.[0-1][0-9]\\.\\d{4}\\.\\s+-\\s+[A-Z]{1,2}$")) {
             String[] dijelovi = komandaString.substring(7).split("\\s+-\\s+");
 
             String oznaka = dijelovi[0].trim();

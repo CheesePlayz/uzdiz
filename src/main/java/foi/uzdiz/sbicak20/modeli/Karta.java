@@ -142,7 +142,7 @@ public class Karta {
         }
 
         public KartaBuilder datumVrijemeKupovine(String datumVrijemeKupovine) throws ParseException {
-            SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd.MM.yyyy. HH:mm:ss");
+            SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd.MM.yyyy. HH:mm");
             this.datumVrijemeKupovine = dateTimeFormat.parse(datumVrijemeKupovine);
             return this;
         }
