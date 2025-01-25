@@ -2,6 +2,7 @@ package foi.uzdiz.sbicak20;
 
 import foi.uzdiz.sbicak20.modeli.*;
 import foi.uzdiz.sbicak20.modeli.composite.VozniRed;
+import foi.uzdiz.sbicak20.modeli.memento.Caretaker;
 import foi.uzdiz.sbicak20.pomocnici.VozniRedPunjac;
 import foi.uzdiz.sbicak20.pomocnici.komande.*;
 import foi.uzdiz.sbicak20.pomocnici.kupovanje.BlagajnaKupovanje;
@@ -34,6 +35,8 @@ public class ZeljeznickiSustavSingleton {
 
     private List<Pruga> prugeList;
 
+    private Caretaker KartaCaretaker;
+
     private ZeljeznickiSustavSingleton(List<ZeljeznickaStanica> stanice, List<ZeljeznickoPrijevoznoSredstvo> vozila, List<List<Kompozicija>> kompozicije, List<VozniRedPodaci> vr, List<OznakaDana> od) {
         this.stanice = stanice;
         this.vozila = vozila;
@@ -43,6 +46,7 @@ public class ZeljeznickiSustavSingleton {
         registarKorisnika = new RegistarKorisnika();
         vozniRedPunjac = new VozniRedPunjac();
         vozniRed = vozniRedPunjac.napuniVozniRed(stanice, vr, od);
+        KartaCaretaker = new Caretaker();
 
         for (ZeljeznickaStanica stanica : stanice) {
             prugeMap.putIfAbsent(stanica.getOznakaPruge(), new ArrayList<>());
@@ -150,6 +154,10 @@ public class ZeljeznickiSustavSingleton {
     public void setCjenikKarti(CjenikKarti cjenikKarti) {
         this.cjenikKarti = cjenikKarti;
     }
+    public Caretaker getKartaCaretaker() {
+        return KartaCaretaker;
+    }
+
 
     public void IzvrsiKomanduVisitor(String komandaString) {
         Komanda komanda = parseKomandu(komandaString);
@@ -270,6 +278,13 @@ public class ZeljeznickiSustavSingleton {
             return new KKPV2S(oznaka, polazna, odredisna, datum, nacinKupovine);
         }
 
+        if (komandaString.matches("^IKKPV(\\s+\\d+)?$")) {
+            String[] dijelovi = komandaString.split("\\s+");
+            int index = (dijelovi.length > 1) ? Integer.parseInt(dijelovi[1]) : -1;
+            return new IKKPV(index);
+        }
+
+
 
 
 
@@ -309,5 +324,6 @@ public class ZeljeznickiSustavSingleton {
         System.out.println("Nepoznata komanda ili pogrešna sintaksa: " + komandaString);
         return null;
     }
+
 
 }

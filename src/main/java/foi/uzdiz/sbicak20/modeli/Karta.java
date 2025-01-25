@@ -1,5 +1,7 @@
 package foi.uzdiz.sbicak20.modeli;
 
+import foi.uzdiz.sbicak20.modeli.memento.Memento;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -148,6 +150,26 @@ public class Karta {
         public Karta build() {
             return new Karta(this);
         }
+    }
+
+
+    public Memento sacuvajUMemento() {
+        return new Memento(this);
+    }
+
+    public void dohvatiIzMementa(Memento memento) {
+        Karta karta = memento.getSacuvanoStanjeKarta();
+        this.oznakaVlaka = karta.oznakaVlaka;
+        this.polaznaStanica = karta.polaznaStanica;
+        this.odredisnaStanica = karta.odredisnaStanica;
+        this.datum = karta.datum;
+        this.vrijemeKretanja = karta.vrijemeKretanja;
+        this.vrijemeDolaska = karta.vrijemeDolaska;
+        this.izvornaCijena = karta.izvornaCijena;
+        this.popust = karta.popust;
+        this.konacnaCijena = karta.konacnaCijena;
+        this.nacinKupovanja = karta.nacinKupovanja;
+        this.datumVrijemeKupovine = karta.datumVrijemeKupovine;
     }
 }
 

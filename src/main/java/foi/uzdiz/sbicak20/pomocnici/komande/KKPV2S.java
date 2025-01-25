@@ -1,6 +1,8 @@
 package foi.uzdiz.sbicak20.pomocnici.komande;
 
+import foi.uzdiz.sbicak20.ZeljeznickiSustavSingleton;
 import foi.uzdiz.sbicak20.modeli.Karta;
+import foi.uzdiz.sbicak20.modeli.memento.Memento;
 import foi.uzdiz.sbicak20.pomocnici.kupovanje.NacinKupovanjaStrategy;
 
 import java.util.Date;
@@ -30,6 +32,7 @@ public class KKPV2S implements Komanda{
     @Override
     public void izvrsi() {
         Karta novaKarta = nacinKupovanja.kupiKartu(oznakaVlaka, polaznaStanica, odlaznaStanica, datum);
-        // posremi kartu u memento
+        assert ZeljeznickiSustavSingleton.getInstanca() != null;
+        ZeljeznickiSustavSingleton.getInstanca().getKartaCaretaker().dodajMemento(new Memento(novaKarta));
     }
 }
