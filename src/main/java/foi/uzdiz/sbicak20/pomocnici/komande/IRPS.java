@@ -41,7 +41,7 @@ public class IRPS implements Komanda {
 
                 if (statusOdgovara || statusObrnuto) {
                     if (prviRedakTablice) {
-                        System.out.printf("%-10s | %-50s | %-10s%n", "Pruga", "Relacija", "Status");
+                        System.out.printf("%-10s | %-50s | %-10s%n", "Pruga", "Relacija", "Status Pruge");
                         prviRedakTablice = false;
                     }
 

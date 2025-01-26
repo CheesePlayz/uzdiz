@@ -36,12 +36,14 @@ public class PSP2S implements Komanda{
         for (Pruga pruga : ZeljeznickiSustavSingleton.getInstanca().getPruge()){
             if (Objects.equals(oznaka, pruga.getOznaka())){
                 switch(status){
-                    case "I": pruga.postaviStatus(new IspravnaState()); break;
-                    case "T": pruga.postaviStatus(new TestiranjeState()); break;
-                    case "K": pruga.postaviStatus(new KvarState()); break;
-                    case "Z": pruga.postaviStatus(new ZatvorenaState()); break;
+                    case "I": pruga.postaviStatus(new IspravnaState(), polaznaStanica, odredisnaStanica); break;
+                    case "T": pruga.postaviStatus(new TestiranjeState(), polaznaStanica, odredisnaStanica); break;
+                    case "K": pruga.postaviStatus(new KvarState(), polaznaStanica, odredisnaStanica); break;
+                    case "Z": pruga.postaviStatus(new ZatvorenaState(), polaznaStanica, odredisnaStanica); break;
+                    default:
+                        System.out.println("Nije moguće postaviti status, jer takav status ne postoji!");
                 }
-                pruga.promijeniStatus(polaznaStanica, odredisnaStanica);
+
             }
         }
     }

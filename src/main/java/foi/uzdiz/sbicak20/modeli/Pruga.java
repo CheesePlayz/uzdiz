@@ -1,6 +1,8 @@
 package foi.uzdiz.sbicak20.modeli;
 
 import foi.uzdiz.sbicak20.pomocnici.stanja.PrugaState;
+import foi.uzdiz.sbicak20.pomocnici.stanja.TestiranjeState;
+import foi.uzdiz.sbicak20.pomocnici.stanja.ZatvorenaState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +26,16 @@ public class Pruga {
         return oznaka;
     }
 
-    public void promijeniStatus(String polazna, String odredisna) {
-        trenutniStatus.promijeniStatus(this, polazna, odredisna);
-    }
+    public void postaviStatus(PrugaState noviStatus, String polazna, String odredisna) {
 
-    public void postaviStatus(PrugaState noviStatus) {
+        if (trenutniStatus instanceof ZatvorenaState && !(noviStatus instanceof TestiranjeState)) {
+            System.out.println("Nije moguće iz Zatvorenog stanja prijeći u '" + noviStatus.dohvatiNazivStatusa() + "'!");
+            return;
+        }
+
         System.out.println("Promjena trenutnog statusa pruge na: " + noviStatus.dohvatiNazivStatusa());
         this.trenutniStatus = noviStatus;
+        trenutniStatus.promijeniStatus(this, polazna, odredisna);
     }
 
     public void azurirajStanice(String polazna, String odredisna, String noviStatus) {
