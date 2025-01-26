@@ -17,11 +17,9 @@ public class VozniRedPunjac {
         VozniRed vr = new VozniRed();
 
         for (VozniRedPodaci podaci : vrpodaci) {
-            Vlak postojeciVlak = (Vlak) vr.getDjeca().stream()
-                    .filter(komponenta -> komponenta instanceof Vlak &&
-                            ((Vlak) komponenta).getOznakaVlaka().equals(podaci.getOznakaVlaka()))
-                    .findFirst()
-                    .orElse(null);
+            Vlak postojeciVlak = (Vlak) vr.getDjeca().stream().
+                    filter(komponenta -> komponenta instanceof Vlak && ((Vlak) komponenta)
+                            .getOznakaVlaka().equals(podaci.getOznakaVlaka())).findFirst().orElse(null);
 
             if (postojeciVlak != null) {
                 postojeciVlak.dodajKomponentu(napraviEtapu(stanice, podaci, oz));
@@ -51,13 +49,7 @@ public class VozniRedPunjac {
         String polaznaStanica = getPolaznaZeljeznickaStanica(podaciVoznogReda, stanice, podaciVoznogReda.getOznakaPruge());
         String odredisnaStanica = getOdredisnaZeljeznickaStanica(podaciVoznogReda, stanice, podaciVoznogReda.getOznakaPruge());
 
-        Etapa etapa = new Etapa(
-                podaciVoznogReda.getOznakaVlaka(),
-                podaciVoznogReda.getOznakaPruge(),
-                vrijemePolaska,
-                vrijemeDolaska,
-                daniUTjednu
-        );
+        Etapa etapa = new Etapa(podaciVoznogReda.getOznakaVlaka(), podaciVoznogReda.getOznakaPruge(), vrijemePolaska, vrijemeDolaska, daniUTjednu);
 
         etapa.dodajKomponentu(new Stanica(polaznaStanica));
         etapa.dodajKomponentu(new Stanica(odredisnaStanica));

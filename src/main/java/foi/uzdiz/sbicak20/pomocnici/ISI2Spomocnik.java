@@ -2,13 +2,12 @@ package foi.uzdiz.sbicak20.pomocnici;
 
 import foi.uzdiz.sbicak20.ZeljeznickiSustavSingleton;
 import foi.uzdiz.sbicak20.modeli.ZeljeznickaStanica;
+
 import java.util.*;
 
 public class ISI2Spomocnik {
 
-    public static double izracunajUdaljenost(
-                                             String pocetnaStanica,
-                                             String odredisnaStanica) {
+    public static double izracunajUdaljenost(String pocetnaStanica, String odredisnaStanica) {
         Map<String, List<ZeljeznickaStanica>> pruge = new HashMap<>();
         assert ZeljeznickiSustavSingleton.getInstanca() != null;
         for (ZeljeznickaStanica s : ZeljeznickiSustavSingleton.getInstanca().getStanice()) {
@@ -30,7 +29,7 @@ public class ISI2Spomocnik {
                 }
             }
         }
-        List<String> put = bfsPronadjiPut(grafTezine, pocetnaStanica, odredisnaStanica);
+        List<String> put = bfsPronadiPut(grafTezine, pocetnaStanica, odredisnaStanica);
         if (put == null) {
             return 0.0;
         }
@@ -46,9 +45,7 @@ public class ISI2Spomocnik {
         return ukupnaKm;
     }
 
-    private static List<String> bfsPronadjiPut(Map<String, Map<String, Integer>> graf,
-                                               String pocetna,
-                                               String odredisna) {
+    private static List<String> bfsPronadiPut(Map<String, Map<String, Integer>> graf, String pocetna, String odredisna) {
         Queue<List<String>> red = new LinkedList<>();
         Set<String> posjecene = new HashSet<>();
         List<String> startPut = new ArrayList<>();

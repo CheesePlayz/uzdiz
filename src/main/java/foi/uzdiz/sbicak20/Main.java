@@ -66,13 +66,7 @@ public class Main {
         }
 
         InitSustava initSustava = new InitSustava(putanjaStanice, putanjaVozila, putanjaKompozicije, putanjaVozniRed, putanjaOznakeDana);
-        ZeljeznickiSustavSingleton sustavSingleton = ZeljeznickiSustavSingleton.getInstanca(
-                initSustava.getStanice(),
-                initSustava.getVozila(),
-                initSustava.getKompozicije(),
-                initSustava.getVozniRed(),
-                initSustava.getOznakeDana()
-        );
+        ZeljeznickiSustavSingleton sustavSingleton = ZeljeznickiSustavSingleton.getInstanca(initSustava.getStanice(), initSustava.getVozila(), initSustava.getKompozicije(), initSustava.getVozniRed(), initSustava.getOznakeDana());
 
         SustavGresakaSingleton.getInstance().ispisiSveGreske();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {

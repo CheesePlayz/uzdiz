@@ -85,7 +85,9 @@ public class ZeljeznickiSustavSingleton {
         return kompozicije;
     }
 
-    public List<Pruga> getPruge(){return prugeList;}
+    public List<Pruga> getPruge() {
+        return prugeList;
+    }
 
     public void setKompozicije(List<List<Kompozicija>> kompozicije) {
         this.kompozicije = kompozicije;
@@ -147,13 +149,14 @@ public class ZeljeznickiSustavSingleton {
         this.vozila = vozila;
     }
 
-    public CjenikKarti getCjenikKarti(){
+    public CjenikKarti getCjenikKarti() {
         return cjenikKarti;
     }
 
     public void setCjenikKarti(CjenikKarti cjenikKarti) {
         this.cjenikKarti = cjenikKarti;
     }
+
     public Caretaker getKartaCaretaker() {
         return KartaCaretaker;
     }
@@ -238,12 +241,12 @@ public class ZeljeznickiSustavSingleton {
         if (komandaString.matches("^CVP \\d+([.,]\\d+)? \\d+([.,]\\d+)? \\d+([.,]\\d+)? \\d+([.,]\\d+)? \\d+([.,]\\d+)? \\d+([.,]\\d+)?$")) {
             String[] dijelovi = komandaString.substring(4).trim().split(" ");
 
-            double cijenaNormalni = Double.parseDouble(dijelovi[0].replace(',','.'));
-            double cijenaUbrzani = Double.parseDouble(dijelovi[1].replace(',','.'));
-            double cijenaBrzi = Double.parseDouble(dijelovi[2].replace(',','.'));
-            double popustSuN = Double.parseDouble(dijelovi[3].replace(',','.'));
-            double popustWebMob = Double.parseDouble(dijelovi[4].replace(',','.'));
-            double uvecanjeVlak = Double.parseDouble(dijelovi[5].replace(',','.'));
+            double cijenaNormalni = Double.parseDouble(dijelovi[0].replace(',', '.'));
+            double cijenaUbrzani = Double.parseDouble(dijelovi[1].replace(',', '.'));
+            double cijenaBrzi = Double.parseDouble(dijelovi[2].replace(',', '.'));
+            double popustSuN = Double.parseDouble(dijelovi[3].replace(',', '.'));
+            double popustWebMob = Double.parseDouble(dijelovi[4].replace(',', '.'));
+            double uvecanjeVlak = Double.parseDouble(dijelovi[5].replace(',', '.'));
 
             return new CVP(cijenaNormalni, cijenaUbrzani, cijenaBrzi, popustSuN, popustWebMob, uvecanjeVlak);
         }
@@ -267,9 +270,15 @@ public class ZeljeznickiSustavSingleton {
             String kupnjaKarata = dijelovi[4].trim();
             NacinKupovanjaStrategy nacinKupovine = null;
             switch (kupnjaKarata) {
-                case "WM": nacinKupovine = new WebMobilnoKupovanje(); break;
-                case "B": nacinKupovine = new BlagajnaKupovanje(); break;
-                case "V": nacinKupovine = new VlakKupovanje(); break;
+                case "WM":
+                    nacinKupovine = new WebMobilnoKupovanje();
+                    break;
+                case "B":
+                    nacinKupovine = new BlagajnaKupovanje();
+                    break;
+                case "V":
+                    nacinKupovine = new VlakKupovanje();
+                    break;
                 default:
                     System.out.println("Neispravan način kupovine.");
                     return null;
@@ -285,9 +294,6 @@ public class ZeljeznickiSustavSingleton {
         }
 
 
-
-
-
         if (komandaString.matches("PSP2S\\s+[^\\-]+\\s*-\\s*[^\\-]+\\s*-\\s*[^\\-]+\\s*-\\s*[A-Z]")) {
 
             String[] dijelovi = komandaString.substring(5).trim().split("\\s*-\\s*");
@@ -297,7 +303,7 @@ public class ZeljeznickiSustavSingleton {
                 oznaka = dijelovi[0].trim();
                 polaznaStanica = dijelovi[1].trim();
                 odredisnaStanica = dijelovi[2].trim();
-                if (!ispravniStatusi.contains(dijelovi[3].trim())){
+                if (!ispravniStatusi.contains(dijelovi[3].trim())) {
                     System.out.println("Krivi status za komandu! Statusi su: [I]spravna, U [K]varu, U [T]estiranju, [Z]atvorena");
                     return null;
                 } else {
