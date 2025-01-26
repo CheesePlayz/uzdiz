@@ -58,8 +58,9 @@ public class BlagajnaKupovanje implements NacinKupovanjaStrategy{
                     .vrijemeKretanja("")
                     .vrijemeDolaska("")
                     .izvornaCijena(izvornaCijena)
+                    .uvecanje(0)
                     .popust(popust)
-                    .konacnaCijena(konacnaCijena)
+                    .popustSuN((danUTjednu == DayOfWeek.SATURDAY || danUTjednu == DayOfWeek.SUNDAY) ? cjenikKarti.getPopustSuN() : 0)                    .konacnaCijena(konacnaCijena)
                     .nacinKupovanja("Blagajna")
                     .datumVrijemeKupovine(datumVrijemeKupovine)
                     .build();

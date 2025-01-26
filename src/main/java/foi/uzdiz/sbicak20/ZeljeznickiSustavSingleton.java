@@ -271,7 +271,7 @@ public class ZeljeznickiSustavSingleton {
                 case "B": nacinKupovine = new BlagajnaKupovanje(); break;
                 case "V": nacinKupovine = new VlakKupovanje(); break;
                 default:
-                    System.out.println("Greška: Neispravan način kupovine.");
+                    System.out.println("Neispravan način kupovine.");
                     return null;
             }
 

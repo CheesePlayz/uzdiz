@@ -30,9 +30,9 @@ public class IKKPV implements Komanda{
         }
 
         System.out.printf(
-                "| %-15s | %-18s | %-18s | %-12s | %-17s | %-17s | %-13s | %-11s | %-14s | %-15s | %-18s |\n",
+                "| %-13s | %-18s | %-18s | %-11s | %-16s | %-15s | %-13s | %-9s | %-9s | %-6s | %-12s | %-12s | %-17s |\n",
                 "Oznaka Vlaka", "Polazna Stanica", "Odredišna Stanica", "Datum", "Vrijeme Kretanja",
-                "Vrijeme Dolaska", "Izv. Cijena", "Popust (%)", "Konačna Cijena", "Način Kupovine", "Datum Kupovine"
+                "Vrijeme Dolaska", "Izv. Cijena", "Uvećanje", "Popust(%)","SuN(%)", "Kon. Cijena", "Kupovina", "Datum Kupovine"
         );
 
         if (index == -1) {
@@ -65,7 +65,7 @@ public class IKKPV implements Komanda{
         SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd.MM.yyyy. HH:mm");
 
         System.out.printf(
-                "| %-15s | %-18s | %-18s | %-12s | %-17s | %-17s | %-13.2f | %-11.2f | %-14.2f | %-15s | %-18s |\n",
+                "| %-13s | %-18s | %-18s | %-11s | %-16s | %-15s | %-13.2f | %-9s | %-9s | %-6s | %-12.2f | %-12s | %-17s |\n",
                 karta.getOznakaVlaka(),
                 karta.getPolaznaStanica(),
                 karta.getOdredisnaStanica(),
@@ -73,11 +73,14 @@ public class IKKPV implements Komanda{
                 karta.getVrijemeKretanja(),
                 karta.getVrijemeDolaska(),
                 karta.getIzvornaCijena(),
-                karta.getPopust(),
+                (karta.getUvecanje() != 0 ? String.format("%.2f", karta.getUvecanje()) : ""),
+                (karta.getPopust() != 0 ? String.format("%.2f", karta.getPopust()) : ""),
+                (karta.getPopustSuN() != 0 ? String.format("%.2f", karta.getPopustSuN()) : ""),
                 karta.getKonacnaCijena(),
                 karta.getNacinKupovanja(),
                 dateTimeFormat.format(karta.getDatumVrijemeKupovine())
         );
     }
+
 
 }

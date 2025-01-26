@@ -14,7 +14,9 @@ public class Karta {
     private String vrijemeKretanja;
     private String vrijemeDolaska;
     private double izvornaCijena;
+    private double uvecanje;
     private double popust;
+    private double popustSuN;
     private double konacnaCijena;
     private String nacinKupovanja;
     private Date datumVrijemeKupovine;
@@ -27,7 +29,9 @@ public class Karta {
         this.vrijemeKretanja = builder.vrijemeKretanja;
         this.vrijemeDolaska = builder.vrijemeDolaska;
         this.izvornaCijena = builder.izvornaCijena;
+        this.uvecanje = builder.uvecanje;
         this.popust = builder.popust;
+        this.popustSuN = builder.popustSuN;
         this.konacnaCijena = builder.konacnaCijena;
         this.nacinKupovanja = builder.nacinKupovanja;
         this.datumVrijemeKupovine = builder.datumVrijemeKupovine;
@@ -61,8 +65,16 @@ public class Karta {
         return izvornaCijena;
     }
 
+    public double getUvecanje() {
+        return uvecanje;
+    }
+
     public double getPopust() {
         return popust;
+    }
+
+    public double getPopustSuN() {
+        return popustSuN;
     }
 
     public double getKonacnaCijena() {
@@ -85,7 +97,9 @@ public class Karta {
         private String vrijemeKretanja;
         private String vrijemeDolaska;
         private double izvornaCijena;
+        private double uvecanje;
         private double popust;
+        private double popustSuN;
         private double konacnaCijena;
         private String nacinKupovanja;
         private Date datumVrijemeKupovine;
@@ -126,8 +140,18 @@ public class Karta {
             return this;
         }
 
+        public KartaBuilder uvecanje(double uvecanje) {
+            this.uvecanje = uvecanje;
+            return this;
+        }
+
         public KartaBuilder popust(double popust) {
             this.popust = popust;
+            return this;
+        }
+
+        public KartaBuilder popustSuN(double popustSuN) {
+            this.popustSuN = popustSuN;
             return this;
         }
 
@@ -166,7 +190,9 @@ public class Karta {
         this.vrijemeKretanja = karta.vrijemeKretanja;
         this.vrijemeDolaska = karta.vrijemeDolaska;
         this.izvornaCijena = karta.izvornaCijena;
+        this.uvecanje = karta.uvecanje;
         this.popust = karta.popust;
+        this.popustSuN = karta.popustSuN;
         this.konacnaCijena = karta.konacnaCijena;
         this.nacinKupovanja = karta.nacinKupovanja;
         this.datumVrijemeKupovine = karta.datumVrijemeKupovine;

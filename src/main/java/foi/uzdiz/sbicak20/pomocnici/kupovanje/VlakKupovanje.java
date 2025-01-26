@@ -59,11 +59,13 @@ public class VlakKupovanje implements NacinKupovanjaStrategy {
                     .vrijemeKretanja("")
                     .vrijemeDolaska("")
                     .izvornaCijena(izvornaCijena)
-                    .popust(uvecanje)
-                    .konacnaCijena(konacnaCijena)
+                    .uvecanje(uvecanje)
+                    .popust(0)
+                    .popustSuN((danUTjednu == DayOfWeek.SATURDAY || danUTjednu == DayOfWeek.SUNDAY) ? cjenikKarti.getPopustSuN() : 0)                    .konacnaCijena(konacnaCijena)
                     .nacinKupovanja("Vlak")
                     .datumVrijemeKupovine(datumVrijemeKupovine)
                     .build();
+
 
         } catch (Exception e) {
             System.out.println("Greška prilikom kupovine karte: " + e.getMessage());
